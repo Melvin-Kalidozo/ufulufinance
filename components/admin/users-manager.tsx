@@ -1,0 +1,420 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { cn } from "@/lib/utils";
+import { Plus, Pencil, Trash2, UserRound, ShieldCheck, Loader2 } from "lucide-react";
+
+type UserRow = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+};
+
+type Filter = "ALL" | "ADMIN" | "CUSTOMER";
+
+const EMPTY_FORM = {
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  role: "ADMIN",
+};
+
+export function UsersManager() {
+  const [users, setUsers] = useState<UserRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<Filter>("ALL");
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<UserRow | null>(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
+
+  const [deleteTarget, setDeleteTarget] = useState<UserRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const fetchUsers = useCallback(async () => {
+    try {
+      const res = await fetch("/api/users");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setUsers(data.users);
+    } catch {
+      toast.error("Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadUsers = useCallback(async () => {
+    setLoading(true);
+    await fetchUsers();
+  }, [fetchUsers]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initialLoad() {
+      try {
+        const res = await fetch("/api/users");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        if (!cancelled) setUsers(data.users);
+      } catch {
+        if (!cancelled) toast.error("Failed to load users");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    initialLoad();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filtered =
+    filter === "ALL" ? users : users.filter((u) => u.role === filter);
+
+  function openCreate() {
+    setEditing(null);
+    setForm(EMPTY_FORM);
+    setDialogOpen(true);
+  }
+
+  function openEdit(user: UserRow) {
+    setEditing(user);
+    setForm({
+      name: user.name,
+      email: user.email,
+      phone: user.phone || "",
+      password: "",
+      role: user.role,
+    });
+    setDialogOpen(true);
+  }
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      if (editing) {
+        const payload: Record<string, unknown> = {
+          name: form.name,
+          phone: form.phone,
+          role: form.role,
+        };
+        if (form.password) payload.password = form.password;
+
+        const res = await fetch(`/api/users/${editing.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        toast.success("User updated");
+      } else {
+        const res = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        toast.success("User created");
+      }
+      setDialogOpen(false);
+      loadUsers();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Operation failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleToggleActive(user: UserRow) {
+    try {
+      const res = await fetch(`/api/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: !user.isActive }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      toast.success(user.isActive ? "User deactivated" : "User activated");
+      loadUsers();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Operation failed");
+    }
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/users/${deleteTarget.id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      toast.success("User deleted");
+      setDeleteTarget(null);
+      loadUsers();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Operation failed");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)}>
+          <TabsList>
+            <TabsTrigger value="ALL">All</TabsTrigger>
+            <TabsTrigger value="ADMIN">
+              <ShieldCheck className="size-4" />
+              Admins
+            </TabsTrigger>
+            <TabsTrigger value="CUSTOMER">
+              <UserRound className="size-4" />
+              Customers
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Button onClick={openCreate}>
+          <Plus className="size-4" />
+          Add user
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+          No users found in this category.
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Joined</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {user.phone || "—"}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={user.role === "ADMIN" ? "default" : "outline"}
+                      className="text-[10px] uppercase tracking-wide"
+                    >
+                      {user.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <button
+                      onClick={() => handleToggleActive(user)}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 text-xs font-medium hover:underline",
+                        user.isActive ? "text-success" : "text-muted-foreground"
+                      )}
+                      title={user.isActive ? "Click to deactivate" : "Click to activate"}
+                    >
+                      <span
+                        className={cn(
+                          "size-1.5 rounded-full",
+                          user.isActive ? "bg-success" : "bg-muted-foreground"
+                        )}
+                      />
+                      {user.isActive ? "Active" : "Inactive"}
+                    </button>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-1">
+                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(user)}>
+                        <Pencil className="size-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        className="text-destructive hover:bg-destructive/10"
+                        onClick={() => setDeleteTarget(user)}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      {/* Create / edit dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editing ? "Edit user" : "Add user"}</DialogTitle>
+            <DialogDescription>
+              {editing
+                ? "Update the user's details. Leave password blank to keep it unchanged."
+                : "Create a new admin or customer account."}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSave} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="name">Full name</Label>
+              <Input
+                id="name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="phone">Phone (optional)</Label>
+              <Input
+                id="phone"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="role">Role</Label>
+              <Select
+                value={form.role}
+                onValueChange={(v) => setForm({ ...form, role: v })}
+              >
+                <SelectTrigger id="role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  <SelectItem value="CUSTOMER">Customer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="password">
+                Password {editing ? "(optional)" : ""}
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder={editing ? "Leave blank to keep current" : "Min 8 characters"}
+                minLength={editing ? undefined : 8}
+                required={!editing}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={saving}>
+                {saving ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : editing ? (
+                  "Save changes"
+                ) : (
+                  "Create user"
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation */}
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+        title="Delete user?"
+        description={
+          deleteTarget
+            ? `This will permanently remove ${deleteTarget.name} (${deleteTarget.email}) and cannot be undone.`
+            : ""
+        }
+        confirmLabel="Delete"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
+    </div>
+  );
+}
