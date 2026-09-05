@@ -26,183 +26,9 @@ import {
   Check,
 } from "lucide-react";
 
-interface JobRole {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  description: string;
-  overview: string;
-  responsibilities: string[];
-  requirements: string[];
-  image: string;
-  icon: any;
-  isFeatured?: boolean;
-}
-
-const OPEN_ROLES: JobRole[] = [
-  {
-    id: "loan-officer-msme",
-    title: "Loan Officer — MSME Lending",
-    department: "Field Credit Operations",
-    location: "Lilongwe (Area 2 & City Centre)",
-    type: "Full-Time",
-    description: "Originate and appraise business working capital loans with active field client visits and portfolio growth.",
-    overview:
-      "As an MSME Loan Officer, you will be the direct bridge between Ufulu Finance and local entrepreneurs. You will appraise market traders, structure working capital facilities, and coach clients on cashflow discipline.",
-    responsibilities: [
-      "Conduct field visits to assess business inventory, daily cashflow, and trading viability",
-      "Appraise loan applications under our responsible underwriting guidelines",
-      "Manage customer repayment relationships to achieve portfolio collection targets above 98%",
-      "Conduct introductory financial literacy coaching for new borrowers",
-    ],
-    requirements: [
-      "Diploma or Degree in Business Administration, Banking, Finance, or related discipline",
-      "Minimum 1 to 2 years experience in microfinance field operations or retail sales",
-      "Fluency in English and Chichewa; strong interpersonal and negotiation skills",
-      "Clean credit bureau record and high personal integrity",
-    ],
-    image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&q=80",
-    icon: Briefcase,
-    isFeatured: true, // Featured Lime Card
-  },
-  {
-    id: "credit-risk-analyst",
-    title: "Senior Credit Risk Analyst",
-    department: "Risk & Compliance",
-    location: "Lilongwe HQ",
-    type: "Full-Time",
-    description: "Appraise MSME loan portfolios, evaluate repayment capacity, and ensure underwriting policy compliance.",
-    overview:
-      "Oversee credit portfolio risk indicators, monitor PAR (Portfolio at Risk) thresholds, and refine automated scoring algorithms for digital loan disbursements.",
-    responsibilities: [
-      "Perform credit risk stress testing across seasonal agricultural and trade portfolios",
-      "Evaluate non-performing loans and recommend ethical restructuring options",
-      "Ensure regulatory alignment with Reserve Bank of Malawi microfinance prudential standards",
-    ],
-    requirements: [
-      "Bachelor's degree in Actuarial Science, Statistics, Economics, or Finance",
-      "3+ years experience in risk management within a financial institution",
-      "Advanced Excel and financial modeling proficiency",
-    ],
-    image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
-    icon: Scale,
-    isFeatured: false,
-  },
-  {
-    id: "agri-credit-specialist",
-    title: "Agri-Credit Field Specialist",
-    department: "Agri-Finance",
-    location: "Dedza / Mchinji Hub",
-    type: "Full-Time",
-    description: "Structure seasonal fertilizer and seed input facilities for smallholder cooperatives across central Malawi.",
-    overview:
-      "Work directly with farming clubs, cooperatives, and input agro-dealers to structure harvest-aligned credit packages.",
-    responsibilities: [
-      "Mobilize and assess agricultural producer clubs and village savings associations",
-      "Monitor rain patterns, planting schedules, and crop disease indicators",
-      "Coordinate structured commodity aggregation with commercial off-takers",
-    ],
-    requirements: [
-      "Degree or Diploma in Agricultural Economics, Agronomy, or Rural Development",
-      "Motorcycle riding competence with valid driver's license",
-      "Familiarity with central Malawi agricultural farming belts",
-    ],
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-    icon: Sparkles,
-    isFeatured: false,
-  },
-  {
-    id: "digital-finance-officer",
-    title: "Digital Finance Systems Officer",
-    department: "FinTech & IT",
-    location: "Lilongwe HQ",
-    type: "Full-Time",
-    description: "Support mobile money rails (Airtel Money & Mpamba) and core banking transaction automation.",
-    overview:
-      "Maintain 99.9% uptime for digital loan disbursements, API integrations with telecommunications operators, and borrower SMS notification systems.",
-    responsibilities: [
-      "Manage core banking API gateways with Airtel Money and TNM Mpamba",
-      "Ensure database security, end-to-end encryption, and customer data privacy",
-      "Provide level 2 technical troubleshooting for branch loan disbursement portals",
-    ],
-    requirements: [
-      "BSc in Computer Science, Information Technology, or Software Engineering",
-      "Experience with REST APIs, SQL databases, and cloud infrastructure",
-    ],
-    image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80",
-    icon: Laptop,
-    isFeatured: false,
-  },
-  {
-    id: "branch-customer-relations",
-    title: "Branch Customer Relations Officer",
-    department: "Client Services",
-    location: "Blantyre (Limbe Branch)",
-    type: "Full-Time",
-    description: "Serve as the primary point of contact for loan onboarding, account balance inquiries, and walk-in clients.",
-    overview:
-      "Create a warm, welcoming, and judgment-free branch experience for every client seeking financial assistance or loan repayment guidance.",
-    responsibilities: [
-      "Welcome walk-in clients and explain loan product terms with complete transparency",
-      "Verify initial KYC identity documentation and payslips",
-      "Handle borrower queries and document feedback for branch management",
-    ],
-    requirements: [
-      "Diploma in Communication, Public Relations, or Business Studies",
-      "Excellent verbal and written communication in English and Chichewa",
-    ],
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-    icon: Users,
-    isFeatured: false,
-  },
-  {
-    id: "graduate-trainee",
-    title: "Graduate Credit & Banking Trainee",
-    department: "Early Career Program",
-    location: "Lilongwe / Blantyre / Mzuzu",
-    type: "12-Month Rotation",
-    description: "Structured 12-month rotation across credit assessment, customer service, and field loan appraisal.",
-    overview:
-      "A fast-track rotational development program designed for ambitious Malawian recent graduates seeking a leadership trajectory in development finance.",
-    responsibilities: [
-      "Rotate through Field Underwriting, Risk Analytics, and Customer Experience",
-      "Participate in community financial literacy workshops",
-      "Complete a mentored capstone project on microfinance innovation",
-    ],
-    requirements: [
-      "Recent graduate (graduated within last 2 years) with minimum Credit or Distinction",
-      "High analytical curiosity, energy, and strong work ethic",
-    ],
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
-    icon: GraduationCap,
-    isFeatured: false,
-  },
-];
-
-const PERKS = [
-  {
-    title: "Competitive Compensation & Performance Bonus",
-    desc: "Rewarding portfolio excellence, customer satisfaction, and on-time repayment milestones with industry-leading monthly incentives.",
-  },
-  {
-    title: "Health & Medical Cover for You & Dependents",
-    desc: "Comprehensive private medical insurance providing hospital, outpatient, dental, and optical benefits across Malawi.",
-  },
-  {
-    title: "Continuous Professional Development",
-    desc: "Tuition support for professional accreditations (CPA, FCCA, Risk Certifications) and structured internal leadership academies.",
-  },
-  {
-    title: "Supportive, Purpose-Driven Culture",
-    desc: "Work with a high-integrity team genuinely committed to lifting everyday Malawians out of financial hardship.",
-  },
-];
+import { OPEN_ROLES, PERKS, JobRole } from "@/lib/jobsData";
 
 export default function JobsPage() {
-  const [selectedRoleForDetails, setSelectedRoleForDetails] = useState<JobRole | null>(null);
-
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
       {/* ── 1. FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
@@ -358,8 +184,6 @@ export default function JobsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {OPEN_ROLES.map((role) => {
-              const Icon = role.icon;
-
               if (role.isFeatured) {
                 return (
                   <div
@@ -377,7 +201,9 @@ export default function JobsPage() {
                       </div>
 
                       <h3 className="text-lg font-extrabold leading-snug mt-3">
-                        {role.title}
+                        <Link href={`/jobs/${role.id}`} className="hover:underline">
+                          {role.title}
+                        </Link>
                       </h3>
                       <p className="text-xs text-slate-900 font-medium mt-2 leading-relaxed">
                         {role.description}
@@ -435,7 +261,9 @@ export default function JobsPage() {
                     </div>
 
                     <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
-                      {role.title}
+                      <Link href={`/jobs/${role.id}`} className="hover:text-[#1b4332] hover:underline transition-colors">
+                        {role.title}
+                      </Link>
                     </h3>
                     <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                       {role.description}
@@ -476,98 +304,6 @@ export default function JobsPage() {
           </div>
         </div>
       </section>
-
-      {/* ── 5. INDIVIDUAL JOB DETAILS MODAL (Job Title → Overview → Responsibilities → Requirements → Application Form) ── */}
-      {selectedRoleForDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative shadow-2xl space-y-6">
-            <button
-              onClick={() => setSelectedRoleForDetails(null)}
-              className="absolute top-5 right-5 size-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 cursor-pointer"
-            >
-              <X className="size-4" />
-            </button>
-
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold uppercase tracking-wide">
-                  {selectedRoleForDetails.department}
-                </span>
-                <span className="text-xs text-slate-400">&bull;</span>
-                <span className="text-xs text-slate-500 font-medium">
-                  {selectedRoleForDetails.location}
-                </span>
-              </div>
-              <h3 className="text-2xl font-extrabold text-slate-900 mt-2">
-                {selectedRoleForDetails.title}
-              </h3>
-            </div>
-
-            {/* Overview */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                Role Overview
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {selectedRoleForDetails.overview}
-              </p>
-            </div>
-
-            {/* Responsibilities */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                Key Responsibilities
-              </h4>
-              <ul className="space-y-1.5 text-xs text-slate-600">
-                {selectedRoleForDetails.responsibilities.map((r, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-[#65a30d] shrink-0 mt-0.5" />
-                    <span>{r}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Requirements */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                Candidate Requirements
-              </h4>
-              <ul className="space-y-1.5 text-xs text-slate-600">
-                {selectedRoleForDetails.requirements.map((req, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-[#65a30d] font-bold">&bull;</span>
-                    <span>{req}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => setSelectedRoleForDetails(null)}
-                className="px-5 py-2.5 rounded-full border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                Close
-              </button>
-              <JobApplicationDialog
-                job={selectedRoleForDetails}
-                triggerButton={
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Apply for Position
-                    <ArrowRight className="size-3.5" />
-                  </button>
-                }
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

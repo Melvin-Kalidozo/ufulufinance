@@ -18,22 +18,22 @@ export interface JobRole {
 
 export const OPEN_ROLES: JobRole[] = [
   {
-    id: "field-credit-officer",
-    title: "Senior Field Credit Officer",
-    department: "Branch Operations",
-    location: "Lilongwe (Area 2 / Old Town)",
+    id: "loan-officer-msme",
+    title: "Loan Officer — MSME Lending",
+    department: "Field Credit Operations",
+    location: "Lilongwe (Area 2 & City Centre)",
     type: "Full-Time",
     salaryRange: "Competitive + Monthly Performance Bonuses",
-    experienceLevel: "Mid-Level (2+ years)",
+    experienceLevel: "Mid-Level (1-2 years)",
     deadline: "December 31, 2026",
-    description: "Lead field appraisals, build borrower relationships with market traders, and manage loan portfolio quality.",
+    description: "Originate and appraise business working capital loans with active field client visits and portfolio growth.",
     overview:
-      "Join our Lilongwe field credit team serving bustling commercial hubs across Area 2, Area 25, and Tsoka market. You will be on the frontlines of financial inclusion, evaluating enterprise cashflows, guiding market vendors through ethical credit applications, and maintaining strong portfolio health.",
+      "As an MSME Loan Officer, you will be the direct bridge between Ufulu Finance and local entrepreneurs. You will appraise market traders, structure working capital facilities, and coach clients on cashflow discipline.",
     responsibilities: [
-      "Conduct in-person field appraisals of MSME businesses, market stalls, and trading operations",
+      "Conduct in-person field appraisals of MSME businesses, market stalls, and trading operations across Lilongwe",
       "Verify KYC identity, supplier invoices, and enterprise daily cash turnover records",
-      "Structure appropriate loan amounts aligned with borrower repayment capacities",
-      "Conduct financial literacy training for market trader clusters and borrower groups",
+      "Structure appropriate loan amounts aligned with borrower repayment capacities and cashflow cycles",
+      "Conduct financial literacy coaching for market trader clusters and solidarity borrower groups",
       "Monitor portfolio repayments, maintaining a Portfolio at Risk (PAR 30) below 2.5%",
       "Deliver compassionate, respectful customer relationship management at all times",
     ],
@@ -241,6 +241,24 @@ export const PERKS = [
   },
 ];
 
-export function getJobById(id: string): JobRole | undefined {
-  return OPEN_ROLES.find((job) => job.id === id);
+export function getJobById(id?: string): JobRole | undefined {
+  if (!id) return undefined;
+  const normalized = decodeURIComponent(id).toLowerCase().trim().replace(/\/$/, "");
+
+  // 1. Direct or alias match
+  const match = OPEN_ROLES.find((job) => {
+    const jid = job.id.toLowerCase();
+    if (jid === normalized) return true;
+    if (normalized === "field-credit-officer" && jid === "loan-officer-msme") return true;
+    if (normalized === "loan-officer-msme" && jid === "field-credit-officer") return true;
+    return false;
+  });
+
+  if (match) return match;
+
+  // 2. Fuzzy / partial match fallback
+  return OPEN_ROLES.find((job) => {
+    const jid = job.id.toLowerCase();
+    return normalized.includes(jid) || jid.includes(normalized);
+  });
 }
