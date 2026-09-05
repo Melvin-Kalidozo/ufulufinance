@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,35 +26,32 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/loans", label: "Loans" },
-  { href: "/about", label: "About us" },
-  { href: "/blog", label: "Blog" },
-  { href: "/jobs", label: "Job listings" },
-  { href: "/contact", label: "Contact us" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Loans", href: "/loans" },
+  { label: "About us", href: "/about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Job listings", href: "/jobs" },
+  { label: "Contact us", href: "/contact" },
 ];
 
 export function PublicHeader() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    function handleScroll() {
       setIsScrolled(window.scrollY > 20);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    }
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const user = session?.user;
   const isAdmin = user?.role === "ADMIN";
-  const accountHref = isAdmin ? "/admin" : "/client";
-
+  const accountHref = isAdmin ? "/admin" : "/customer";
   const initials = user?.name
     ? user.name
         .split(" ")
@@ -76,34 +74,23 @@ export function PublicHeader() {
       >
         <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* ── Brand Logo ── */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+          <Link href="/" className="flex items-center shrink-0 group">
             <div
               className={cn(
-                "flex size-9 items-center justify-center rounded-xl transition-colors",
-                isScrolled ? "bg-[#1b4332] text-white" : "bg-[#84cc16] text-slate-950"
+                "rounded-xl p-1.5 transition-all duration-300 flex items-center justify-center",
+                isScrolled
+                  ? "bg-transparent"
+                  : "bg-white/95 shadow-sm border border-white/40 backdrop-blur-xs"
               )}
             >
-              <svg viewBox="0 0 24 24" className="size-5 fill-current">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <div className="flex items-baseline">
-              <span
-                className={cn(
-                  "text-xl sm:text-2xl font-black tracking-tight leading-none transition-colors",
-                  isScrolled ? "text-slate-900" : "text-white"
-                )}
-              >
-                Ufulu
-                <span
-                  className={cn(
-                    "transition-colors",
-                    isScrolled ? "text-[#1b4332]" : "text-[#a3e635]"
-                  )}
-                >
-                  Finance
-                </span>
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Ufulu Finance - Financial Freedom in Reach"
+                width={175}
+                height={55}
+                priority
+                className="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-102"
+              />
             </div>
           </Link>
 
@@ -121,11 +108,11 @@ export function PublicHeader() {
                     "relative py-2.5 px-3 text-sm font-semibold transition-colors duration-200 group flex flex-col items-center",
                     isScrolled
                       ? active
-                        ? "text-[#1b4332]"
+                        ? "text-[#034DA2]"
                         : "text-slate-600 hover:text-slate-950"
                       : active
-                      ? "text-[#a3e635]"
-                      : "text-white/85 hover:text-white"
+                      ? "text-[#38bdf8]"
+                      : "text-white/90 hover:text-white"
                   )}
                 >
                   <span>{link.label}</span>
@@ -137,11 +124,11 @@ export function PublicHeader() {
                       active
                         ? cn(
                             "w-4/5",
-                            isScrolled ? "bg-[#1b4332]" : "bg-[#a3e635]"
+                            isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
                           )
                         : cn(
                             "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
-                            isScrolled ? "bg-[#1b4332]/60" : "bg-[#a3e635]/80"
+                            isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
                           )
                     )}
                   />
@@ -152,14 +139,14 @@ export function PublicHeader() {
 
           {/* ── Right Actions ── */}
           <div className="flex items-center gap-3">
-            {/* Apply Now button (Hidden on mobile phones, directs directly to /loans) */}
+            {/* Apply Now button */}
             <Link
               href="/loans"
               className={cn(
                 "hidden sm:inline-flex items-center justify-center rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all hover:scale-105 cursor-pointer",
                 isScrolled
-                  ? "bg-[#1b4332] hover:bg-[#2d6a4f] active:bg-[#143d28] text-white shadow-md"
-                  : "bg-[#84cc16] hover:bg-[#a3e635] active:bg-[#65a30d] text-slate-950 font-bold shadow-lg"
+                  ? "bg-[#034DA2] hover:bg-[#023877] active:bg-[#022955] text-white shadow-md shadow-blue-900/15"
+                  : "bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white font-bold shadow-lg shadow-sky-950/30"
               )}
             >
               Apply Now
@@ -177,7 +164,7 @@ export function PublicHeader() {
                         : "border-white/20 bg-white/10 hover:bg-white/20 text-white"
                     )}
                   >
-                    <span className="flex size-7 items-center justify-center rounded-full bg-[#1b4332] text-[10px] font-bold text-white">
+                    <span className="flex size-7 items-center justify-center rounded-full bg-[#034DA2] text-[10px] font-bold text-white">
                       {initials}
                     </span>
                     <span className="hidden text-xs font-semibold xl:inline">
@@ -249,7 +236,7 @@ export function PublicHeader() {
                   className={cn(
                     "flex items-center justify-between py-2.5 text-sm font-semibold rounded-xl px-3.5 transition-colors",
                     active
-                      ? "bg-[#1b4332] text-white shadow-xs"
+                      ? "bg-[#034DA2] text-white shadow-xs"
                       : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
                   )}
                 >

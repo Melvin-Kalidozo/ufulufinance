@@ -23,12 +23,12 @@ export function ShareJobButton({ jobTitle }: { jobTitle?: string }) {
     >
       {copied ? (
         <>
-          <Check className="size-3.5 text-[#a3e635]" />
-          <span className="text-[#a3e635] font-bold">Link Copied!</span>
+          <Check className="size-3.5 text-[#38bdf8]" />
+          <span className="text-[#38bdf8] font-bold">Link Copied!</span>
         </>
       ) : (
         <>
-          <Share2 className="size-3.5 text-emerald-300" />
+          <Share2 className="size-3.5 text-sky-300" />
           <span>Share Vacancy</span>
         </>
       )}

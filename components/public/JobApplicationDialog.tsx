@@ -185,22 +185,22 @@ export function JobApplicationDialog({
 
       <DialogContent className="sm:max-w-[580px] p-0 overflow-hidden rounded-3xl border border-slate-200 shadow-2xl bg-white max-h-[92vh] flex flex-col">
         {/* ── Dialog Header ── */}
-        <div className="bg-[#0b1f14] px-6 py-5 shrink-0 relative overflow-hidden border-b border-emerald-900/40">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#84cc16]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="bg-[#01214A] px-6 py-5 shrink-0 relative overflow-hidden border-b border-blue-900/40">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#009FE0]/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#84cc16]/20 border border-[#84cc16]/40 text-[#a3e635] text-[10px] font-extrabold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#009FE0]/20 border border-[#009FE0]/40 text-[#009FE0] text-[10px] font-extrabold uppercase tracking-wider">
               <Briefcase className="size-3" />
               <span>Career Opportunity</span>
             </div>
             <DialogTitle className="text-xl font-extrabold text-white tracking-tight">
               Apply for {job.title}
             </DialogTitle>
-            <DialogDescription className="text-emerald-100/70 text-xs flex items-center gap-2 pt-0.5">
+            <DialogDescription className="text-blue-100/80 text-xs flex items-center gap-2 pt-0.5">
               <span>{job.department}</span>
               <span>&bull;</span>
               <span className="flex items-center gap-1">
-                <MapPin className="size-3 text-[#a3e635]" /> {job.location}
+                <MapPin className="size-3 text-[#009FE0]" /> {job.location}
               </span>
               <span>&bull;</span>
               <span>{job.type}</span>
@@ -213,7 +213,7 @@ export function JobApplicationDialog({
           {sent ? (
             /* ── Success State ── */
             <div className="py-8 px-4 text-center space-y-5">
-              <div className="size-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#1b4332] flex items-center justify-center mx-auto shadow-xs">
+              <div className="size-16 rounded-2xl bg-blue-50 border border-blue-200/80 text-[#034DA2] flex items-center justify-center mx-auto shadow-xs">
                 <CheckCircle2 className="size-9 text-[#16a34a]" />
               </div>
 
@@ -221,7 +221,7 @@ export function JobApplicationDialog({
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                   Application Tracking Number
                 </span>
-                <span className="font-mono text-xl font-black text-[#1b4332] bg-slate-100 px-4 py-1.5 rounded-xl border border-slate-200 inline-block">
+                <span className="font-mono text-xl font-black text-[#034DA2] bg-slate-100 px-4 py-1.5 rounded-xl border border-slate-200 inline-block">
                   {refId}
                 </span>
                 <h3 className="text-xl font-extrabold text-slate-900 pt-2">
@@ -235,7 +235,7 @@ export function JobApplicationDialog({
               <button
                 type="button"
                 onClick={handleReset}
-                className="w-full rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer"
+                className="w-full rounded-full bg-[#034DA2] hover:bg-[#023877] text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer"
               >
                 Done
               </button>
@@ -259,7 +259,7 @@ export function JobApplicationDialog({
                     className={`${inputBase} ${
                       touched.name && errors.name
                         ? "border-red-400 bg-red-50/20 focus:border-red-500"
-                        : "border-slate-200 focus:border-[#1b4332]"
+                        : "border-slate-200 focus:border-[#034DA2]"
                     }`}
                   />
                   {touched.name && errors.name && (
@@ -283,7 +283,7 @@ export function JobApplicationDialog({
                     className={`${inputBase} ${
                       touched.email && errors.email
                         ? "border-red-400 bg-red-50/20 focus:border-red-500"
-                        : "border-slate-200 focus:border-[#1b4332]"
+                        : "border-slate-200 focus:border-[#034DA2]"
                     }`}
                   />
                   {touched.email && errors.email && (
@@ -310,7 +310,7 @@ export function JobApplicationDialog({
                     className={`${inputBase} ${
                       touched.phone && errors.phone
                         ? "border-red-400 bg-red-50/20 focus:border-red-500"
-                        : "border-slate-200 focus:border-[#1b4332]"
+                        : "border-slate-200 focus:border-[#034DA2]"
                     }`}
                   />
                   {touched.phone && errors.phone && (
@@ -328,7 +328,7 @@ export function JobApplicationDialog({
                     name="location"
                     value={form.location}
                     onChange={handleChange}
-                    className={`${inputBase} border-slate-200 focus:border-[#1b4332] bg-slate-50`}
+                    className={`${inputBase} border-slate-200 focus:border-[#034DA2] bg-slate-50`}
                   >
                     <option value="Lilongwe">Lilongwe (Central Hub)</option>
                     <option value="Blantyre">Blantyre (Southern Hub)</option>
@@ -359,11 +359,11 @@ export function JobApplicationDialog({
                 {!cvFile ? (
                   <label
                     htmlFor="cv-upload-input"
-                    className={`flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed rounded-2xl bg-slate-50 hover:bg-emerald-50/30 transition-colors cursor-pointer text-center group ${
-                      touched.cv && errors.cv ? "border-red-400" : "border-slate-200 hover:border-[#1b4332]"
+                    className={`flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed rounded-2xl bg-slate-50 hover:bg-sky-50/30 transition-colors cursor-pointer text-center group ${
+                      touched.cv && errors.cv ? "border-red-400" : "border-slate-200 hover:border-[#034DA2]"
                     }`}
                   >
-                    <div className="size-8 rounded-full bg-slate-100 group-hover:bg-emerald-100 flex items-center justify-center text-slate-500 group-hover:text-[#1b4332] transition-colors">
+                    <div className="size-8 rounded-full bg-slate-100 group-hover:bg-blue-100 flex items-center justify-center text-slate-500 group-hover:text-[#034DA2] transition-colors">
                       <UploadCloud className="size-4" />
                     </div>
                     <div>
@@ -376,16 +376,16 @@ export function JobApplicationDialog({
                     </div>
                   </label>
                 ) : (
-                  <div className="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200">
+                  <div className="flex items-center justify-between p-3 rounded-2xl bg-sky-50/80 border border-sky-200">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="size-10 rounded-lg bg-[#1b4332] text-white flex items-center justify-center shrink-0">
-                        <FileText className="size-5 text-[#84cc16]" />
+                      <div className="size-10 rounded-lg bg-[#034DA2] text-white flex items-center justify-center shrink-0">
+                        <FileText className="size-5 text-[#009FE0]" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-slate-900 truncate">
                           {cvFile.name}
                         </p>
-                        <p className="text-[10px] text-emerald-800 font-medium">
+                        <p className="text-[10px] text-sky-800 font-medium">
                           {cvFile.size} &bull; Validated PDF ready to submit
                         </p>
                       </div>
@@ -427,7 +427,7 @@ export function JobApplicationDialog({
                   className={`${inputBase} ${
                     touched.coverLetter && errors.coverLetter
                       ? "border-red-400 bg-red-50/20 focus:border-red-500"
-                      : "border-slate-200 focus:border-[#1b4332]"
+                      : "border-slate-200 focus:border-[#034DA2]"
                   } resize-none`}
                 />
                 {touched.coverLetter && errors.coverLetter && (
@@ -442,7 +442,7 @@ export function JobApplicationDialog({
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] active:bg-[#143d28] disabled:opacity-60 text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer hover:shadow-lg"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] active:bg-[#022955] disabled:opacity-60 text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer hover:shadow-lg"
                 >
                   {sending ? (
                     <>

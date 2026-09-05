@@ -42,7 +42,7 @@ export default function JobsPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0d281a]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -54,11 +54,11 @@ export default function JobsPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">Careers</span>
+            <span className="text-[#009FE0] font-semibold">Careers</span>
           </div>
         </div>
       </section>
@@ -68,7 +68,7 @@ export default function JobsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Careers Introduction</span>
             </div>
 
@@ -76,7 +76,7 @@ export default function JobsPage() {
               Build a Career That Directly Transforms Communities
             </h2>
 
-            <p className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
+            <p className="text-sm font-semibold text-[#034DA2] bg-blue-50 border border-blue-100 p-4 rounded-2xl">
               We are a team of ethical bankers, agronomists, risk analysts, and technology developers passionate about expanding financial freedom across Malawi.
             </p>
           </div>
@@ -92,19 +92,19 @@ export default function JobsPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Uncompromising Personal Integrity</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Empathy &amp; Respect for Everyday Borrowers</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Curiosity &amp; Drive to Learn Continuously</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Prudent Risk Assessment Discipline</span>
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function JobsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-[#84cc16]" />
+                <span className="size-2 rounded-full bg-[#009FE0]" />
                 <span>Why Work With Us</span>
               </div>
 
@@ -137,7 +137,7 @@ export default function JobsPage() {
                 />
                 <div className="absolute inset-0 bg-black/10" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#65a30d] shadow-lg">
+                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#00A3E0] shadow-lg">
                     <HeartHandshake className="size-7" />
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export default function JobsPage() {
                   key={p.title}
                   className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4"
                 >
-                  <div className="size-11 rounded-full bg-[#a3e635] flex items-center justify-center shrink-0 text-slate-950 shadow-sm">
+                  <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
                     <Award className="size-5" />
                   </div>
                   <div>
@@ -171,7 +171,7 @@ export default function JobsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Available Positions</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -188,14 +188,14 @@ export default function JobsPage() {
                 return (
                   <div
                     key={role.id}
-                    className="rounded-3xl p-6 bg-[#84cc16] text-slate-950 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
+                    className="rounded-3xl p-6 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
                   >
                     <div>
                       <div className="flex items-start justify-between gap-2">
-                        <span className="px-3 py-1 rounded-full bg-slate-950 text-[#84cc16] text-[10px] font-extrabold uppercase tracking-wide">
+                        <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
                           {role.department}
                         </span>
-                        <div className="size-8 rounded-full bg-slate-950 text-white flex items-center justify-center shrink-0">
+                        <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
                           <ArrowUpRight className="size-4" />
                         </div>
                       </div>
@@ -230,7 +230,7 @@ export default function JobsPage() {
                         triggerButton={
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-950 text-[#84cc16] text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
                           >
                             Apply Now
                             <ArrowRight className="size-3.5" />
@@ -261,7 +261,7 @@ export default function JobsPage() {
                     </div>
 
                     <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
-                      <Link href={`/jobs/${role.id}`} className="hover:text-[#1b4332] hover:underline transition-colors">
+                      <Link href={`/jobs/${role.id}`} className="hover:text-[#034DA2] hover:underline transition-colors">
                         {role.title}
                       </Link>
                     </h3>
@@ -281,7 +281,7 @@ export default function JobsPage() {
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                     <Link
                       href={`/jobs/${role.id}`}
-                      className="text-xs font-bold text-[#1b4332] hover:underline"
+                      className="text-xs font-bold text-[#034DA2] hover:underline"
                     >
                       View Job Details
                     </Link>
@@ -290,7 +290,7 @@ export default function JobsPage() {
                       triggerButton={
                         <button
                           type="button"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white text-xs font-semibold transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
                         >
                           Apply Now
                           <ArrowRight className="size-3.5" />

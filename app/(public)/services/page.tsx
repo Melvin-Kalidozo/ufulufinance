@@ -160,7 +160,7 @@ export default function ServicesPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0b2b1b]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#021833]/95 via-[#0a2540]/90 to-[#034DA2]/85" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -172,11 +172,11 @@ export default function ServicesPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#38bdf8] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">Services</span>
+            <span className="text-[#38bdf8] font-semibold">Services</span>
           </div>
         </div>
       </section>
@@ -192,7 +192,7 @@ export default function ServicesPage() {
               { stat: "MWK 15M", label: "Max Loan Ceiling", sub: "For asset-backed facilities" },
             ].map((item) => (
               <div key={item.stat} className="py-8 px-6 text-center">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#1b4332]">{item.stat}</p>
+                <p className="text-3xl sm:text-4xl font-extrabold text-[#034DA2]">{item.stat}</p>
                 <p className="text-sm font-bold text-slate-900 mt-1">{item.label}</p>
                 <p className="text-[11px] text-slate-400 mt-0.5">{item.sub}</p>
               </div>
@@ -207,8 +207,8 @@ export default function ServicesPage() {
 
           {/* Section header */}
           <div className="mb-12 space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Our Credit Facilities</span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -236,15 +236,15 @@ export default function ServicesPage() {
                     onClick={() => setSelectedServiceIndex(idx)}
                     className={`group w-full text-left rounded-2xl px-4 py-3 sm:px-4.5 sm:py-3.5 border transition-all duration-200 cursor-pointer flex items-center gap-3.5 ${
                       isActive
-                        ? "bg-[#1b4332] border-[#1b4332] shadow-md"
+                        ? "bg-[#034DA2] border-[#034DA2] shadow-md"
                         : "bg-white border-slate-200/80 hover:border-slate-300 hover:shadow-xs"
                     }`}
                   >
                     {/* Icon bubble */}
                     <div className={`size-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                       isActive
-                        ? "bg-[#84cc16] text-slate-950"
-                        : "bg-slate-100 text-[#1b4332] group-hover:bg-emerald-50"
+                        ? "bg-[#009FE0] text-white"
+                        : "bg-slate-100 text-[#034DA2] group-hover:bg-blue-50"
                     }`}>
                       <Icon className="size-4.5" />
                     </div>
@@ -257,7 +257,7 @@ export default function ServicesPage() {
                         {srv.title}
                       </p>
                       <p className={`text-[11px] mt-0.5 leading-snug line-clamp-1 transition-colors ${
-                        isActive ? "text-emerald-200/90" : "text-slate-500"
+                        isActive ? "text-blue-200/90" : "text-slate-500"
                       }`}>
                         {srv.tagline}
                       </p>
@@ -265,7 +265,7 @@ export default function ServicesPage() {
 
                     {/* Active chevron */}
                     <div className={`size-5 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                      isActive ? "bg-[#84cc16] text-slate-950" : "bg-slate-100 text-slate-400 group-hover:text-slate-600"
+                      isActive ? "bg-[#009FE0] text-white" : "bg-slate-100 text-slate-400 group-hover:text-slate-600"
                     }`}>
                       <ArrowRight className="size-3" />
                     </div>
@@ -292,7 +292,7 @@ export default function ServicesPage() {
 
                   {/* Badges on image */}
                   <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#84cc16] text-slate-950 shadow-xs">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#009FE0] text-white shadow-xs">
                       Active Facility
                     </span>
                   </div>
@@ -302,7 +302,7 @@ export default function ServicesPage() {
                     <h3 className="text-lg sm:text-xl font-extrabold text-white leading-snug drop-shadow-xs">
                       {activeService.title}
                     </h3>
-                    <p className="text-xs text-emerald-100/90 mt-0.5 line-clamp-1">{activeService.tagline}</p>
+                    <p className="text-xs text-blue-100/90 mt-0.5 line-clamp-1">{activeService.tagline}</p>
                   </div>
                 </div>
 
@@ -324,7 +324,7 @@ export default function ServicesPage() {
                     ].map((item) => (
                       <div key={item.label} className="bg-slate-50 border border-slate-100 rounded-xl p-3">
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">{item.label}</p>
-                        <p className={`text-xs sm:text-[13px] font-bold leading-snug ${item.accent ? "text-[#1b4332]" : "text-slate-900"}`}>
+                        <p className={`text-xs sm:text-[13px] font-bold leading-snug ${item.accent ? "text-[#034DA2]" : "text-slate-900"}`}>
                           {item.value}
                         </p>
                       </div>
@@ -332,10 +332,10 @@ export default function ServicesPage() {
                   </div>
 
                   {/* Collateral */}
-                  <div className="flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/80 rounded-xl p-3">
-                    <ShieldCheck className="size-4 text-[#1b4332] shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-xl p-3">
+                    <ShieldCheck className="size-4 text-[#034DA2] shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-[10px] text-emerald-900/80 font-bold uppercase tracking-wider mb-0.5">Security / Collateral</p>
+                      <p className="text-[10px] text-[#034DA2] font-bold uppercase tracking-wider mb-0.5">Security / Collateral</p>
                       <p className="text-xs text-slate-700 font-medium leading-relaxed">{activeService.collateral}</p>
                     </div>
                   </div>
@@ -347,7 +347,7 @@ export default function ServicesPage() {
                       triggerButton={
                         <button
                           type="button"
-                          className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white px-5 py-2.5 text-xs font-bold transition-all cursor-pointer hover:shadow-md"
+                          className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-5 py-2.5 text-xs font-bold transition-all cursor-pointer hover:shadow-md"
                         >
                           Enquire for This Service
                           <ArrowRight className="size-3.5" />
@@ -372,8 +372,8 @@ export default function ServicesPage() {
       <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Who We Serve</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -393,20 +393,20 @@ export default function ServicesPage() {
                   className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow"
                 >
                   <div className="space-y-3">
-                    <div className="size-12 rounded-2xl bg-[#a3e635]/20 text-[#1b4332] flex items-center justify-center">
+                    <div className="size-12 rounded-2xl bg-blue-50 text-[#034DA2] flex items-center justify-center border border-blue-100">
                       <Icon className="size-6" />
                     </div>
                     <h3 className="text-base font-bold text-slate-900">{group.title}</h3>
-                    <span className="text-[11px] font-semibold text-emerald-800 block">
+                    <span className="text-[11px] font-semibold text-[#009FE0] block">
                       {group.subtitle}
                     </span>
                     <p className="text-xs text-slate-600 leading-relaxed">
                       {group.desc}
                     </p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-[#1b4332]">
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-[#034DA2]">
                     <span>Eligible for Credit</span>
-                    <CheckCircle2 className="size-3.5 text-[#65a30d]" />
+                    <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
                   </div>
                 </div>
               );
@@ -418,8 +418,8 @@ export default function ServicesPage() {
       {/* ── 6. DISTINCT SERVICE ADVANTAGES (Non-repetitive, modern cards) ─ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-            <span className="size-2 rounded-full bg-[#84cc16]" />
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+            <span className="size-2 rounded-full bg-[#009FE0]" />
             <span>Borrower Advantages</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -439,7 +439,7 @@ export default function ServicesPage() {
                 className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="size-11 rounded-2xl bg-[#1b4332] text-[#84cc16] flex items-center justify-center">
+                  <div className="size-11 rounded-2xl bg-[#034DA2] text-[#38bdf8] flex items-center justify-center">
                     <Icon className="size-5" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900">{adv.title}</h3>
@@ -447,9 +447,9 @@ export default function ServicesPage() {
                     {adv.desc}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-emerald-800">
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-[#034DA2]">
                   <span>Guaranteed Feature</span>
-                  <CheckCircle2 className="size-3 text-[#65a30d]" />
+                  <CheckCircle2 className="size-3 text-[#00A3E0]" />
                 </div>
               </div>
             );

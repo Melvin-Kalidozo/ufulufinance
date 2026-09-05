@@ -35,17 +35,17 @@ export default function ErrorPage({
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col justify-between">
       {/* Top Header Bar */}
-      <header className="w-full bg-[#0d281a] border-b border-emerald-900/40 py-4 px-4 sm:px-8">
+      <header className="w-full bg-[#01214A] border-b border-sky-900/40 py-4 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="size-9 rounded-xl bg-[#1b4332] border border-[#84cc16]/40 flex items-center justify-center font-black text-[#84cc16] text-lg shadow-sm">
+            <div className="size-9 rounded-xl bg-[#034DA2] border border-[#00A3E0]/40 flex items-center justify-center font-black text-white text-lg shadow-sm">
               U
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-white text-base tracking-tight leading-none">
                 Ufulu Finance
               </span>
-              <span className="text-[10px] font-semibold text-emerald-400 tracking-wider uppercase mt-0.5">
+              <span className="text-[10px] font-semibold text-sky-400 tracking-wider uppercase mt-0.5">
                 Microfinance Malawi
               </span>
             </div>
@@ -53,9 +53,9 @@ export default function ErrorPage({
 
           <Link
             href="/contact"
-            className="text-xs font-semibold text-emerald-200 hover:text-[#84cc16] transition-colors flex items-center gap-1.5"
+            className="text-xs font-semibold text-sky-200 hover:text-white transition-colors flex items-center gap-1.5"
           >
-            <HelpCircle className="size-3.5" />
+            <HelpCircle className="size-3.5 text-[#00A3E0]" />
             <span>Support Desk</span>
           </Link>
         </div>
@@ -84,8 +84,8 @@ export default function ErrorPage({
           </p>
 
           {/* Security & Integrity Reassurance */}
-          <div className="my-6 p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 max-w-md mx-auto flex items-center gap-3 text-left">
-            <div className="size-9 rounded-xl bg-[#1b4332] text-[#84cc16] flex items-center justify-center shrink-0">
+          <div className="my-6 p-4 rounded-2xl bg-blue-50/80 border border-blue-200/80 max-w-md mx-auto flex items-center gap-3 text-left">
+            <div className="size-9 rounded-xl bg-[#034DA2] text-[#38bdf8] flex items-center justify-center shrink-0">
               <ShieldCheck className="size-5" />
             </div>
             <div>
@@ -108,9 +108,9 @@ export default function ErrorPage({
             <button
               type="button"
               onClick={handleRetry}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#1b4332] hover:bg-[#143225] text-white text-xs sm:text-sm font-bold transition-all hover:scale-[1.02] shadow-md shadow-emerald-950/20 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs sm:text-sm font-bold transition-all hover:scale-[1.02] shadow-md shadow-blue-950/20 cursor-pointer"
             >
-              <RotateCcw className="size-4 text-[#84cc16]" />
+              <RotateCcw className="size-4 text-[#38bdf8]" />
               <span>Retry Operation</span>
             </button>
 
@@ -124,7 +124,7 @@ export default function ErrorPage({
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#84cc16] hover:bg-[#a3e635] text-slate-950 text-xs sm:text-sm font-extrabold transition-all hover:scale-[1.02] shadow-md shadow-lime-500/20"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white text-xs sm:text-sm font-extrabold transition-all hover:scale-[1.02] shadow-md shadow-sky-500/20"
             >
               <PhoneCall className="size-4" />
               <span>Contact Support</span>
@@ -134,16 +134,16 @@ export default function ErrorPage({
           {/* Emergency helpline */}
           <div className="mt-12 pt-8 border-t border-slate-200 text-xs text-slate-500 flex flex-wrap items-center justify-center gap-6">
             <div className="flex items-center gap-1.5">
-              <PhoneCall className="size-3.5 text-[#1b4332]" />
+              <PhoneCall className="size-3.5 text-[#034DA2]" />
               <span>Emergency Hotline:</span>
-              <a href="tel:+265990000000" className="font-bold text-slate-800 hover:text-[#1b4332]">
+              <a href="tel:+265990000000" className="font-bold text-slate-800 hover:text-[#034DA2]">
                 +265 99 000 0000
               </a>
             </div>
             <div className="flex items-center gap-1.5">
-              <Mail className="size-3.5 text-[#1b4332]" />
+              <Mail className="size-3.5 text-[#034DA2]" />
               <span>Email:</span>
-              <a href="mailto:support@ufulufinance.com" className="font-bold text-slate-800 hover:text-[#1b4332]">
+              <a href="mailto:support@ufulufinance.com" className="font-bold text-slate-800 hover:text-[#034DA2]">
                 support@ufulufinance.com
               </a>
             </div>

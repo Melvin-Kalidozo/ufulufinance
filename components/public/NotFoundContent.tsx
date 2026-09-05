@@ -19,8 +19,8 @@ export function NotFoundContent() {
   return (
     <div className="w-full max-w-3xl mx-auto text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
       {/* Top Badge */}
-      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-[#1b4332] text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
-        <FileQuestion className="size-3.5 text-[#84cc16]" />
+      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#034DA2] text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
+        <FileQuestion className="size-3.5 text-[#009FE0]" />
         <span>Error 404 • Page Not Found</span>
       </div>
 
@@ -30,8 +30,8 @@ export function NotFoundContent() {
           404
         </span>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="size-20 sm:size-24 rounded-3xl bg-gradient-to-br from-[#1b4332] to-[#0f2e1e] flex items-center justify-center shadow-xl shadow-emerald-950/20 border border-emerald-600/30">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#84cc16]">
+          <div className="size-20 sm:size-24 rounded-3xl bg-gradient-to-br from-[#034DA2] to-[#01214A] flex items-center justify-center shadow-xl shadow-blue-950/20 border border-blue-500/30">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
               ?
             </span>
           </div>
@@ -60,9 +60,9 @@ export function NotFoundContent() {
 
         <Link
           href="/"
-          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#1b4332] hover:bg-[#143225] text-white text-xs sm:text-sm font-bold transition-all hover:scale-[1.02] shadow-md shadow-emerald-950/20"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs sm:text-sm font-bold transition-all hover:scale-[1.02] shadow-md shadow-blue-950/20"
         >
-          <Home className="size-4 text-[#84cc16]" />
+          <Home className="size-4 text-[#009FE0]" />
           <span>Return to Homepage</span>
         </Link>
       </div>
@@ -76,13 +76,13 @@ export function NotFoundContent() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           <Link
             href="/loans"
-            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between"
+            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
-              <div className="size-9 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center group-hover:bg-[#1b4332] group-hover:text-white transition-colors mb-3">
+              <div className="size-9 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors mb-3">
                 <Coins className="size-4.5" />
               </div>
-              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#1b4332] transition-colors">
+              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#034DA2] transition-colors">
                 Loan Products
               </h3>
             </div>
@@ -93,13 +93,13 @@ export function NotFoundContent() {
 
           <Link
             href="/services"
-            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between"
+            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
-              <div className="size-9 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center group-hover:bg-[#1b4332] group-hover:text-white transition-colors mb-3">
+              <div className="size-9 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors mb-3">
                 <Layers className="size-4.5" />
               </div>
-              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#1b4332] transition-colors">
+              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#034DA2] transition-colors">
                 All Services
               </h3>
             </div>
@@ -110,13 +110,13 @@ export function NotFoundContent() {
 
           <Link
             href="/jobs"
-            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between"
+            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
-              <div className="size-9 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center group-hover:bg-[#1b4332] group-hover:text-white transition-colors mb-3">
+              <div className="size-9 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors mb-3">
                 <Briefcase className="size-4.5" />
               </div>
-              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#1b4332] transition-colors">
+              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#034DA2] transition-colors">
                 Careers
               </h3>
             </div>
@@ -127,13 +127,13 @@ export function NotFoundContent() {
 
           <Link
             href="/contact"
-            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between"
+            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
-              <div className="size-9 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center group-hover:bg-[#1b4332] group-hover:text-white transition-colors mb-3">
+              <div className="size-9 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors mb-3">
                 <HelpCircle className="size-4.5" />
               </div>
-              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#1b4332] transition-colors">
+              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#034DA2] transition-colors">
                 Help & Support
               </h3>
             </div>
@@ -144,9 +144,9 @@ export function NotFoundContent() {
         </div>
 
         {/* Direct Help Bar */}
-        <div className="mt-8 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="mt-8 p-4 rounded-2xl bg-blue-50/70 border border-blue-200/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-[#1b4332] text-[#84cc16] flex items-center justify-center shrink-0">
+            <div className="size-9 rounded-xl bg-[#034DA2] text-[#009FE0] flex items-center justify-center shrink-0">
               <PhoneCall className="size-4" />
             </div>
             <div>
@@ -159,13 +159,13 @@ export function NotFoundContent() {
           <div className="flex items-center gap-2 shrink-0">
             <a
               href="tel:+265990000000"
-              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-[#1b4332] transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-[#034DA2] transition-colors"
             >
               +265 99 000 0000
             </a>
             <Link
               href="/contact"
-              className="px-3.5 py-1.5 rounded-xl bg-[#1b4332] hover:bg-[#143225] text-xs font-bold text-white transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-xs font-bold text-white transition-colors"
             >
               Contact Us
             </Link>

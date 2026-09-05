@@ -263,7 +263,7 @@ export default function AboutPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0d281a]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -275,11 +275,11 @@ export default function AboutPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">About us</span>
+            <span className="text-[#009FE0] font-semibold">About us</span>
           </div>
         </div>
       </section>
@@ -289,7 +289,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Company Overview</span>
             </div>
 
@@ -297,7 +297,7 @@ export default function AboutPage() {
               Improving the Welfare of Malawians Through Accessible &amp; Meaningful Financial Services
             </h2>
 
-            <p className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
+            <p className="text-sm font-semibold text-[#034DA2] bg-blue-50 border border-blue-100 p-4 rounded-2xl">
               A non-deposit-taking financial institution committed to responsible lending, customer-focused service, and expanding financial inclusion across Malawi.
             </p>
           </div>
@@ -319,27 +319,27 @@ export default function AboutPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Civil Service Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Private Sector Payroll Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Village Banking Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Business Loans (Expanding)</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Responsible Lending Practices</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Non-Deposit Taking Microfinance Institution</span>
                 </div>
               </div>
@@ -353,7 +353,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Our History</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -372,10 +372,10 @@ export default function AboutPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-black text-[#1b4332] tracking-tight">
+                    <span className="text-2xl font-black text-[#034DA2] tracking-tight">
                       {step.year}
                     </span>
-                    <span className="size-7 rounded-full bg-[#84cc16]/20 text-slate-950 font-bold text-xs flex items-center justify-center">
+                    <span className="size-7 rounded-full bg-[#009FE0]/20 text-slate-950 font-bold text-xs flex items-center justify-center">
                       0{idx + 1}
                     </span>
                   </div>
@@ -384,8 +384,8 @@ export default function AboutPage() {
                     {step.description}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-emerald-800">
-                  <CheckCircle2 className="size-3.5 text-[#65a30d]" />
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-[#034DA2]">
+                  <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
                   <span>Milestone Verified</span>
                 </div>
               </div>
@@ -398,33 +398,33 @@ export default function AboutPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Vision Card */}
-          <div className="bg-[#1b4332] text-white rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-between">
+          <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-between">
             <div className="relative z-10 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#a3e635] tracking-wide uppercase">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#009FE0] tracking-wide uppercase">
                 <Eye className="size-3.5" />
                 <span>Vision Statement</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
                 A Leading Industry Player in Improving the Welfare of Malawians
               </h3>
-              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed">
                 To be a leading industry player in improving the welfare of Malawians through provision of affordable and meaningful financial services.
               </p>
             </div>
 
-            <div className="relative z-10 pt-8 mt-6 border-t border-emerald-700/50 flex items-center justify-between text-xs text-emerald-200">
+            <div className="relative z-10 pt-8 mt-6 border-t border-blue-700/50 flex items-center justify-between text-xs text-blue-200">
               <span>Our Guiding North Star</span>
-              <span className="text-[#a3e635] font-semibold">Ufulu Vision &rarr;</span>
+              <span className="text-[#009FE0] font-semibold">Ufulu Vision &rarr;</span>
             </div>
 
-            <div className="absolute -bottom-16 -right-16 size-48 rounded-full bg-[#84cc16]/15 blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-16 -right-16 size-48 rounded-full bg-[#009FE0]/15 blur-2xl pointer-events-none" />
           </div>
 
           {/* Mission Card */}
           <div className="bg-white text-slate-900 rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-200/90 flex flex-col justify-between">
             <div className="relative z-10 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-bold text-slate-800 tracking-wide uppercase">
-                <Target className="size-3.5 text-[#65a30d]" />
+                <Target className="size-3.5 text-[#00A3E0]" />
                 <span>Mission Statement</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
@@ -437,10 +437,10 @@ export default function AboutPage() {
 
             <div className="relative z-10 pt-8 mt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span>Customer-First Always</span>
-              <span className="text-[#65a30d] font-semibold">Ufulu Mission &rarr;</span>
+              <span className="text-[#00A3E0] font-semibold">Ufulu Mission &rarr;</span>
             </div>
 
-            <div className="absolute -top-16 -right-16 size-44 rounded-full bg-[#84cc16]/10 blur-2xl pointer-events-none" />
+            <div className="absolute -top-16 -right-16 size-44 rounded-full bg-[#009FE0]/10 blur-2xl pointer-events-none" />
           </div>
         </div>
       </section>
@@ -450,7 +450,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Core Values</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -468,14 +468,14 @@ export default function AboutPage() {
                 return (
                   <div
                     key={val.id}
-                    className="rounded-3xl p-7 bg-[#84cc16] text-slate-950 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
+                    className="rounded-3xl p-7 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <span className="px-3 py-1 rounded-full bg-slate-950 text-white text-[10px] font-extrabold uppercase tracking-wide">
                           {val.badge}
                         </span>
-                        <div className="size-10 rounded-full bg-slate-950 text-[#84cc16] flex items-center justify-center">
+                        <div className="size-10 rounded-full bg-white/20 text-white flex items-center justify-center">
                           <Icon className="size-5" />
                         </div>
                       </div>
@@ -502,7 +502,7 @@ export default function AboutPage() {
                       <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
                         {val.badge}
                       </span>
-                      <div className="size-10 rounded-full bg-[#a3e635]/30 text-slate-900 flex items-center justify-center">
+                      <div className="size-10 rounded-full bg-[#009FE0]/20 text-slate-900 flex items-center justify-center">
                         <Icon className="size-5 text-slate-900" />
                       </div>
                     </div>
@@ -515,7 +515,7 @@ export default function AboutPage() {
                   </div>
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-500">
                     <span>Practiced Daily</span>
-                    <Check className="size-4 text-[#65a30d]" />
+                    <Check className="size-4 text-[#00A3E0]" />
                   </div>
                 </div>
               );
@@ -528,7 +528,7 @@ export default function AboutPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-            <span className="size-2 rounded-full bg-[#84cc16]" />
+            <span className="size-2 rounded-full bg-[#009FE0]" />
             <span>Regional Footprint</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -546,16 +546,16 @@ export default function AboutPage() {
               className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow"
             >
               <div className="space-y-3">
-                <div className="size-11 rounded-2xl bg-[#1b4332] text-[#84cc16] flex items-center justify-center">
+                <div className="size-11 rounded-2xl bg-[#034DA2] text-[#009FE0] flex items-center justify-center">
                   <Building2 className="size-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wide block">
+                  <span className="text-[11px] font-bold text-[#034DA2] uppercase tracking-wide block">
                     {hub.region}
                   </span>
                   <h3 className="text-xl font-bold text-slate-900 mt-0.5">{hub.city} Hub</h3>
                   <p className="text-xs font-medium text-slate-500 flex items-center gap-1 mt-1">
-                    <MapPin className="size-3.5 text-[#65a30d]" /> {hub.location}
+                    <MapPin className="size-3.5 text-[#00A3E0]" /> {hub.location}
                   </p>
                 </div>
 
@@ -579,7 +579,7 @@ export default function AboutPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div className="space-y-2.5 max-w-xl">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-[#84cc16]" />
+                <span className="size-2 rounded-full bg-[#009FE0]" />
                 <span>Governance &amp; Leadership</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -596,7 +596,7 @@ export default function AboutPage() {
                 onClick={() => setActiveLeaderTab("all")}
                 className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   activeLeaderTab === "all"
-                    ? "bg-[#1b4332] text-white shadow-xs"
+                    ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -609,7 +609,7 @@ export default function AboutPage() {
                 onClick={() => setActiveLeaderTab("board")}
                 className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   activeLeaderTab === "board"
-                    ? "bg-[#1b4332] text-white shadow-xs"
+                    ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -622,7 +622,7 @@ export default function AboutPage() {
                 onClick={() => setActiveLeaderTab("executive")}
                 className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   activeLeaderTab === "executive"
-                    ? "bg-[#1b4332] text-white shadow-xs"
+                    ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -656,13 +656,13 @@ export default function AboutPage() {
                       <span
                         className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-xs backdrop-blur-md inline-flex items-center gap-1.5 ${
                           lead.category === "board"
-                            ? "bg-white/95 text-[#1b4332] border border-slate-200/60"
-                            : "bg-[#1b4332]/95 text-white border border-emerald-700/50"
+                            ? "bg-white/95 text-[#034DA2] border border-slate-200/60"
+                            : "bg-[#034DA2]/95 text-white border border-blue-700/50"
                         }`}
                       >
                         <span
                           className={`size-1.5 rounded-full ${
-                            lead.category === "board" ? "bg-amber-500" : "bg-[#84cc16]"
+                            lead.category === "board" ? "bg-amber-500" : "bg-[#009FE0]"
                           }`}
                         />
                         {lead.category === "board" ? "Board Member" : "Executive"}
@@ -676,15 +676,15 @@ export default function AboutPage() {
 
                   {/* Card Body (Evened out, balanced proportion) */}
                   <div className="p-5 pb-3">
-                    <h3 className="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-[#1b4332] transition-colors leading-snug tracking-tight">
+                    <h3 className="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors leading-snug tracking-tight">
                       {lead.name}
                     </h3>
-                    <p className="text-xs font-bold text-[#1b4332] mt-0.5 leading-snug">
+                    <p className="text-xs font-bold text-[#034DA2] mt-0.5 leading-snug">
                       {lead.role}
                     </p>
 
                     <div className="flex items-center gap-1.5 text-[11px] text-slate-600 mt-2 font-medium">
-                      <GraduationCap className="size-3.5 text-[#1b4332] shrink-0" />
+                      <GraduationCap className="size-3.5 text-[#034DA2] shrink-0" />
                       <span className="truncate">{lead.credentials}</span>
                     </div>
 
@@ -697,8 +697,8 @@ export default function AboutPage() {
                 {/* Footer: Verified Authority */}
                 <div className="px-5 pb-5 pt-0">
                   <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                    <span className="inline-flex items-center gap-1 text-emerald-800 font-semibold">
-                      <BadgeCheck className="size-3.5 text-[#16a34a]" />
+                    <span className="inline-flex items-center gap-1 text-[#034DA2] font-semibold">
+                      <BadgeCheck className="size-3.5 text-[#00A3E0]" />
                       Verified Credentials
                     </span>
                     <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
@@ -717,7 +717,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <HelpCircle className="size-4 text-[#65a30d]" />
+              <HelpCircle className="size-4 text-[#00A3E0]" />
               <span>Common Questions</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950">
@@ -746,7 +746,7 @@ export default function AboutPage() {
                     </span>
                     <div
                       className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                        isOpen ? "bg-[#1b4332] text-white rotate-180" : "bg-slate-100 text-slate-600"
+                        isOpen ? "bg-[#034DA2] text-white rotate-180" : "bg-slate-100 text-slate-600"
                       }`}
                     >
                       <ChevronDown className="size-4" />
@@ -763,19 +763,19 @@ export default function AboutPage() {
             })}
           </div>
 
-          <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-emerald-50 border border-emerald-100 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
+          <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
             <div>
-              <h4 className="text-sm font-bold text-emerald-950">
+              <h4 className="text-sm font-bold text-[#034DA2]">
                 Need more answers or custom advisory?
               </h4>
-              <p className="text-xs text-emerald-800/80 mt-0.5">
+              <p className="text-xs text-[#034DA2]/80 mt-0.5">
                 Explore our full FAQ knowledge base or speak with our accredited loan officers.
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <Link
                 href="/faq"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white text-xs font-bold transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-bold transition-all shadow-sm"
               >
                 <span>Full FAQ Page</span>
                 <ArrowRight className="size-3.5" />
@@ -796,8 +796,8 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#a3e635]">
-                <span className="size-2 rounded-full bg-[#84cc16]" />
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#009FE0]">
+                <span className="size-2 rounded-full bg-[#009FE0]" />
                 <span>Our Impact</span>
               </div>
 
@@ -812,7 +812,7 @@ export default function AboutPage() {
               <div className="pt-2">
                 <Link
                   href="/impact"
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#a3e635] hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#009FE0] hover:text-white transition-colors"
                 >
                   <span>Explore our detailed Impact &amp; Portfolio Report</span>
                   <ArrowRight className="size-4" />
@@ -822,7 +822,7 @@ export default function AboutPage() {
 
             <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#a3e635]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
                   MWK 4.8B+
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">
@@ -834,7 +834,7 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#a3e635]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
                   15,200+
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">
@@ -846,7 +846,7 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#a3e635]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
                   68%
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">
@@ -858,7 +858,7 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#a3e635]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
                   98.4%
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">

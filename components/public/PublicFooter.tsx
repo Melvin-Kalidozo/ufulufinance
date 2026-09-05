@@ -36,14 +36,14 @@ export function PublicFooter() {
   const hideCtaBanner = pathname === "/" || pathname === "/contact";
 
   return (
-    <footer className="relative w-full bg-gradient-to-b from-[#143d28] via-[#0d281a] to-[#071910] text-slate-100 overflow-hidden border-t border-emerald-900/40">
+    <footer className="relative w-full bg-gradient-to-b from-[#0a2540] via-[#032d60] to-[#021833] text-slate-100 overflow-hidden border-t border-blue-900/40">
       {/* Subtle ambient decorative radial glow */}
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,_rgba(132,204,22,0.12)_0%,_transparent_70%)] pointer-events-none" />
-      <div className="absolute -bottom-32 left-10 w-96 h-96 bg-[radial-gradient(circle,_rgba(45,106,79,0.2)_0%,_transparent_70%)] pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,_rgba(0,159,224,0.12)_0%,_transparent_70%)] pointer-events-none" />
+      <div className="absolute -bottom-32 left-10 w-96 h-96 bg-[radial-gradient(circle,_rgba(3,77,162,0.2)_0%,_transparent_70%)] pointer-events-none" />
 
       {/* ── CTA BANNER (For Subpages) ───────────── */}
       {!hideCtaBanner && (
-        <div className="relative min-h-[360px] sm:min-h-[400px] flex items-center justify-center overflow-hidden border-b border-emerald-800/40">
+        <div className="relative min-h-[360px] sm:min-h-[400px] flex items-center justify-center overflow-hidden border-b border-blue-800/40">
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=2000&q=80"
@@ -54,7 +54,7 @@ export function PublicFooter() {
               sizes="100vw"
             />
             {/* Natural vignette/gradient overlay */}
-            <div className="absolute inset-0 bg-[#0d281a]/85 backdrop-brightness-95" />
+            <div className="absolute inset-0 bg-[#032d60]/85 backdrop-brightness-95" />
           </div>
 
           <div className="relative z-10 w-full max-w-4xl mx-auto px-4 py-16 text-center text-white space-y-4">
@@ -68,7 +68,7 @@ export function PublicFooter() {
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
               <Link
                 href="/loans"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#84cc16] hover:bg-[#a3e635] text-slate-950 px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 Apply for Financing
                 <ArrowRight className="size-4" />
@@ -84,25 +84,26 @@ export function PublicFooter() {
         </div>
       )}
 
-      {/* ── FOOTER BODY (Integrated Green Gradient Footer) ── */}
+      {/* ── FOOTER BODY (Integrated Blue Gradient Footer) ── */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 py-16">
         {/* ── Main Footer Grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
 
           {/* ── Brand column (Left) ── */}
           <div className="lg:col-span-4 space-y-5">
-            <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="flex size-9 items-center justify-center rounded-xl bg-[#84cc16] text-slate-950 shadow-md">
-                <svg viewBox="0 0 24 24" className="size-5 fill-current">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
+            <Link href="/" className="inline-flex items-center group">
+              <div className="bg-white rounded-2xl p-2 sm:p-2.5 shadow-md border border-white/20">
+                <Image
+                  src="/logo.png"
+                  alt="Ufulu Finance - Financial Freedom in Reach"
+                  width={200}
+                  height={65}
+                  className="h-10 sm:h-12 w-auto object-contain"
+                />
               </div>
-              <span className="text-2xl font-black tracking-tight text-white">
-                Ufulu<span className="text-[#a3e635]">Finance</span>
-              </span>
             </Link>
 
-            <p className="text-xs sm:text-sm text-emerald-100/75 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Dedicated to empowering everyday Malawians with transparent financial solutions, ethical microfinance, and fair credit to cultivate sustainable prosperity.
             </p>
 
@@ -115,7 +116,7 @@ export function PublicFooter() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.name}
-                  className="flex size-8 items-center justify-center rounded-full bg-white/10 hover:bg-[#84cc16] hover:text-slate-950 text-white transition-all hover:scale-105"
+                  className="flex size-8 items-center justify-center rounded-full bg-white/10 hover:bg-[#009FE0] hover:text-white text-white transition-all hover:scale-105"
                 >
                   <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
                     <path d={s.d} />
@@ -133,29 +134,29 @@ export function PublicFooter() {
               <h4 className="text-xs font-bold text-white tracking-wider uppercase">
                 Company
               </h4>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-emerald-100/70">
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
                 <li>
-                  <Link href="/about" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/about" className="hover:text-[#38bdf8] transition-colors">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/services" className="hover:text-[#38bdf8] transition-colors">
                     Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="/loans" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/loans" className="hover:text-[#38bdf8] transition-colors">
                     Loan Products
                   </Link>
                 </li>
                 <li>
-                  <Link href="/impact" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/impact" className="hover:text-[#38bdf8] transition-colors">
                     Portfolio &amp; Impact
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/contact" className="hover:text-[#38bdf8] transition-colors">
                     Contact Us
                   </Link>
                 </li>
@@ -167,29 +168,29 @@ export function PublicFooter() {
               <h4 className="text-xs font-bold text-white tracking-wider uppercase">
                 Resources
               </h4>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-emerald-100/70">
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
                 <li>
-                  <Link href="/blog" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/blog" className="hover:text-[#38bdf8] transition-colors">
                     Blog &amp; Insights
                   </Link>
                 </li>
                 <li>
-                  <Link href="/faq" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/faq" className="hover:text-[#38bdf8] transition-colors">
                     FAQs
                   </Link>
                 </li>
                 <li>
-                  <Link href="/loans" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/loans" className="hover:text-[#38bdf8] transition-colors">
                     Loan Calculator
                   </Link>
                 </li>
                 <li>
-                  <Link href="/privacy" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/privacy" className="hover:text-[#38bdf8] transition-colors">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/terms" className="hover:text-[#38bdf8] transition-colors">
                     Terms of Service
                   </Link>
                 </li>
@@ -201,24 +202,24 @@ export function PublicFooter() {
               <h4 className="text-xs font-bold text-white tracking-wider uppercase">
                 Careers &amp; Help
               </h4>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-emerald-100/70">
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
                 <li>
-                  <Link href="/jobs" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/jobs" className="hover:text-[#38bdf8] transition-colors">
                     Open Positions
                   </Link>
                 </li>
                 <li>
-                  <Link href="/jobs" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/jobs" className="hover:text-[#38bdf8] transition-colors">
                     Why Work With Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/contact" className="hover:text-[#38bdf8] transition-colors">
                     Customer Support
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-[#a3e635] transition-colors">
+                  <Link href="/contact" className="hover:text-[#38bdf8] transition-colors">
                     Branch Locator
                   </Link>
                 </li>
@@ -227,41 +228,41 @@ export function PublicFooter() {
 
             {/* Branch Locations Integrated Column */}
             <div className="space-y-3.5">
-              <h4 className="text-xs font-bold text-white tracking-wider uppercase flex items-center gap-1.5 text-[#a3e635]">
+              <h4 className="text-xs font-bold text-white tracking-wider uppercase flex items-center gap-1.5 text-[#38bdf8]">
                 <MapPin className="size-3.5" />
                 <span>Our Offices</span>
               </h4>
-              <div className="space-y-3 text-xs text-emerald-100/75">
+              <div className="space-y-3 text-xs text-slate-300">
                 <div>
                   <p className="font-bold text-white">Lilongwe Head Office</p>
-                  <p className="text-[11px] text-emerald-200/70">City Centre, Area 3, Lilongwe, Malawi</p>
+                  <p className="text-[11px] text-slate-400">City Centre, Area 3, Lilongwe, Malawi</p>
                   <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="tel:+265991234567" className="text-[#a3e635] hover:underline font-medium">
+                    <a href="tel:+265991234567" className="text-[#38bdf8] hover:underline font-medium">
                       +265 99 123 4567
                     </a>
-                    <span className="text-[10px] text-emerald-300/60">8:00 AM – 5:00 PM</span>
+                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
                   </div>
                 </div>
 
                 <div>
                   <p className="font-bold text-white">Blantyre Commercial Branch</p>
-                  <p className="text-[11px] text-emerald-200/70">Victoria Avenue, CBD, Blantyre, Malawi</p>
+                  <p className="text-[11px] text-slate-400">Victoria Avenue, CBD, Blantyre, Malawi</p>
                   <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="tel:+265881234567" className="text-[#a3e635] hover:underline font-medium">
+                    <a href="tel:+265881234567" className="text-[#38bdf8] hover:underline font-medium">
                       +265 88 123 4567
                     </a>
-                    <span className="text-[10px] text-emerald-300/60">8:00 AM – 5:00 PM</span>
+                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
                   </div>
                 </div>
 
                 <div>
                   <p className="font-bold text-white">Mzuzu Regional Office</p>
-                  <p className="text-[11px] text-emerald-200/70">Katoto Commercial Area, Mzuzu, Malawi</p>
+                  <p className="text-[11px] text-slate-400">Katoto Commercial Area, Mzuzu, Malawi</p>
                   <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="mailto:info@ufulufinance.com" className="text-[#a3e635] hover:underline font-medium">
+                    <a href="mailto:info@ufulufinance.com" className="text-[#38bdf8] hover:underline font-medium">
                       info@ufulufinance.com
                     </a>
-                    <span className="text-[10px] text-emerald-300/60">8:00 AM – 5:00 PM</span>
+                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
                   </div>
                 </div>
               </div>
@@ -271,7 +272,7 @@ export function PublicFooter() {
         </div>
 
         {/* ── Bottom Copyright & Legal ── */}
-        <div className="mt-14 pt-6 border-t border-emerald-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-200/60">
+        <div className="mt-14 pt-6 border-t border-blue-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>&copy; {new Date().getFullYear()} Ufulu Finance Limited. All rights reserved.</p>
           <div className="flex items-center gap-4 text-[11px]">
             <Link href="/privacy" className="hover:text-white transition-colors">

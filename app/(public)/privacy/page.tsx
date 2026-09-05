@@ -103,7 +103,7 @@ export default function PrivacyPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0b2b1b]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -115,11 +115,11 @@ export default function PrivacyPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">Privacy Policy</span>
+            <span className="text-[#009FE0] font-semibold">Privacy Policy</span>
           </div>
         </div>
       </section>
@@ -131,7 +131,7 @@ export default function PrivacyPage() {
           {/* Left Column */}
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Client Data Protection</span>
             </div>
 
@@ -152,27 +152,27 @@ export default function PrivacyPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Zero Unauthorised Third-Party Selling</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Bank-Grade 256-Bit SSL Encryption</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Transparent Credit Bureau Reporting</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Right to Review &amp; Correct Records</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Secure Mobile Disbursal Rails</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#65a30d] shrink-0" />
+                  <Check className="size-4 text-[#00A3E0] shrink-0" />
                   <span>Dedicated Compliance Officer Support</span>
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function PrivacyPage() {
             {/* Left */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-[#84cc16]" />
+                <span className="size-2 rounded-full bg-[#009FE0]" />
                 <span>Security Standards</span>
               </div>
 
@@ -208,7 +208,7 @@ export default function PrivacyPage() {
                 />
                 <div className="absolute inset-0 bg-black/10" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#65a30d] shadow-lg">
+                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#00A3E0] shadow-lg">
                     <Lock className="size-7" />
                   </div>
                 </div>
@@ -219,7 +219,7 @@ export default function PrivacyPage() {
             <div className="lg:col-span-6 space-y-4">
 
               <div className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4">
-                <div className="size-11 rounded-full bg-[#a3e635] flex items-center justify-center shrink-0 text-slate-950 shadow-sm">
+                <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
                   <ShieldCheck className="size-5" />
                 </div>
                 <div>
@@ -233,7 +233,7 @@ export default function PrivacyPage() {
               </div>
 
               <div className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4">
-                <div className="size-11 rounded-full bg-[#a3e635] flex items-center justify-center shrink-0 text-slate-950 shadow-sm">
+                <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
                   <Key className="size-5" />
                 </div>
                 <div>
@@ -247,7 +247,7 @@ export default function PrivacyPage() {
               </div>
 
               <div className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4">
-                <div className="size-11 rounded-full bg-[#a3e635] flex items-center justify-center shrink-0 text-slate-950 shadow-sm">
+                <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
                   <Database className="size-5" />
                 </div>
                 <div>
@@ -261,7 +261,7 @@ export default function PrivacyPage() {
               </div>
 
               <div className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4">
-                <div className="size-11 rounded-full bg-[#a3e635] flex items-center justify-center shrink-0 text-slate-950 shadow-sm">
+                <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
                   <Award className="size-5" />
                 </div>
                 <div>
@@ -286,7 +286,7 @@ export default function PrivacyPage() {
 
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Policy Articles</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -305,18 +305,18 @@ export default function PrivacyPage() {
                 return (
                   <div
                     key={sec.id}
-                    className="rounded-3xl p-6 bg-[#84cc16] text-slate-950 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
+                    className="rounded-3xl p-6 bg-gradient-to-br from-[#01214A] to-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1 border border-[#00A3E0]/30"
                   >
                     <div>
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="text-base font-extrabold leading-snug">
                           {sec.title}
                         </h3>
-                        <div className="size-8 rounded-full bg-slate-950 text-white flex items-center justify-center shrink-0">
+                        <div className="size-8 rounded-full bg-white/15 text-[#38bdf8] flex items-center justify-center shrink-0">
                           <ArrowUpRight className="size-4" />
                         </div>
                       </div>
-                      <p className="text-xs text-slate-900 font-medium mt-2 leading-relaxed">
+                      <p className="text-xs text-sky-100 font-normal mt-2 leading-relaxed">
                         {sec.description}
                       </p>
                     </div>
@@ -329,7 +329,7 @@ export default function PrivacyPage() {
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 25vw"
                       />
-                      <div className="absolute bottom-2.5 left-2.5 size-9 rounded-full bg-slate-950 text-[#84cc16] flex items-center justify-center shadow-md">
+                      <div className="absolute bottom-2.5 left-2.5 size-9 rounded-full bg-[#00A3E0] text-white flex items-center justify-center shadow-md">
                         <Icon className="size-4" />
                       </div>
                     </div>
@@ -364,7 +364,7 @@ export default function PrivacyPage() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 25vw"
                     />
-                    <div className="absolute bottom-2.5 left-2.5 size-9 rounded-full bg-[#a3e635] text-slate-950 flex items-center justify-center shadow-md">
+                    <div className="absolute bottom-2.5 left-2.5 size-9 rounded-full bg-[#00A3E0] text-white flex items-center justify-center shadow-md">
                       <Icon className="size-4" />
                     </div>
                   </div>
@@ -376,7 +376,7 @@ export default function PrivacyPage() {
           <div className="mt-14 text-center">
             <Link
               href="/contact?subject=Privacy%20Inquiry"
-              className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white px-8 py-3.5 text-sm font-semibold shadow-md transition-all"
+              className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-8 py-3.5 text-sm font-semibold shadow-md transition-all"
             >
               Contact Data Protection Desk
               <ArrowRight className="size-4" />

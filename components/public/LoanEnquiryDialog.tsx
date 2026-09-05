@@ -316,14 +316,14 @@ export function LoanEnquiryDialog({
 
       <DialogContent className="sm:max-w-[540px] p-0 overflow-hidden rounded-3xl shadow-2xl bg-white max-h-[92vh] flex flex-col">
         {/* ── Header without badge ── */}
-        <div className="bg-[#0b1f14] px-6 py-5 shrink-0 relative overflow-hidden border-b border-emerald-900/40">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#84cc16]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="bg-gradient-to-r from-[#021833] via-[#0a2540] to-[#034DA2] px-6 py-5 shrink-0 relative overflow-hidden border-b border-blue-900/40">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#009FE0]/15 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-1">
             <DialogTitle className="text-xl font-extrabold text-white tracking-tight">
               Apply for Loan Facility
             </DialogTitle>
-            <DialogDescription className="text-emerald-100/75 text-xs">
+            <DialogDescription className="text-blue-100/80 text-xs">
               Submit your preliminary requirements — guaranteed decision within 24 hours.
             </DialogDescription>
           </div>
@@ -355,9 +355,9 @@ export function LoanEnquiryDialog({
                       <div
                         className={`size-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all ${
                           isCompleted
-                            ? "bg-[#1b4332] text-[#84cc16]"
+                            ? "bg-[#034DA2] text-[#38bdf8]"
                             : isActive
-                            ? "bg-[#84cc16] text-slate-950 ring-3 ring-[#84cc16]/20 font-extrabold shadow-xs"
+                            ? "bg-[#034DA2] text-white ring-3 ring-[#034DA2]/20 font-extrabold shadow-xs"
                             : "bg-slate-200 text-slate-600"
                         }`}
                       >
@@ -366,7 +366,7 @@ export function LoanEnquiryDialog({
                       <span
                         className={`text-xs font-semibold ${
                           isActive
-                            ? "text-[#1b4332] font-bold"
+                            ? "text-[#034DA2] font-bold"
                             : isCompleted
                             ? "text-slate-800"
                             : "text-slate-600"
@@ -378,7 +378,7 @@ export function LoanEnquiryDialog({
                     {idx < 2 && (
                       <div
                         className={`h-0.5 mx-3 flex-1 transition-colors rounded-full ${
-                          currentStep > idx + 1 ? "bg-[#1b4332]" : "bg-slate-200"
+                          currentStep > idx + 1 ? "bg-[#034DA2]" : "bg-slate-200"
                         }`}
                       />
                     )}
@@ -394,15 +394,15 @@ export function LoanEnquiryDialog({
           {sent ? (
             /* ── Success State ── */
             <div className="py-6 px-2 text-center space-y-5">
-              <div className="size-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#1b4332] flex items-center justify-center mx-auto shadow-xs">
-                <CheckCircle2 className="size-9 text-[#16a34a]" />
+              <div className="size-16 rounded-2xl bg-blue-50 border border-blue-200/80 text-[#034DA2] flex items-center justify-center mx-auto shadow-xs">
+                <CheckCircle2 className="size-9 text-[#00A3E0]" />
               </div>
 
               <div className="space-y-2">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                   Enquiry Reference
                 </span>
-                <span className="font-mono text-xl font-black text-[#1b4332] bg-slate-100 px-4 py-1.5 rounded-xl border border-slate-200 inline-block">
+                <span className="font-mono text-xl font-black text-[#034DA2] bg-slate-100 px-4 py-1.5 rounded-xl border border-slate-200 inline-block">
                   {refNumber}
                 </span>
                 <h3 className="text-xl font-extrabold text-slate-900 pt-1">
@@ -415,7 +415,7 @@ export function LoanEnquiryDialog({
 
               <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-left text-xs space-y-2 text-slate-600">
                 <div className="flex items-center gap-2 text-slate-900 font-bold">
-                  <ShieldCheck className="size-4 text-[#16a34a]" />
+                  <ShieldCheck className="size-4 text-[#00A3E0]" />
                   <span>What happens next:</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-500 pl-1">
@@ -428,7 +428,7 @@ export function LoanEnquiryDialog({
               <button
                 type="button"
                 onClick={handleReset}
-                className="w-full rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer"
+                className="w-full rounded-full bg-[#034DA2] hover:bg-[#023877] text-white py-3 text-xs font-bold transition-all shadow-md cursor-pointer"
               >
                 Close &amp; Return
               </button>
@@ -454,7 +454,7 @@ export function LoanEnquiryDialog({
                         className={`${inputBaseClass} pl-9 ${
                           touched.name && errors.name
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
-                            : "border-slate-200 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16]"
+                            : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
                         }`}
                       />
                       <User className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
@@ -483,7 +483,7 @@ export function LoanEnquiryDialog({
                         className={`${inputBaseClass} pl-9 ${
                           touched.phone && errors.phone
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
-                            : "border-slate-200 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16]"
+                            : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
                         }`}
                       />
                       <Phone className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
@@ -516,7 +516,7 @@ export function LoanEnquiryDialog({
                         className={`${inputBaseClass} pl-9 ${
                           touched.email && errors.email
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
-                            : "border-slate-200 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16]"
+                            : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
                         }`}
                       />
                       <Mail className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
@@ -550,7 +550,7 @@ export function LoanEnquiryDialog({
                         className={`w-full rounded-xl border bg-slate-50 px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none transition-all ${
                           touched.product && errors.product
                             ? "border-red-400 bg-red-50/20"
-                            : "border-slate-200 focus:border-[#84cc16]"
+                            : "border-slate-200 focus:border-[#034DA2]"
                         }`}
                       >
                         <SelectValue placeholder="Select a loan facility" />
@@ -560,7 +560,7 @@ export function LoanEnquiryDialog({
                           <SelectItem
                             key={prod}
                             value={prod}
-                            className="text-xs py-2.5 focus:bg-emerald-50 focus:text-[#1b4332] cursor-pointer rounded-lg font-medium"
+                            className="text-xs py-2.5 focus:bg-blue-50 focus:text-[#034DA2] cursor-pointer rounded-lg font-medium"
                           >
                             {prod}
                           </SelectItem>
@@ -594,7 +594,7 @@ export function LoanEnquiryDialog({
                         className={`${inputBaseClass} pl-9 ${
                           touched.amount && errors.amount
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
-                            : "border-slate-200 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16]"
+                            : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
                         }`}
                       />
                       <Banknote className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
@@ -606,7 +606,7 @@ export function LoanEnquiryDialog({
                       </p>
                     ) : activeMin && activeMax ? (
                       <p className="text-[10px] text-slate-500">
-                        Range for <span className="font-semibold text-[#1b4332]">{form.product}</span>:{" "}
+                        Range for <span className="font-semibold text-[#034DA2]">{form.product}</span>:{" "}
                         MWK {activeMin.toLocaleString()} – MWK {activeMax.toLocaleString()}
                       </p>
                     ) : (
@@ -627,7 +627,7 @@ export function LoanEnquiryDialog({
                       value={form.message}
                       onChange={handleChange}
                       placeholder="Tell us briefly about your business, restocking plans, or loan purpose..."
-                      className={`${inputBaseClass} resize-none border-slate-200 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16]`}
+                      className={`${inputBaseClass} resize-none border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]`}
                     />
                   </div>
                 </div>
@@ -648,7 +648,7 @@ export function LoanEnquiryDialog({
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block font-medium">Loan Facility</span>
-                      <span className="font-semibold text-[#1b4332] truncate block">{form.product}</span>
+                      <span className="font-semibold text-[#034DA2] truncate block">{form.product}</span>
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block font-medium">Requested Amount</span>
@@ -678,13 +678,13 @@ export function LoanEnquiryDialog({
                         onClick={() => fileInputRef.current?.click()}
                         className={`border border-dashed rounded-xl py-2.5 px-3.5 text-center cursor-pointer transition-all ${
                           isDragging
-                            ? "border-[#84cc16] bg-emerald-50/50"
-                            : "border-slate-200 hover:border-[#84cc16] bg-slate-50/60 hover:bg-slate-50"
+                            ? "border-[#034DA2] bg-blue-50/50"
+                            : "border-slate-200 hover:border-[#034DA2] bg-slate-50/60 hover:bg-slate-50"
                         }`}
                       >
                         <div className="flex items-center justify-center gap-2.5">
                           <div className="size-7 rounded-lg bg-white border border-slate-200 text-slate-500 flex items-center justify-center shadow-2xs shrink-0">
-                            <UploadCloud className="size-4 text-[#1b4332]" />
+                            <UploadCloud className="size-4 text-[#034DA2]" />
                           </div>
                           <div className="text-left">
                             <span className="text-xs font-bold text-slate-800 block leading-tight">
@@ -704,16 +704,16 @@ export function LoanEnquiryDialog({
                         />
                       </div>
                     ) : (
-                      <div className="flex items-center justify-between p-2 rounded-xl border border-emerald-200 bg-emerald-50/60">
+                      <div className="flex items-center justify-between p-2 rounded-xl border border-blue-200 bg-blue-50/60">
                         <div className="flex items-center gap-2.5 overflow-hidden">
                           {idFile.dataUrl ? (
                             <img
                               src={idFile.dataUrl}
                               alt="ID Preview"
-                              className="size-8 rounded-lg object-cover border border-emerald-300 shrink-0"
+                              className="size-8 rounded-lg object-cover border border-blue-300 shrink-0"
                             />
                           ) : (
-                            <div className="size-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                            <div className="size-8 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
                               <FileText className="size-4" />
                             </div>
                           )}
@@ -721,7 +721,7 @@ export function LoanEnquiryDialog({
                             <p className="text-xs font-bold text-slate-900 truncate">
                               {idFile.name}
                             </p>
-                            <p className="text-[10px] text-emerald-700 font-medium">
+                            <p className="text-[10px] text-[#034DA2] font-medium">
                               Ready &bull; {idFile.size}
                             </p>
                           </div>
@@ -751,7 +751,7 @@ export function LoanEnquiryDialog({
                         termsError && !agreedTerms
                           ? "border-red-400 bg-red-50/40 ring-1 ring-red-400/40"
                           : agreedTerms
-                          ? "border-emerald-300 bg-emerald-50/50"
+                          ? "border-blue-300 bg-blue-50/50"
                           : "border-slate-200 bg-slate-50/70 hover:bg-slate-50"
                       }`}
                     >
@@ -762,7 +762,7 @@ export function LoanEnquiryDialog({
                           setAgreedTerms(e.target.checked);
                           if (e.target.checked) setTermsError(false);
                         }}
-                        className="mt-0.5 size-4 rounded accent-[#1b4332] text-[#1b4332] focus:ring-[#84cc16] cursor-pointer shrink-0"
+                        className="mt-0.5 size-4 rounded accent-[#034DA2] text-[#034DA2] focus:ring-[#034DA2] cursor-pointer shrink-0"
                       />
                       <span className="text-[11px] text-slate-700 leading-snug">
                         I confirm that I have read the facility requirements for this loan and verify that my provided details are accurate.
@@ -798,10 +798,10 @@ export function LoanEnquiryDialog({
                     key={`continue-btn-${currentStep}`}
                     type="button"
                     onClick={nextStep}
-                    className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#1b4332] hover:bg-[#143225] text-white text-xs font-bold transition-all hover:scale-[1.02] shadow-sm cursor-pointer ml-auto"
+                    className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-bold transition-all hover:scale-[1.02] shadow-sm cursor-pointer ml-auto"
                   >
                     <span>Continue</span>
-                    <ArrowRight className="size-3.5 text-[#84cc16]" />
+                    <ArrowRight className="size-3.5 text-[#38bdf8]" />
                   </button>
                 ) : (
                   <button
@@ -809,7 +809,7 @@ export function LoanEnquiryDialog({
                     type="button"
                     onClick={handleFinalSubmit}
                     disabled={sending}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#84cc16] hover:bg-[#a3e635] text-slate-950 text-xs font-extrabold transition-all shadow-md hover:scale-[1.02] cursor-pointer disabled:opacity-50 ml-auto"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white text-xs font-extrabold transition-all shadow-md hover:scale-[1.02] cursor-pointer disabled:opacity-50 ml-auto"
                   >
                     {sending ? (
                       <>

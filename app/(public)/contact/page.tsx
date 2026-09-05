@@ -177,7 +177,7 @@ export default function ContactPage() {
         "bg-red-50/30 border border-red-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-500/20";
     } else if (isValid) {
       borderClasses =
-        "bg-[#F0F4F8] border border-emerald-400/80 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20";
+        "bg-[#F0F4F8] border border-sky-400/80 focus:bg-white focus:border-[#00A3E0] focus:ring-2 focus:ring-sky-500/20";
     }
 
     return {
@@ -202,7 +202,7 @@ export default function ContactPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0d281a]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-2xl mx-auto px-4">
@@ -214,11 +214,11 @@ export default function ContactPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <a href="/" className="hover:text-[#a3e635] transition-colors">
+            <a href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </a>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">Contact</span>
+            <span className="text-[#009FE0] font-semibold">Contact</span>
           </div>
         </div>
       </section>
@@ -242,8 +242,8 @@ export default function ContactPage() {
                   <div className="mt-8 space-y-6">
                     {/* Head Office */}
                     <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#1b4332] text-white shadow-md shadow-emerald-950/20">
-                        <MapPin className="size-5 text-[#84cc16]" />
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                        <MapPin className="size-5 text-[#009FE0]" />
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-900">Head Office</p>
@@ -256,8 +256,8 @@ export default function ContactPage() {
 
                     {/* Email Us */}
                     <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#1b4332] text-white shadow-md shadow-emerald-950/20">
-                        <Mail className="size-5 text-[#84cc16]" />
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                        <Mail className="size-5 text-[#009FE0]" />
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-900">Email Us</p>
@@ -268,8 +268,8 @@ export default function ContactPage() {
 
                     {/* Call Us */}
                     <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#1b4332] text-white shadow-md shadow-emerald-950/20">
-                        <Phone className="size-5 text-[#84cc16]" />
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                        <Phone className="size-5 text-[#009FE0]" />
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-900">Call Us</p>
@@ -293,7 +293,7 @@ export default function ContactPage() {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={s.name}
-                        className="flex size-8 items-center justify-center rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white transition-transform hover:scale-110 shadow-xs"
+                        className="flex size-8 items-center justify-center rounded-full bg-[#034DA2] hover:bg-[#023877] text-white transition-transform hover:scale-110 shadow-xs"
                       >
                         <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
                           <path d={s.d} />
@@ -312,7 +312,7 @@ export default function ContactPage() {
 
                 {sent ? (
                   <div className="mt-10 flex flex-col items-center gap-4 py-16 text-center">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-emerald-50 text-[#1b4332]">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-blue-50 text-[#034DA2]">
                       <CheckCircle2 className="size-8" />
                     </div>
                     <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>
@@ -322,7 +322,7 @@ export default function ContactPage() {
                     <button
                       type="button"
                       onClick={handleReset}
-                      className="mt-4 rounded-full bg-[#1b4332] text-white px-6 py-2.5 text-xs font-semibold hover:bg-[#2d6a4f] transition-colors"
+                      className="mt-4 rounded-full bg-[#034DA2] text-white px-6 py-2.5 text-xs font-semibold hover:bg-[#023877] transition-colors"
                     >
                       Send Another Message
                     </button>
@@ -352,7 +352,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("name").borderClasses}`}
                           />
                           {getFieldState("name").isValid && (
-                            <CheckCircle2 className="size-4 text-emerald-600 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("name").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -407,7 +407,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("phone").borderClasses}`}
                           />
                           {getFieldState("phone").isValid && (
-                            <CheckCircle2 className="size-4 text-emerald-600 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("phone").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -440,7 +440,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("email").borderClasses}`}
                           />
                           {getFieldState("email").isValid && (
-                            <CheckCircle2 className="size-4 text-emerald-600 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("email").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -474,7 +474,7 @@ export default function ContactPage() {
                           className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("subject").borderClasses}`}
                         />
                         {getFieldState("subject").isValid && (
-                          <CheckCircle2 className="size-4 text-emerald-600 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                          <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         )}
                         {getFieldState("subject").isInvalid && (
                           <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -519,7 +519,7 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={sending}
-                        className="w-full rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] active:bg-[#143d28] disabled:opacity-60 text-white py-3.5 text-sm font-semibold shadow-md shadow-emerald-950/20 transition-all cursor-pointer"
+                        className="w-full rounded-full bg-[#034DA2] hover:bg-[#023877] active:bg-[#022955] disabled:opacity-60 text-white py-3.5 text-sm font-semibold shadow-md shadow-blue-900/20 transition-all cursor-pointer"
                       >
                         {sending ? (
                           <span className="inline-flex items-center gap-2">

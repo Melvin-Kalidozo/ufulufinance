@@ -140,7 +140,7 @@ export default function FAQPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0b2b1b]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -152,11 +152,11 @@ export default function FAQPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">FAQs</span>
+            <span className="text-[#009FE0] font-semibold">FAQs</span>
           </div>
         </div>
       </section>
@@ -165,7 +165,7 @@ export default function FAQPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-            <span className="size-2 rounded-full bg-[#84cc16]" />
+            <span className="size-2 rounded-full bg-[#009FE0]" />
             <span>FAQs Introduction</span>
           </div>
 
@@ -188,7 +188,7 @@ export default function FAQPage() {
               placeholder="Type keywords like 'interest rate', 'airtel money', 'payslip', 'chattel'..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm shadow-xs focus:outline-none focus:border-[#1b4332]"
+              className="w-full bg-white border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm shadow-xs focus:outline-none focus:border-[#034DA2]"
             />
           </div>
 
@@ -207,7 +207,7 @@ export default function FAQPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                   activeCategory === cat.id
-                    ? "bg-[#1b4332] text-white shadow-xs"
+                    ? "bg-[#034DA2] text-white shadow-xs"
                     : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
                 }`}
               >
@@ -243,7 +243,7 @@ export default function FAQPage() {
                     className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/70 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="size-2 rounded-full bg-[#84cc16] shrink-0" />
+                      <span className="size-2 rounded-full bg-[#009FE0] shrink-0" />
                       <span className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
                         {faq.question}
                       </span>

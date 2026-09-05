@@ -119,7 +119,7 @@ export default function ImpactPortfolioPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#0d281a]/85 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/85 to-slate-950/90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -131,11 +131,11 @@ export default function ImpactPortfolioPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#a3e635] transition-colors">
+            <Link href="/" className="hover:text-[#009FE0] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#a3e635] font-semibold">Impact</span>
+            <span className="text-[#009FE0] font-semibold">Impact</span>
           </div>
         </div>
       </section>
@@ -145,7 +145,7 @@ export default function ImpactPortfolioPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Portfolio Introduction</span>
             </div>
 
@@ -153,7 +153,7 @@ export default function ImpactPortfolioPage() {
               Measuring Success Through Changed Lives, Not Just Loan Volumes
             </h2>
 
-            <p className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
+            <p className="text-sm font-semibold text-[#034DA2] bg-blue-50 border border-blue-100 p-4 rounded-2xl">
               Every kwacha disbursed by Ufulu Finance is structured to safeguard borrower dignity, protect household earnings, and multiply long-term assets.
             </p>
           </div>
@@ -165,19 +165,19 @@ export default function ImpactPortfolioPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#1b4332] block">MWK 4.8B+</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">MWK 4.8B+</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Cumulative Credit</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#1b4332] block">15,200+</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">15,200+</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Borrowers Financed</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#1b4332] block">68%</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">68%</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Women Entrepreneurs</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#1b4332] block">98.4%</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">98.4%</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">On-Time Repayment</span>
               </div>
             </div>
@@ -190,7 +190,7 @@ export default function ImpactPortfolioPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Featured Initiatives</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -218,7 +218,7 @@ export default function ImpactPortfolioPage() {
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
-                      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-xs text-[10px] font-bold text-[#a3e635] uppercase tracking-wider">
+                      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-xs text-[10px] font-bold text-[#009FE0] uppercase tracking-wider">
                         {proj.category}
                       </div>
                     </div>
@@ -237,7 +237,7 @@ export default function ImpactPortfolioPage() {
                   </div>
 
                   <div className="p-6 pt-0 border-t border-slate-100 mt-4">
-                    <span className="text-xs font-bold text-emerald-800 block pt-3">
+                    <span className="text-xs font-bold text-[#034DA2] block pt-3">
                       {proj.metrics}
                     </span>
                   </div>
@@ -250,9 +250,9 @@ export default function ImpactPortfolioPage() {
 
       {/* ── 4. COMMUNITY INITIATIVES ─────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="bg-[#1b4332] text-white rounded-[32px] p-8 sm:p-14 shadow-xl">
+        <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-14 shadow-xl">
           <div className="max-w-2xl mb-12 space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#a3e635]">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#009FE0]">
               <Sparkles className="size-4" />
               <span>Community Initiatives</span>
             </div>
@@ -269,11 +269,11 @@ export default function ImpactPortfolioPage() {
                   key={init.title}
                   className="bg-white/10 border border-white/15 rounded-3xl p-6 backdrop-blur-xs space-y-3"
                 >
-                  <div className="size-12 rounded-2xl bg-[#84cc16] text-slate-950 flex items-center justify-center">
+                  <div className="size-12 rounded-2xl bg-[#009FE0] text-white flex items-center justify-center">
                     <Icon className="size-6" />
                   </div>
                   <h3 className="text-base font-bold text-white">{init.title}</h3>
-                  <p className="text-xs text-emerald-100/85 leading-relaxed">
+                  <p className="text-xs text-blue-100/85 leading-relaxed">
                     {init.desc}
                   </p>
                 </div>
@@ -288,7 +288,7 @@ export default function ImpactPortfolioPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#84cc16]" />
+              <span className="size-2 rounded-full bg-[#009FE0]" />
               <span>Success Stories</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -318,14 +318,14 @@ export default function ImpactPortfolioPage() {
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-slate-900">{story.name}</h4>
-                      <span className="text-xs text-[#1b4332] font-semibold block">
+                      <span className="text-xs text-[#034DA2] font-semibold block">
                         {story.enterprise}
                       </span>
                       <span className="text-[11px] text-slate-400 block">{story.location}</span>
                     </div>
                   </div>
 
-                  <Quote className="size-6 text-[#84cc16]" />
+                  <Quote className="size-6 text-[#009FE0]" />
 
                   <p className="text-xs text-slate-600 leading-relaxed italic">
                     &ldquo;{story.quote}&rdquo;
@@ -333,7 +333,7 @@ export default function ImpactPortfolioPage() {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-slate-100">
-                  <span className="text-[11px] font-bold text-emerald-800">
+                  <span className="text-[11px] font-bold text-[#034DA2]">
                     {story.stats}
                   </span>
                 </div>
