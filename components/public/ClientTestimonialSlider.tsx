@@ -238,7 +238,7 @@ export function ClientTestimonialSlider() {
                   setShowAll(false);
                 }}
                 className={cn(
-                  "px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1.5",
+                  "px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1.5",
                   isActive
                     ? "bg-[#034DA2] text-white shadow-md shadow-blue-950/15"
                     : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -247,7 +247,7 @@ export function ClientTestimonialSlider() {
                 <span>{cat.label}</span>
                 <span
                   className={cn(
-                    "text-[10px] px-1.5 py-0.5 rounded-full font-bold",
+                    "text-[10px] px-1.5 py-0.5 rounded-md font-bold",
                     isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
                   )}
                 >
@@ -291,7 +291,7 @@ export function ClientTestimonialSlider() {
 
               {/* Facility Tag */}
               <div className="mb-4">
-                <span className="inline-block text-[11px] font-bold text-[#034DA2] bg-blue-50 border border-blue-100/80 px-3 py-1 rounded-full">
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#034DA2]">
                   {item.facility}
                 </span>
               </div>
@@ -324,7 +324,7 @@ export function ClientTestimonialSlider() {
                     <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors truncate">
                       {item.name}
                     </h4>
-                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#00A3E0] bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100">
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#00A3E0]">
                       <BadgeCheck className="size-3 text-[#00A3E0]" />
                       <span>Verified</span>
                     </span>
@@ -334,13 +334,13 @@ export function ClientTestimonialSlider() {
                 </div>
               </div>
 
-              {/* Disbursed Amount Pill + Highlight */}
-              <div className="flex items-center justify-between pt-2 text-xs bg-slate-50 px-3 py-2 rounded-2xl border border-slate-100">
+              {/* Disbursed Amount + Highlight */}
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
                 <div className="flex items-center gap-1">
                   <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">Disbursed:</span>
                   <span className="font-mono font-extrabold text-[#034DA2]">{item.amount}</span>
                 </div>
-                <span className="text-[10px] font-bold text-slate-600 bg-white px-2 py-0.5 rounded-lg border border-slate-200/60 truncate">
+                <span className="text-[10px] font-bold text-slate-500 truncate">
                   {item.highlight}
                 </span>
               </div>

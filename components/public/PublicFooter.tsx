@@ -68,14 +68,14 @@ export function PublicFooter() {
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
               <Link
                 href="/loans"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 Apply for Financing
                 <ArrowRight className="size-4" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
+                className="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
               >
                 Contact Nearest Branch
               </Link>

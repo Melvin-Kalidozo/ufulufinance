@@ -143,7 +143,7 @@ export function PublicHeader() {
             <Link
               href="/loans"
               className={cn(
-                "hidden sm:inline-flex items-center justify-center rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all hover:scale-105 cursor-pointer",
+                "hidden sm:inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all hover:scale-105 cursor-pointer",
                 isScrolled
                   ? "bg-[#034DA2] hover:bg-[#023877] active:bg-[#022955] text-white shadow-md shadow-blue-900/15"
                   : "bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white font-bold shadow-lg shadow-sky-950/30"
@@ -158,7 +158,7 @@ export function PublicHeader() {
                 <DropdownMenuTrigger asChild>
                   <button
                     className={cn(
-                      "flex items-center gap-2 rounded-full p-1 pr-2.5 transition-colors border",
+                      "flex items-center gap-2 rounded-xl p-1 pr-2.5 transition-colors border",
                       isScrolled
                         ? "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                         : "border-white/20 bg-white/10 hover:bg-white/20 text-white"

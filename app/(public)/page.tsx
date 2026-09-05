@@ -263,14 +263,14 @@ export default function HomePage() {
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
               <Link
                 href="/loans"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-7 py-3.5 text-sm font-bold shadow-lg shadow-sky-950/20 transition-all hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-7 py-3.5 text-sm font-bold shadow-lg shadow-sky-950/20 transition-all hover:scale-105 cursor-pointer"
               >
                 Apply Now
                 <ArrowRight className="size-4" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
+                className="inline-flex items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
               >
                 Explore Facilities
               </Link>
@@ -291,7 +291,6 @@ export default function HomePage() {
                 <div>
                   <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
                     <span>{stat.number}</span>
-                    <span className="size-2 rounded-full bg-[#00A3E0]" />
                   </div>
                   <h3 className="text-base font-bold text-slate-800 mt-1">{stat.label}</h3>
                   <p className="text-xs text-slate-500 mt-2 leading-relaxed">{stat.description}</p>
@@ -311,10 +310,9 @@ export default function HomePage() {
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2]">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
-              <span>About Ufulu Finance</span>
-            </div>
+            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              About Ufulu Finance
+            </p>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
               Driven by Integrity.<br />
@@ -359,7 +357,7 @@ export default function HomePage() {
             <div className="pt-4">
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-6 py-3 text-xs font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white px-6 py-3 text-xs font-semibold transition-colors shadow-sm"
               >
                 Learn More About Our Mission
                 <ArrowRight className="size-3.5" />
@@ -376,10 +374,6 @@ export default function HomePage() {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-            </div>
-            <div className="absolute -top-6 -left-6 size-20 rounded-full bg-[#034DA2] border-4 border-white shadow-xl flex flex-col items-center justify-center text-white text-center p-2">
-              <ShieldCheck className="size-5 text-[#38bdf8]" />
-              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-1">Verified</span>
             </div>
             <div className="absolute -bottom-6 right-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-200/80 flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-[#034DA2]">
@@ -403,10 +397,9 @@ export default function HomePage() {
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
-              <span>Who We Empower</span>
-            </div>
+            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              Who We Empower
+            </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Financial Solutions Built for Malawi
             </h2>
@@ -556,7 +549,7 @@ export default function HomePage() {
                         triggerButton={
                           <button
                             type="button"
-                            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-8 py-3.5 text-xs sm:text-sm font-bold shadow-md shadow-blue-950/15 transition-all hover:scale-105 cursor-pointer"
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white px-8 py-3.5 text-xs sm:text-sm font-bold shadow-md shadow-blue-950/15 transition-all hover:scale-105 cursor-pointer"
                           >
                             <span>Enquire for This Loan</span>
                             <ArrowRight className="size-4" />
@@ -603,10 +596,9 @@ export default function HomePage() {
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
-              <span>Institutional Strengths</span>
-            </div>
+            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              Institutional Strengths
+            </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Why Choose Ufulu Finance?
             </h2>
@@ -641,10 +633,9 @@ export default function HomePage() {
       ───────────────────────────────────────────────────────────────── */}
       <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-            <span className="size-2 rounded-full bg-[#009FE0]" />
-            <span>Social &amp; Economic Impact</span>
-          </div>
+          <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            Social &amp; Economic Impact
+          </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
             Transforming Livelihoods Across Malawi
           </h2>
@@ -677,10 +668,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-                <span className="size-2 rounded-full bg-[#009FE0]" />
-                <span>Knowledge &amp; Market Insights</span>
-              </div>
+              <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+                Knowledge &amp; Market Insights
+              </p>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">
                 Latest Financial Insights
               </h2>
@@ -762,14 +752,14 @@ export default function HomePage() {
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               href="/loans"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
             >
               Apply for Financing
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
+              className="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
             >
               Contact Nearest Branch
             </Link>
