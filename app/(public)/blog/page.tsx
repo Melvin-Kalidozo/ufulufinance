@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   Search,
   ChevronRight,
@@ -341,37 +340,6 @@ export default function BlogInsightsPage() {
           </div>
         </section>
       )}
-
-      {/* ── 6. ADVISORY CTA BANNER ─────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="relative rounded-3xl bg-gradient-to-r from-[#0d281a] via-[#1b4332] to-[#0f2e1e] p-8 sm:p-12 text-white overflow-hidden shadow-xl border border-emerald-800/40">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#a3e635] bg-white/10 px-3 py-1 rounded-full backdrop-blur-xs">
-              <Sparkles className="size-3" />
-              Financial Literacy & Advisory
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Turn Knowledge Into Sustainable Growth
-            </h3>
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-              Have questions about loan structures, seasonal working capital, or group financing? Our credit specialists provide personalized guidance across all regional branches.
-            </p>
-            <div className="pt-2">
-              <LoanEnquiryDialog
-                triggerButton={
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#84cc16] hover:bg-[#a3e635] text-slate-950 font-bold px-7 py-3 text-xs sm:text-sm shadow-md transition-all hover:scale-105 cursor-pointer"
-                  >
-                    <span>Speak with a Loan Advisor</span>
-                    <ArrowRight className="size-4" />
-                  </button>
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
     </div>
   );

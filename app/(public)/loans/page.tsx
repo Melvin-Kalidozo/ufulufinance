@@ -76,10 +76,11 @@ const LOAN_PRODUCTS: LoanProduct[] = [
       "Malawian citizen aged 21 years and above",
     ],
     kycRequirements: [
-      "Valid National Identity Card",
-      "Recent 3 months mobile money or commercial bank statement",
-      "Proof of physical trading stall / business residence",
-      "Two passport-sized photographs",
+      "Valid National ID",
+      "Proof of business (e.g. trading licence or business registration)",
+      "Proof of residence",
+      "Completed Ufulu Finance loan application and KYC forms",
+      "Any additional information or documentation requested by Ufulu Finance Limited",
     ],
     repaymentTerms:
       "Flat monthly interest calculated transparently. Early repayment without penalties.",
@@ -113,9 +114,11 @@ const LOAN_PRODUCTS: LoanProduct[] = [
       "Historical proof of crop production for at least 2 seasons",
     ],
     kycRequirements: [
-      "Valid National ID Card",
-      "Letter of confirmation from Village Head or Cooperative Chairman",
-      "Produce buyer contract or historical marketing receipts",
+      "Valid National ID",
+      "Proof of business",
+      "Proof of residence",
+      "Completed Ufulu Finance loan application and KYC forms",
+      "Any additional information or documentation requested by Ufulu Finance Limited",
     ],
     repaymentTerms:
       "Flexible schedule with principal payable upon harvest commodity aggregation.",
@@ -149,10 +152,10 @@ const LOAN_PRODUCTS: LoanProduct[] = [
       "Salary paid via commercial bank account",
     ],
     kycRequirements: [
-      "Valid National Identity Card",
-      "Latest 3 months original payslips",
-      "Recent 3 months certified bank statement showing salary deposits",
-      "Staff employment ID card",
+      "Valid National ID",
+      "Evidence of employment with the Government of Malawi",
+      "Completed Ufulu Finance loan application and KYC documentation",
+      "Any additional documents required during the assessment process",
     ],
     repaymentTerms:
       "Direct payroll deduction or bank stop-order on the official government salary date.",
@@ -184,9 +187,11 @@ const LOAN_PRODUCTS: LoanProduct[] = [
       "Group operating with consistent savings history for at least 6 months",
     ],
     kycRequirements: [
-      "National ID for all group signatories",
-      "Group constitution and meeting minute book",
-      "Introduction letter from local Community Development Assistant (CDA)",
+      "Valid National ID for each borrower",
+      "Proof of business",
+      "Proof of residence",
+      "Completed Ufulu Finance loan application and KYC documentation",
+      "Any additional information or documentation requested by Ufulu Finance Limited",
     ],
     repaymentTerms:
       "Bi-weekly or monthly collection during standard cluster group meetings.",
@@ -218,9 +223,11 @@ const LOAN_PRODUCTS: LoanProduct[] = [
       "Ability to contribute 20% down payment",
     ],
     kycRequirements: [
-      "National ID and business registration certificate",
-      "Pro-forma invoice from authorized equipment/vehicle dealer",
-      "6 months bank or mobile money turnover statement",
+      "Valid National ID",
+      "Proof of confirmed monthly salary income for at least 6 months",
+      "Employment information from a participating employer",
+      "Completed Ufulu Finance loan application and KYC documentation",
+      "Any additional information requested by Ufulu Finance Limited",
     ],
     repaymentTerms:
       "Equal monthly instalments matched to the asset's productive lifespan.",

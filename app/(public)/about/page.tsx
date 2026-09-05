@@ -37,85 +37,85 @@ export default function AboutPage() {
 
   const CORE_VALUES = [
     {
-      id: "integrity",
-      title: "Radical Transparency & Integrity",
+      id: "transparency",
+      title: "Transparency",
       description:
-        "Zero hidden deductions, published interest rates, and full disclosure of repayment obligations before agreement execution.",
+        "We are fully open about our fees, interest rates, and repayment terms. Clients receive complete information before signing any agreement — no hidden charges, ever.",
       icon: ShieldCheck,
-      badge: "Non-Negotiable",
+      badge: "Core Value",
       isFeatured: false,
     },
     {
-      id: "dignity",
-      title: "Client Dignity & Empathy",
+      id: "efficiency",
+      title: "Efficiency & Timeliness",
       description:
-        "Treating every market vendor, smallholder, and civil servant with equal respect, privacy, and compassionate customer service.",
-      icon: HeartHandshake,
-      badge: "Human-Centric",
-      isFeatured: true, // Featured lime card
-    },
-    {
-      id: "inclusion",
-      title: "Inclusive Wealth Creation",
-      description:
-        "Designing credit structures that actively welcome underserved women cooperatives, rural farmers, and young entrepreneurs.",
-      icon: Users,
-      badge: "Grassroots",
-      isFeatured: false,
-    },
-    {
-      id: "agility",
-      title: "Speed & Digital Agility",
-      description:
-        "Rapid 24-hour loan appraisal and instant mobile wallet disbursements via Airtel Money and TNM Mpamba.",
+        "We process applications and disburse funds swiftly because we understand that timely access to finance is what makes the difference for our customers.",
       icon: Sparkles,
-      badge: "24h Payouts",
+      badge: "Core Value",
+      isFeatured: true,
+    },
+    {
+      id: "dependability",
+      title: "Dependability",
+      description:
+        "Customers, partners, and communities can count on us to deliver on our commitments consistently and reliably at every interaction.",
+      icon: BadgeCheck,
+      badge: "Core Value",
       isFeatured: false,
     },
     {
-      id: "stewardship",
-      title: "Responsible Stewardship",
+      id: "effectiveness",
+      title: "Effectiveness",
       description:
-        "Rigorous credit assessment protecting borrowers against over-indebtedness while safeguarding sustainable institutional capital.",
-      icon: Scale,
-      badge: "Sustainable",
-      isFeatured: false,
-    },
-    {
-      id: "literacy",
-      title: "Continuous Financial Education",
-      description:
-        "Equipping every borrower with cashflow planning, inventory control, and debt-management workshops to foster longevity.",
+        "We pursue outcomes that genuinely improve the socio-economic wellbeing of our customers, measuring success by real impact on lives and livelihoods.",
       icon: Target,
-      badge: "Empowerment",
+      badge: "Core Value",
+      isFeatured: false,
+    },
+    {
+      id: "flexibility",
+      title: "Flexibility",
+      description:
+        "We tailor our solutions to the diverse needs of different customer segments — from civil servants to village banking groups — rather than applying a one-size-fits-all approach.",
+      icon: Scale,
+      badge: "Core Value",
+      isFeatured: false,
+    },
+    {
+      id: "ethicality",
+      title: "Ethicality",
+      description:
+        "We conduct our business with the highest standards of integrity, fairness, and responsibility — protecting our customers and the communities we serve.",
+      icon: HeartHandshake,
+      badge: "Core Value",
       isFeatured: false,
     },
   ];
 
   const TIMELINE = [
     {
-      year: "2021",
-      title: "Inception in Lilongwe",
+      year: "2016",
+      title: "Ufulu Finance Established",
       description:
-        "Founded by seasoned Malawian credit practitioners with a mission to bridge the liquidity gap for unbanked urban traders in Area 3 and Area 2.",
+        "Ufulu Finance Limited commenced operations as a non-deposit-taking financial institution, with a core focus on providing accessible and reliable credit solutions to civil servants across Malawi.",
     },
     {
-      year: "2022",
-      title: "Central Region Agri-Credit Expansion",
+      year: "2016–",
+      title: "Civil Service Lending Focus",
       description:
-        "Launched the seasonal input financing pilot across Mchinji and Dedza, supporting over 2,500 smallholders with timely fertilizer and hybrid seed packages.",
+        "Built a strong foundation in civil service lending, providing tailored loan products with structured repayment arrangements through payroll deductions for government employees.",
     },
     {
-      year: "2024",
-      title: "Digital Rails & Instant Disbursements",
+      year: "Growing",
+      title: "Expanding Into New Segments",
       description:
-        "Integrated direct Airtel Money and TNM Mpamba automated settlement rails, cutting turnaround times from 5 days to under 24 hours.",
+        "Progressively expanded into private sector payroll lending and village banking loans, broadening financial access for salaried private-sector employees and community groups.",
     },
     {
-      year: "2026",
-      title: "National Presence & Over 15,000 Borrowers",
+      year: "Future",
+      title: "Path to Deposit-Taking Institution",
       description:
-        "Expanded physical branches to Blantyre and Mzuzu, surpassing MWK 4.8 Billion in cumulative disbursements with a 98.4% on-time repayment rate.",
+        "Pursuing our long-term strategic ambition to progress into a deposit-taking financial institution, driving deeper financial inclusion for individuals and businesses across Malawi.",
     },
   ];
 
@@ -294,50 +294,53 @@ export default function AboutPage() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              Championing Financial Dignity &amp; Sustainable Economic Freedom
+              Improving the Welfare of Malawians Through Accessible &amp; Meaningful Financial Services
             </h2>
 
             <p className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
-              Regulated microfinance solutions engineered specifically for Malawian micro-entrepreneurs, smallholder farmers, and hardworking civil servants.
+              A non-deposit-taking financial institution committed to responsible lending, customer-focused service, and expanding financial inclusion across Malawi.
             </p>
           </div>
 
           <div className="lg:col-span-7 space-y-6 text-slate-600">
             <p className="text-sm sm:text-base leading-relaxed">
-              Founded in Lilongwe, <strong className="text-slate-900 font-semibold">Ufulu Finance</strong> was established on a single vital conviction: that credit should be an empowering catalyst for growth, never an extractive burden. We bridge the critical liquidity divide between informal money lenders and rigid commercial banks.
+              <strong className="text-slate-900 font-semibold">Ufulu Finance Limited</strong> commenced its operations in 2016 as a non-deposit-taking financial institution with a focus on providing accessible and reliable credit solutions to Malawians.
             </p>
             <p className="text-sm sm:text-base leading-relaxed">
-              We serve over <strong className="text-slate-900 font-semibold">15,000 active clients</strong> across Malawi through branches in Lilongwe, Blantyre, and Mzuzu. By combining in-person advisory with direct Airtel Money and TNM Mpamba mobile settlements, we deliver fair working capital within 24 hours of approval.
+              The company was established with a core focus on supporting civil servants through tailored loan products. Over the years, Ufulu Finance has continued to grow its customer base and expand its financial solutions — progressively moving into business financing to support entrepreneurs, small businesses, and other productive sectors of the economy.
+            </p>
+            <p className="text-sm sm:text-base leading-relaxed">
+              Our long-term strategic ambition is to progress into a <strong className="text-slate-900 font-semibold">deposit-taking financial institution</strong> — a journey driven by our commitment to expanding financial inclusion and providing a broader range of services to individuals and businesses.
             </p>
 
             <div className="pt-2">
               <p className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3.5">
-                Our Institutional Commitments
+                Our Current Services
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>100% Published, Non-Deceptive Fee Schedules</span>
+                  <span>Civil Service Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>Rapid 24-Hour Approval Timelines</span>
+                  <span>Private Sector Payroll Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>Prioritizing Women &amp; Youth Enterprises</span>
+                  <span>Village Banking Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>Strict Non-Predatory Debt Assessment</span>
+                  <span>Business Loans (Expanding)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>Direct Mobile Wallet Disbursements</span>
+                  <span>Responsible Lending Practices</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-[#65a30d] shrink-0" />
-                  <span>Non-Deposit Taking Microfinance Compliance</span>
+                  <span>Non-Deposit Taking Microfinance Institution</span>
                 </div>
               </div>
             </div>
@@ -394,47 +397,47 @@ export default function AboutPage() {
       {/* ── 4. MISSION & VISION ─────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Mission Card */}
+          {/* Vision Card */}
           <div className="bg-[#1b4332] text-white rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-between">
             <div className="relative z-10 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#a3e635] tracking-wide uppercase">
-                <Target className="size-3.5" />
-                <span>Our Mission</span>
+                <Eye className="size-3.5" />
+                <span>Vision Statement</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Empowering Malawian Enterprises with Fair, Fast, &amp; Dignified Credit
+              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+                A Leading Industry Player in Improving the Welfare of Malawians
               </h3>
               <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                To eradicate financial exclusion across Malawi by providing transparent working capital, seasonal agricultural liquidity, and payroll support that builds family resilience and generates sustainable grassroots wealth.
+                To be a leading industry player in improving the welfare of Malawians through provision of affordable and meaningful financial services.
               </p>
             </div>
 
             <div className="relative z-10 pt-8 mt-6 border-t border-emerald-700/50 flex items-center justify-between text-xs text-emerald-200">
-              <span>Customer-Centric Principles</span>
-              <span className="text-[#a3e635] font-semibold">Ufulu Promise &rarr;</span>
+              <span>Our Guiding North Star</span>
+              <span className="text-[#a3e635] font-semibold">Ufulu Vision &rarr;</span>
             </div>
 
             <div className="absolute -bottom-16 -right-16 size-48 rounded-full bg-[#84cc16]/15 blur-2xl pointer-events-none" />
           </div>
 
-          {/* Vision Card */}
+          {/* Mission Card */}
           <div className="bg-white text-slate-900 rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-200/90 flex flex-col justify-between">
             <div className="relative z-10 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-bold text-slate-800 tracking-wide uppercase">
-                <Compass className="size-3.5 text-[#65a30d]" />
-                <span>Our Vision</span>
+                <Target className="size-3.5 text-[#65a30d]" />
+                <span>Mission Statement</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Malawi’s Most Trusted, Transformative Financial Partner
+              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+                A Lender of Choice for the Communities We Serve
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                To be Malawi’s benchmark microfinance institution, renowned for integrity, technological accessibility, client financial education, and long-term community socio-economic empowerment.
+                To stimulate the socio-economic status of our customers for the better, through provision of highly competitive credit and savings facilities and in so doing to become a lender of choice for the communities.
               </p>
             </div>
 
             <div className="relative z-10 pt-8 mt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Sustainable Nation-Building</span>
-              <span className="text-[#65a30d] font-semibold">Vision 2030 &rarr;</span>
+              <span>Customer-First Always</span>
+              <span className="text-[#65a30d] font-semibold">Ufulu Mission &rarr;</span>
             </div>
 
             <div className="absolute -top-16 -right-16 size-44 rounded-full bg-[#84cc16]/10 blur-2xl pointer-events-none" />

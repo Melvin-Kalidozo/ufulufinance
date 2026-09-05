@@ -42,7 +42,11 @@ export const LOAN_CATALOGUE: {
   minAmount: number;
   maxAmount: number;
 }[] = [
-  { name: "MSME QuickGrowth Working Capital",       minAmount: 100000,  maxAmount: 10000000 },
+  { name: "Civil Service Loans",                     minAmount: 50000,   maxAmount: 5000000  },
+  { name: "Private Sector Payroll Loans",            minAmount: 50000,   maxAmount: 5000000  },
+  { name: "Village Banking Loans",                   minAmount: 50000,   maxAmount: 2000000  },
+  { name: "Business Loans",                          minAmount: 100000,  maxAmount: 10000000 },
+  { name: "MSME QuickGrowth Working Capital",        minAmount: 100000,  maxAmount: 10000000 },
   { name: "Mlimi Harvest Input Booster",             minAmount: 150000,  maxAmount: 7500000  },
   { name: "Boma Civil Servant Express",              minAmount: 50000,   maxAmount: 2500000  },
   { name: "Tikondane Solidarity Cluster Credit",     minAmount: 50000,   maxAmount: 500000   },

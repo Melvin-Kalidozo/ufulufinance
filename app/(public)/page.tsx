@@ -23,19 +23,21 @@ import {
   Quote,
   Sparkles,
   ArrowUpRight,
+  Zap,
+  Banknote,
 } from "lucide-react";
 
 export const metadata = {
   title: "Ufulu Finance | Transparent Microfinance in Malawi",
   description:
-    "Your trusted partner in microfinance and growth. Providing MSME business loans, civil servant advances, and agri-seasonal credit across Malawi.",
+    "Providing Civil Service Loans, Private Sector Payroll Loans, Village Banking Facilities, and Business Lending across Malawi.",
 };
 
 const STATS = [
   {
     number: "250+",
-    label: "SMEs Financed",
-    description: "Empowering small enterprises and commercial suppliers with accessible working capital.",
+    label: "SMEs & Groups Financed",
+    description: "Empowering small enterprises, community clusters, and public servants with accessible credit.",
   },
   {
     number: "15,000+",
@@ -43,81 +45,111 @@ const STATS = [
     description: "Delivering rapid financial support directly to mobile wallets and bank accounts nationwide.",
   },
   {
-    number: "99%",
-    label: "On-Time Decisions",
-    description: "Guaranteed transparent credit evaluation with formal decisions delivered within 24 hours.",
+    number: "100%",
+    label: "Transparent Pricing",
+    description: "Guaranteed clear terms, predictable payroll deductions, and zero hidden penalties.",
   },
 ];
 
-const SERVICES_ECOSYSTEM = [
+const WHO_WE_EMPOWER = [
   {
-    id: "msme",
-    title: "MSME Business Credit",
-    description: "Working capital, inventory restocking, and asset finance for small enterprises and retailers.",
-    icon: Briefcase,
-    link: "/loans",
-  },
-  {
-    id: "agri",
-    title: "Agri-Seasonal Credit",
-    description: "Seed, fertilizer, and irrigation financing structured around Malawi harvest and market cycles.",
-    icon: Wheat,
-    link: "/loans",
-  },
-  {
-    id: "payroll",
-    title: "Civil Servant Advances",
-    description: "Predictable, low-stress salary advances for teachers, healthcare staff, and public officers.",
-    icon: Wallet,
-    link: "/loans",
-  },
-  {
-    id: "village",
-    title: "Village Banking Groups",
-    description: "Solidarity lending strengthening community savings clusters through mutual guarantees.",
-    icon: Users,
-    link: "/loans",
-  },
-  {
-    id: "mobile",
-    title: "Digital Agency Payouts",
-    description: "Fast disbursements and repayments via Airtel Money, TNM Mpamba, and commercial banks.",
-    icon: Sparkles,
-    link: "/loans",
-  },
-  {
-    id: "coaching",
-    title: "Financial Literacy Coaching",
-    description: "Practical workshops in budgeting, cashflow management, and responsible debt servicing.",
+    id: "civil-servants",
+    title: "Civil Servants & Public Officers",
+    subtitle: "Ministries, Healthcare, Education & Uniformed Services",
+    description:
+      "Structured personal financing with automated, predictable payroll deductions that simplify debt management.",
     icon: Landmark,
-    link: "/about",
+    link: "#facilities",
+  },
+  {
+    id: "private-sector",
+    title: "Private Sector Employees",
+    subtitle: "Corporate, NGO & Commercial Enterprises",
+    description:
+      "Reliable salary-linked credit facilities arranged through approved employer participation and direct payroll linkage.",
+    icon: Building2,
+    link: "#facilities",
+  },
+  {
+    id: "village-banking",
+    title: "Village Banking Groups",
+    subtitle: "Solidarity Clusters & Savings Collectives",
+    description:
+      "Group-level credit facilities empowering community clusters to expand income-generating activities together.",
+    icon: Users,
+    link: "#facilities",
+  },
+  {
+    id: "business-loans",
+    title: "Businesses & MSMEs",
+    subtitle: "Retailers, Wholesalers & Growing Enterprises",
+    description:
+      "Expanding capital access to finance bulk stock replenishment, commercial machinery, and business expansion.",
+    icon: TrendingUp,
+    link: "#facilities",
   },
 ];
 
 const LOAN_PRODUCTS = [
   {
-    id: "personal",
-    name: "Personal & Emergency Loan",
-    amount: "Up to MWK 2,000,000",
-    tenure: "1 – 12 months",
-    rate: "From 6.5% monthly",
-    features: ["No physical collateral required", "24-hour decision", "Mobile money disbursement"],
+    id: "civil-service",
+    name: "Civil Service Loans",
+    badge: "Active Facility",
+    isFlagship: true,
+    tagline: "Structured financing designed specifically for government employees.",
+    description:
+      "Our Civil Service Loans provide eligible government employees with access to financing to meet their personal and financial needs. We understand the unique needs of civil servants and provide structured loan solutions with convenient repayment arrangements through payroll deductions.",
+    amount: "Subject to assessment",
+    tenure: "Flexible terms",
+    disbursement: "Efficient processing",
+    repayment: "Payroll deduction",
+    collateral: "Employment confirmation",
+    icon: Landmark,
   },
   {
-    id: "business",
-    name: "MSME Business Growth Loan",
-    amount: "Up to MWK 10,000,000",
-    tenure: "3 – 24 months",
-    rate: "From 5.5% monthly",
-    features: ["Working capital & asset finance", "Flexible grace periods", "Dedicated credit advisor"],
+    id: "private-sector-payroll",
+    name: "Private Sector Payroll Loans",
+    badge: "Active Facility",
+    isFlagship: false,
+    tagline: "Payroll-based lending solutions for eligible private sector employees.",
+    description:
+      "Our Private Sector Payroll Loans provide financing solutions for eligible employees working in vetted private sector organisations. Designed to assist with personal financial needs with structured repayments deducted directly or arranged through employer partnerships.",
+    amount: "Subject to assessment",
+    tenure: "Flexible terms",
+    disbursement: "Efficient processing",
+    repayment: "Linked to payroll",
+    collateral: "Employer participation required",
+    icon: Building2,
   },
   {
-    id: "group",
-    name: "Village Banking Group Loan",
-    amount: "Per group cluster",
-    tenure: "3 – 6 months",
-    rate: "From 4.5% monthly",
-    features: ["Social guarantee model", "Financial literacy training", "Progressive credit limits"],
+    id: "village-banking",
+    name: "Village Banking Loans",
+    badge: "Community Facility",
+    isFlagship: false,
+    tagline: "Community-based financing supporting income-generating activities.",
+    description:
+      "Supporting organised community groups that participate in village banking and other community-based financial activities. The facility helps groups access financing that can support income-generating activities and small businesses.",
+    amount: "Subject to group assessment",
+    tenure: "Flexible terms",
+    disbursement: "Group-based processing",
+    repayment: "Community group schedule",
+    collateral: "Group guarantee",
+    icon: Users,
+  },
+  {
+    id: "business-loans",
+    name: "Business Loans",
+    badge: "Expanding Service",
+    isFlagship: false,
+    tagline: "Financing solutions for businesses and entrepreneurs — expanding now.",
+    description:
+      "As part of our growth strategy, Ufulu Finance is expanding its lending portfolio to provide financing solutions for businesses and entrepreneurs across Malawi, helping access capital for business expansion, working capital, and equipment.",
+    amount: "Subject to business assessment",
+    tenure: "Flexible terms",
+    disbursement: "Business assessment period",
+    repayment: "Agreed repayment schedule",
+    collateral: "Business assets / documentation",
+    icon: TrendingUp,
   },
 ];
 
@@ -221,7 +253,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-200/90 leading-relaxed max-w-xl">
-              Empowering Malawian entrepreneurs, farmers, and civil servants with transparent credit terms, rapid 24-hour decisions, and dedicated financial guidance.
+              Empowering Malawian civil servants, private sector employees, community groups, and entrepreneurs with transparent credit terms, efficient processing, and dedicated financial guidance.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
@@ -286,7 +318,7 @@ export default function HomePage() {
             </h2>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              Founded in Lilongwe, Ufulu Finance was established to bridge the credit gap for unbanked and underserved micro-enterprises, smallholder farmers, and salaried workers across Malawi. We combine flexible loan structures with transparent, responsible lending standards.
+              Founded in 2016 in Lilongwe, Ufulu Finance Limited is a non-deposit-taking microfinance institution registered and operating in Malawi. We specialize in structured civil service loan facilities, private sector payroll lending, village banking community facilities, and expanding business financing.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -352,7 +384,7 @@ export default function HomePage() {
               <div>
                 <div className="text-xs font-bold text-slate-900 flex items-center gap-1">
                   <span>★ 4.9 Rating</span>
-                  <span className="text-slate-400 font-normal">(15k+ clients)</span>
+                  <span className="text-slate-400 font-normal">(Serving Malawi Since 2016)</span>
                 </div>
                 <p className="text-[11px] text-slate-500">Accredited Non-Deposit Institution</p>
               </div>
@@ -362,46 +394,49 @@ export default function HomePage() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────
-          3. SERVICES SECTION
+          3. SECTORS WE EMPOWER (Our Lending Pillars)
       ───────────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#1b4332] bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
               <span className="size-2 rounded-full bg-[#84cc16]" />
-              <span>Full Service Ecosystem</span>
+              <span>Who We Empower</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Comprehensive Financial Services
+              Financial Solutions Built for Malawi
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Modeled on leading microfinance standards to provide flexible credit, mobile access, and advisory across Malawi.
+              Supporting civil servants, private employees, community savings clusters, and growing businesses with transparent, respectful financing.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES_ECOSYSTEM.map((srv) => {
-              const Icon = srv.icon;
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHO_WE_EMPOWER.map((pillar) => {
+              const Icon = pillar.icon;
               return (
                 <div
-                  key={srv.id}
-                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                  key={pillar.id}
+                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
                 >
                   <div className="space-y-4">
-                    <div className="size-11 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center">
+                    <div className="size-11 rounded-xl bg-emerald-50 text-[#1b4332] flex items-center justify-center group-hover:bg-[#1b4332] group-hover:text-white transition-colors">
                       <Icon className="size-5" />
                     </div>
-                    <h3 className="text-base font-bold text-slate-900">{srv.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">{srv.description}</p>
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900">{pillar.title}</h3>
+                      <p className="text-[11px] font-semibold text-emerald-800 mt-0.5">{pillar.subtitle}</p>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">{pillar.description}</p>
                   </div>
                   <div className="mt-6 pt-4 border-t border-slate-100">
-                    <Link
-                      href={srv.link}
+                    <a
+                      href={pillar.link}
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b4332] hover:text-[#2d6a4f] transition-colors"
                     >
-                      <span>Explore service details</span>
+                      <span>Explore loan facilities</span>
                       <ArrowRight className="size-3.5" />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               );
@@ -411,63 +446,150 @@ export default function HomePage() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────
-          4. LOANS SECTION (Products & Live Calculator)
+          4. LOANS SECTION (Refined 2x2 Showcase)
       ───────────────────────────────────────────────────────────────── */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-            <span className="size-2 rounded-full bg-[#84cc16]" />
-            <span>Credit Products</span>
+      <section id="facilities" className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 space-y-3">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#1b4332] bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-100">
+            <span className="size-2 rounded-full bg-[#84cc16] animate-pulse" />
+            <span>Official Credit Facilities</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
             Transparent Loan Facilities Tailored to You
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Compare our key loan categories and estimate your monthly instalments in Malawian Kwacha.
+          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Review our official lending facilities with structured repayment terms, transparent fee schedules, and straightforward requirements.
           </p>
         </div>
 
-        {/* 3 Loan Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {LOAN_PRODUCTS.map((prod) => (
-            <div
-              key={prod.id}
-              className="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full">
-                  {prod.tenure}
-                </span>
-                <h3 className="text-xl font-bold text-slate-900">{prod.name}</h3>
-                <div className="space-y-1">
-                  <div className="text-2xl font-extrabold text-[#1b4332]">{prod.amount}</div>
-                  <div className="text-xs text-slate-500">{prod.rate}</div>
-                </div>
-                <div className="pt-2 border-t border-slate-100 space-y-2 text-xs text-slate-600">
-                  {prod.features.map((feat, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <CheckCircle2 className="size-3.5 text-emerald-600 shrink-0" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {/* 2x2 Refined Facility Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {LOAN_PRODUCTS.map((prod) => {
+            const Icon = prod.icon;
+            return (
+              <div
+                key={prod.id}
+                className="group bg-white rounded-3xl p-7 sm:p-9 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-700/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+              >
+                {/* Flagship accent banner if applicable */}
+                {prod.isFlagship && (
+                  <div className="absolute top-0 right-0 bg-[#1b4332] text-[#a3e635] text-[10px] font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-xs">
+                    ★ Primary Facility
+                  </div>
+                )}
 
-              <div className="mt-8 pt-4">
-                <LoanEnquiryDialog
-                  defaultProduct={prod.name}
-                  triggerButton={
-                    <button
-                      type="button"
-                      className="w-full rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white py-3 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                <div>
+                  {/* Header: Icon & Status Badge */}
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="size-12 rounded-2xl bg-emerald-50 text-[#1b4332] flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform">
+                      <Icon className="size-6" />
+                    </div>
+
+                    <span
+                      className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${
+                        prod.badge === "Active Facility"
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                          : prod.badge === "Community Facility"
+                          ? "bg-lime-50 text-lime-900 border-lime-200"
+                          : "bg-amber-50 text-amber-900 border-amber-200"
+                      }`}
                     >
-                      Enquire for This Loan
-                    </button>
-                  }
-                />
+                      <span
+                        className={`size-1.5 rounded-full ${
+                          prod.badge === "Active Facility"
+                            ? "bg-emerald-600 animate-pulse"
+                            : prod.badge === "Community Facility"
+                            ? "bg-lime-600"
+                            : "bg-amber-600"
+                        }`}
+                      />
+                      {prod.badge}
+                    </span>
+                  </div>
+
+                  {/* Title & Tagline */}
+                  <h3 className="text-2xl font-extrabold text-slate-900 mt-5 tracking-tight group-hover:text-[#1b4332] transition-colors">
+                    {prod.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-emerald-800 mt-1">
+                    {prod.tagline}
+                  </p>
+
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                    {prod.description}
+                  </p>
+
+                  {/* Structured Specifications Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 my-6 p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                    <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        <Banknote className="size-3 text-emerald-700 shrink-0" />
+                        <span>Loan Amount</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-900 mt-1 leading-snug">{prod.amount}</div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        <Clock className="size-3 text-emerald-700 shrink-0" />
+                        <span>Tenure</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-900 mt-1 leading-snug">{prod.tenure}</div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        <Zap className="size-3 text-emerald-700 shrink-0" />
+                        <span>Disbursement</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-900 mt-1 leading-snug">{prod.disbursement}</div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        <Wallet className="size-3 text-emerald-700 shrink-0" />
+                        <span>Repayment</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-900 mt-1 leading-snug">{prod.repayment}</div>
+                    </div>
+
+                    <div className="col-span-2 sm:col-span-2 bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        <ShieldCheck className="size-3 text-emerald-700 shrink-0" />
+                        <span>Security / Collateral</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-900 mt-1 leading-snug">{prod.collateral}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Action Buttons */}
+                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <LoanEnquiryDialog
+                    defaultProduct={prod.name}
+                    triggerButton={
+                      <button
+                        type="button"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#1b4332] hover:bg-[#2d6a4f] text-white px-7 py-3 text-xs font-bold shadow-sm transition-all hover:scale-102 cursor-pointer"
+                      >
+                        <span>Enquire for This Loan</span>
+                        <ArrowRight className="size-3.5" />
+                      </button>
+                    }
+                  />
+
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center justify-center gap-1 text-xs font-semibold text-slate-600 hover:text-[#1b4332] transition-colors py-1"
+                  >
+                    <span>View full requirements</span>
+                    <ChevronRight className="size-3.5" />
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -631,7 +753,7 @@ export default function HomePage() {
             Let’s Cultivate Your Financial Future, Together.
           </h2>
           <p className="text-xs sm:text-sm text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
-            Ready to expand your business, finance harvest inputs, or secure payroll advances? Speak with our accredited loan advisors today.
+            Ready to access civil service credit, explore payroll facilities, or expand your business? Speak with our accredited loan advisors today.
           </p>
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
             <Link
