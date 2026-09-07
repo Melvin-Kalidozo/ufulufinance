@@ -288,21 +288,21 @@ export default function EventDetailPage({ params }: PageProps) {
               </div>
               <div className="space-y-2.5">
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
-                  <p className="text-xs font-bold text-slate-900">Lilongwe Head Office</p>
+                  <p className="text-xs font-bold text-slate-900">Lilongwe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />City Centre, Area 3
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Cuckoo&apos;s Nest, 1st Flr, Mandala St, Area 3
                   </p>
-                  <a href="tel:+265991234567" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
-                    <Phone className="size-3 shrink-0" />+265 99 123 4567
+                  <a href="tel:+265994485444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
+                    <Phone className="size-3 shrink-0" />+265 994 485 444
                   </a>
                 </div>
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
-                  <p className="text-xs font-bold text-slate-900">Blantyre Commercial</p>
+                  <p className="text-xs font-bold text-slate-900">Blantyre / Limbe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Victoria Avenue, CBD
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Zuleka Arcade, 1st Flr Rm 26 (Opp. Illovo), Limbe
                   </p>
-                  <a href="tel:+265881234567" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
-                    <Phone className="size-3 shrink-0" />+265 88 123 4567
+                  <a href="tel:+265888885444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
+                    <Phone className="size-3 shrink-0" />+265 888 885 444
                   </a>
                 </div>
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">

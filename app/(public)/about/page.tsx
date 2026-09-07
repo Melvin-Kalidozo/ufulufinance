@@ -121,25 +121,25 @@ export default function AboutPage() {
 
   const REGIONAL_HUBS = [
     {
-      region: "Central Region (Head Office)",
+      region: "Central Region Hub",
       city: "Lilongwe",
-      location: "Area 3, City Centre",
+      location: "Cuckoo's Nest, 1st Floor, Mandala Street, Area 3",
       focus: "MSME Wholesale Financing, Civil Servant Credit, Civil Service Payroll Operations",
-      contacts: "Phone: +265 99 123 4567 | lilongwe@ufulufinance.com",
+      contacts: "Phone: +265 994 485 444 | lilongwe@ufulufinance.com",
     },
     {
       region: "Southern Region Hub",
-      city: "Blantyre",
-      location: "Limbe Commercial Center",
+      city: "Limbe, Blantyre",
+      location: "Zuleka Arcade, 1st Floor Room 26, Opposite Illovo",
       focus: "Cross-Border Merchant Trade, Vegetable Cluster Banking, Transport Asset Financing",
-      contacts: "Phone: +265 88 123 4567 | blantyre@ufulufinance.com",
+      contacts: "Phone: +265 888 885 444 | blantyre@ufulufinance.com",
     },
     {
       region: "Northern Region Hub",
       city: "Mzuzu",
       location: "Orton Chirwa Avenue",
       focus: "Coffee & Grain Smallholder Facilities, Agro-dealer Bridging, Women Cooperative Groups",
-      contacts: "Phone: +265 99 876 5432 | mzuzu@ufulufinance.com",
+      contacts: "Phone: +265 994 485 444 | mzuzu@ufulufinance.com",
     },
   ];
 
@@ -222,7 +222,7 @@ export default function AboutPage() {
       id: "branches",
       question: "Where are your physical branches located and what are the opening hours?",
       answer:
-        "Our Head Office is in City Centre, Area 3, Lilongwe (+265 99 123 4567). We operate commercial branch hubs at Victoria Avenue, CBD, Blantyre (+265 88 123 4567), and Katoto Commercial Area, Mzuzu (info@ufulufinance.com). All branches are open Monday through Friday, 8:00 AM – 5:00 PM.",
+        "Our Lilongwe Office is at Cuckoo's Nest, 1st Floor, Mandala Street, Area 3, Lilongwe (+265 994 485 444). Our Blantyre/Limbe Office is at Zuleka Arcade, 1st Floor Room 26, Opposite Illovo, Limbe (+265 888 885 444). All offices are open Monday through Friday, 8:00 AM – 5:00 PM.",
     },
     {
       id: "transparent-rates",

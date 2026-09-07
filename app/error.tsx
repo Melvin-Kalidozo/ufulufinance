@@ -136,8 +136,8 @@ export default function ErrorPage({
             <div className="flex items-center gap-1.5">
               <PhoneCall className="size-3.5 text-[#034DA2]" />
               <span>Emergency Hotline:</span>
-              <a href="tel:+265990000000" className="font-bold text-slate-800 hover:text-[#034DA2]">
-                +265 99 000 0000
+              <a href="tel:+265994485444" className="font-bold text-slate-800 hover:text-[#034DA2]">
+                +265 994 485 444
               </a>
             </div>
             <div className="flex items-center gap-1.5">

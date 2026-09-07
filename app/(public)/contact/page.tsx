@@ -15,23 +15,18 @@ import {
 const SOCIAL = [
   {
     name: "Facebook",
-    href: "https://facebook.com",
+    href: "https://facebook.com/ufulufinance",
     d: "M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.889C10.5 0 9 1.5 9 4.667V8z",
   },
   {
+    name: "LinkedIn",
+    href: "https://linkedin.com/company/ufulufinance",
+    d: "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z",
+  },
+  {
     name: "Instagram",
-    href: "https://instagram.com",
+    href: "https://instagram.com/ufulu_finance",
     d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689-.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z",
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com",
-    d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
-  },
-  {
-    name: "YouTube",
-    href: "https://youtube.com",
-    d: "M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z",
   },
 ];
 
@@ -210,7 +205,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-lg mx-auto font-normal leading-relaxed">
-            Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu.
+            Our accredited loan advisors are ready to assist you at our Lilongwe and Blantyre / Limbe offices.
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
@@ -236,7 +231,7 @@ export default function ContactPage() {
                     Get in touch
                   </h2>
                   <p className="mt-3 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs">
-                    Our accredited loan officers and client relationship managers are available across Lilongwe, Blantyre, and Mzuzu to provide rapid, judgment-free financial advisory.
+                    Our loan officers and relationship managers are available in Lilongwe and Limbe, Blantyre to provide flexible financing and rapid support.
                   </p>
 
                   <div className="mt-8 space-y-6">
@@ -246,11 +241,17 @@ export default function ContactPage() {
                         <MapPin className="size-5 text-[#009FE0]" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-900">Head Office</p>
-                        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                          City Centre, Area 3, Lilongwe<br />
-                          Regional Hubs: Blantyre (Limbe) &amp; Mzuzu (Orton Chirwa Ave)
-                        </p>
+                        <p className="text-sm font-bold text-slate-900">Visit Our Offices</p>
+                        <div className="mt-1.5 space-y-2 text-xs text-slate-600 leading-relaxed">
+                          <div>
+                            <p className="font-semibold text-slate-800">Lilongwe Office:</p>
+                            <p className="text-slate-500">Cuckoo&apos;s Nest, 1st Floor, Mandala Street, Area 3, Lilongwe</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-800">Blantyre / Limbe Office:</p>
+                            <p className="text-slate-500">Zuleka Arcade, 1st Floor Room 26, Opposite Illovo, Limbe, Blantyre</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -261,8 +262,12 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-900">Email Us</p>
-                        <p className="text-xs text-slate-500 mt-1">support@ufulufinance.com</p>
-                        <p className="text-xs text-slate-500">loans@ufulufinance.com</p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          <a href="mailto:info@ufulufinance.com" className="hover:text-[#034DA2]">info@ufulufinance.com</a>
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          <a href="mailto:support@ufulufinance.com" className="hover:text-[#034DA2]">support@ufulufinance.com</a>
+                        </p>
                       </div>
                     </div>
 
@@ -272,9 +277,13 @@ export default function ContactPage() {
                         <Phone className="size-5 text-[#009FE0]" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-900">Call Us</p>
-                        <p className="text-xs text-slate-500 mt-1">Direct: +265 99 123 4567</p>
-                        <p className="text-xs text-slate-500">Toll-Free WhatsApp: +265 88 123 4567</p>
+                        <p className="text-sm font-bold text-slate-900">Contact Us</p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          Phone / WhatsApp: <a href="tel:+265994485444" className="font-semibold text-[#034DA2] hover:underline">+265 994 485 444</a>
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          Phone / WhatsApp: <a href="tel:+265888885444" className="font-semibold text-[#034DA2] hover:underline">+265 888 885 444</a>
+                        </p>
                       </div>
                     </div>
                   </div>

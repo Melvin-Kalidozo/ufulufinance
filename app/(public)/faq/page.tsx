@@ -40,7 +40,7 @@ const FAQS: FAQItem[] = [
     categoryLabel: "General Questions",
     question: "Where are your branch offices located?",
     answer:
-      "Our Head Office is in Area 3, City Centre, Lilongwe. We operate regional branches in Blantyre (Limbe Commercial District) and Mzuzu (Orton Chirwa Avenue), with field officers active across Dedza, Mchinji, Kasungu, and surrounding districts.",
+      "Our Lilongwe Office is at Cuckoo's Nest, 1st Floor, Mandala Street, Area 3, Lilongwe (+265 994 485 444). Our Blantyre / Limbe Office is at Zuleka Arcade, 1st Floor Room 26, Opposite Illovo, Limbe (+265 888 885 444). All offices are open Monday to Friday, 8:00 AM – 5:00 PM.",
   },
   {
     id: "who-qualifies",

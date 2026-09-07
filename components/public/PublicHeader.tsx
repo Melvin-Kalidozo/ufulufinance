@@ -254,8 +254,8 @@ export function PublicHeader() {
 
           <div className="pt-4 border-t border-slate-100">
             <div className="text-[11px] text-slate-500 text-center space-y-1">
-              <p className="font-semibold text-slate-700">+265 99 123 4567 &middot; info@ufulufinance.com</p>
-              <p>City Centre, Area 3, Lilongwe, Malawi</p>
+              <p className="font-semibold text-slate-700">+265 994 485 444 &middot; info@ufulufinance.com</p>
+              <p>Area 3, Lilongwe &middot; Limbe, Blantyre</p>
             </div>
           </div>
         </div>
