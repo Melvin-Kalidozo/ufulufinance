@@ -310,8 +310,8 @@ export default function EventDetailPage({ params }: PageProps) {
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
                     <MapPin className="size-3 text-[#00A3E0] shrink-0" />Katoto Commercial Area
                   </p>
-                  <a href="mailto:info@ufulufinance.com" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
-                    <Mail className="size-3 shrink-0" />info@ufulufinance.com
+                  <a href="mailto:ufulufinance@gmail.com" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
+                    <Mail className="size-3 shrink-0" />ufulufinance@gmail.com
                   </a>
                 </div>
               </div>

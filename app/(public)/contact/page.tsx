@@ -263,10 +263,10 @@ export default function ContactPage() {
                       <div>
                         <p className="text-sm font-bold text-slate-900">Email Us</p>
                         <p className="text-xs text-slate-500 mt-1">
-                          <a href="mailto:info@ufulufinance.com" className="hover:text-[#034DA2]">info@ufulufinance.com</a>
+                          <a href="mailto:ufulufinance@gmail.com" className="hover:text-[#034DA2]">ufulufinance@gmail.com</a>
                         </p>
                         <p className="text-xs text-slate-500">
-                          <a href="mailto:support@ufulufinance.com" className="hover:text-[#034DA2]">support@ufulufinance.com</a>
+                          <a href="mailto:ufulufinance@gmail.com" className="hover:text-[#034DA2]">ufulufinance@gmail.com</a>
                         </p>
                       </div>
                     </div>

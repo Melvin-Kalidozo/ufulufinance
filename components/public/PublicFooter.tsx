@@ -254,8 +254,8 @@ export function PublicFooter() {
                   <p className="font-bold text-white">Mzuzu Regional Office</p>
                   <p className="text-[11px] text-slate-400">Katoto Commercial Area, Mzuzu, Malawi</p>
                   <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="mailto:info@ufulufinance.com" className="text-[#38bdf8] hover:underline font-medium">
-                      info@ufulufinance.com
+                    <a href="mailto:ufulufinance@gmail.com" className="text-[#38bdf8] hover:underline font-medium">
+                      ufulufinance@gmail.com
                     </a>
                     <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
                   </div>

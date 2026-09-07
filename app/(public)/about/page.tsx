@@ -125,21 +125,21 @@ export default function AboutPage() {
       city: "Lilongwe",
       location: "Cuckoo's Nest, 1st Floor, Mandala Street, Area 3",
       focus: "MSME Wholesale Financing, Civil Servant Credit, Civil Service Payroll Operations",
-      contacts: "Phone: +265 994 485 444 | lilongwe@ufulufinance.com",
+      contacts: "Phone: +265 994 485 444 | ufulufinance@gmail.com",
     },
     {
       region: "Southern Region Hub",
       city: "Limbe, Blantyre",
       location: "Zuleka Arcade, 1st Floor Room 26, Opposite Illovo",
       focus: "Cross-Border Merchant Trade, Vegetable Cluster Banking, Transport Asset Financing",
-      contacts: "Phone: +265 888 885 444 | blantyre@ufulufinance.com",
+      contacts: "Phone: +265 888 885 444 | ufulufinance@gmail.com",
     },
     {
       region: "Northern Region Hub",
       city: "Mzuzu",
       location: "Orton Chirwa Avenue",
       focus: "Coffee & Grain Smallholder Facilities, Agro-dealer Bridging, Women Cooperative Groups",
-      contacts: "Phone: +265 994 485 444 | mzuzu@ufulufinance.com",
+      contacts: "Phone: +265 994 485 444 | ufulufinance@gmail.com",
     },
   ];
 

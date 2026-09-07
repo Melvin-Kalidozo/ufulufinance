@@ -386,10 +386,10 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 <div className="text-xs text-slate-500 pt-1">
                   <span>Questions regarding this vacancy?</span>
                   <a
-                    href="mailto:careers@ufulufinance.com"
+                    href="mailto:ufulufinance@gmail.com"
                     className="block text-[#01214A] font-semibold hover:underline mt-0.5"
                   >
-                    careers@ufulufinance.com
+                    ufulufinance@gmail.com
                   </a>
                 </div>
               </div>

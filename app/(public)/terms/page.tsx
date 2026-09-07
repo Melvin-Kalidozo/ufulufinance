@@ -183,8 +183,8 @@ export default function TermsPage() {
                 <div className="pt-2 space-y-2 text-xs font-medium text-slate-700">
                   <div className="flex items-center gap-2">
                     <Mail className="size-3.5 text-[#00A3E0] shrink-0" />
-                    <a href="mailto:compliance@ufulufinance.com" className="hover:text-[#00A3E0] transition-colors">
-                      compliance@ufulufinance.com
+                    <a href="mailto:ufulufinance@gmail.com" className="hover:text-[#00A3E0] transition-colors">
+                      ufulufinance@gmail.com
                     </a>
                   </div>
                   <div className="flex items-center gap-2">
@@ -472,7 +472,7 @@ export default function TermsPage() {
                   </p>
                   <ol className="space-y-2.5 pt-1 text-xs sm:text-sm text-slate-700 list-decimal list-inside">
                     <li className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-                      <strong>Internal Lodgment:</strong> Submit your dispute in writing to our Customer Care Desk or via <span className="font-semibold text-slate-900">compliance@ufulufinance.com</span>. We provide an acknowledgment ticket within 24 hours.
+                      <strong>Internal Lodgment:</strong> Submit your dispute in writing to our Customer Care Desk or via <span className="font-semibold text-slate-900">ufulufinance@gmail.com</span>. We provide an acknowledgment ticket within 24 hours.
                     </li>
                     <li className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
                       <strong>Investigation Window:</strong> Our compliance team investigates and delivers a formal resolution determination within 14 calendar days.
@@ -504,7 +504,7 @@ export default function TermsPage() {
                   <div className="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-1">
                     <p className="font-bold text-slate-900">Ufulu Finance Limited — Legal Secretariat</p>
                     <p>Head Office: Victoria Avenue, Blantyre, Republic of Malawi</p>
-                    <p>Email: <a href="mailto:compliance@ufulufinance.com" className="text-[#00A3E0] underline font-medium">compliance@ufulufinance.com</a> | Telephone: +265 (0) 1 772 400</p>
+                    <p>Email: <a href="mailto:ufulufinance@gmail.com" className="text-[#00A3E0] underline font-medium">ufulufinance@gmail.com</a> | Telephone: +265 994 485 444</p>
                   </div>
                 </div>
               </section>

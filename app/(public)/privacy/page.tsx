@@ -185,8 +185,8 @@ export default function PrivacyPage() {
                 <div className="pt-2 space-y-2 text-xs font-medium text-slate-700">
                   <div className="flex items-center gap-2">
                     <Mail className="size-3.5 text-[#00A3E0] shrink-0" />
-                    <a href="mailto:privacy@ufulufinance.com" className="hover:text-[#00A3E0] transition-colors">
-                      privacy@ufulufinance.com
+                    <a href="mailto:ufulufinance@gmail.com" className="hover:text-[#00A3E0] transition-colors">
+                      ufulufinance@gmail.com
                     </a>
                   </div>
                   <div className="flex items-center gap-2">
@@ -502,7 +502,7 @@ export default function PrivacyPage() {
                   <div className="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-1">
                     <p className="font-bold text-slate-900">Ufulu Finance Limited — Office of the DPO</p>
                     <p>Head Office: Victoria Avenue, Blantyre, Republic of Malawi</p>
-                    <p>Email: <a href="mailto:privacy@ufulufinance.com" className="text-[#00A3E0] underline font-medium">privacy@ufulufinance.com</a> | Telephone: +265 (0) 1 772 400</p>
+                    <p>Email: <a href="mailto:ufulufinance@gmail.com" className="text-[#00A3E0] underline font-medium">ufulufinance@gmail.com</a> | Telephone: +265 994 485 444</p>
                   </div>
                 </div>
               </section>
