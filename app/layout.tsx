@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const lato = Lato({
-  variable: "--font-lato",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${lato.variable} antialiased`}>
-      <body className="min-h-screen bg-background text-foreground">
+    <html lang="en" className={`${plusJakarta.variable} font-sans antialiased`}>
+      <body suppressHydrationWarning className="min-h-screen bg-background text-foreground font-sans">
         {children}
         <Toaster position="top-right" richColors />
       </body>
