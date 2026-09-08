@@ -3,8 +3,8 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import { ClientTestimonialSlider } from "@/components/public/ClientTestimonialSlider";
+import { getHomeContent } from "@/lib/cms-data";
 import { HomePreload } from "@/components/public/HomePreload";
-import { getJson } from "@/lib/content";
 import {
   ArrowRight,
   ShieldCheck,
@@ -43,18 +43,15 @@ export default async function HomePage() {
   const iconOf = (key: string) => SECTOR_ICON[key] ?? Sparkles;
   const fmtDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
 
-  const json = await getJson<{
-    data?: {
-      settings?: Record<string, unknown> | null;
-      stats?: Record<string, unknown>[];
-      sectors?: Record<string, unknown>[];
-      whyChoose?: Record<string, unknown>[];
-      impactMetrics?: Record<string, unknown>[];
-      loanProducts?: Record<string, unknown>[];
-      recentArticles?: Record<string, unknown>[];
-    };
-  }>("/api/public/home").catch(() => null);
-  const payload = json?.data ?? null;
+  const payload = (await getHomeContent().catch(() => null)) as {
+    settings?: Record<string, unknown> | null;
+    stats?: Record<string, unknown>[];
+    sectors?: Record<string, unknown>[];
+    whyChoose?: Record<string, unknown>[];
+    impactMetrics?: Record<string, unknown>[];
+    loanProducts?: Record<string, unknown>[];
+    recentArticles?: Record<string, unknown>[];
+  } | null;
 
 
   const STATS = (payload?.stats ?? []).map((x) => ({

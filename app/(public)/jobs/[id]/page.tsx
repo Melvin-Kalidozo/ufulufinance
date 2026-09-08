@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { JobRole } from "@/lib/jobsData";
-import { getJson } from "@/lib/content";
+import { getJobBySlug, getOpenJobs } from "@/lib/cms-data";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
 import { ShareJobButton } from "@/components/public/ShareJobButton";
 import {
@@ -59,10 +59,8 @@ export async function generateMetadata(
   props: PageProps<"/jobs/[id]">
 ): Promise<Metadata> {
   const { id } = await props.params;
-  const data = await getJson<{ data?: Record<string, unknown> }>(
-    `/api/public/jobs/${encodeURIComponent(id)}`
-  ).catch(() => null);
-  const job = data?.data ? mapJob(data.data) : null;
+  const raw = await getJobBySlug(id).catch(() => null);
+  const job = raw ? mapJob(raw as unknown as Record<string, unknown>) : null;
   if (!job) {
     return { title: "Job Not Found — Ufulu Finance" };
   }
@@ -74,20 +72,18 @@ export async function generateMetadata(
 
 export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
   const { id } = await props.params;
-  const [detail, list] = await Promise.all([
-    getJson<{ data?: Record<string, unknown> }>(
-      `/api/public/jobs/${encodeURIComponent(id)}`
-    ).catch(() => null),
-    getJson<{ data: unknown[] }>("/api/public/jobs?limit=20").catch(() => null),
+  const [raw, all] = await Promise.all([
+    getJobBySlug(id).catch(() => null),
+    getOpenJobs(20).catch(() => []),
   ]);
 
-  const job = detail?.data ? mapJob(detail.data) : null;
+  const job = raw ? mapJob(raw as unknown as Record<string, unknown>) : null;
   if (!job) {
     notFound();
   }
 
-  const otherJobs = (list?.data ?? [])
-    .map((r) => mapJob(r as Record<string, unknown>))
+  const otherJobs = (all ?? [])
+    .map((r) => mapJob(r as unknown as Record<string, unknown>))
     .filter((r) => r.id !== job.id)
     .slice(0, 3);
 
