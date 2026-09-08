@@ -7,8 +7,21 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Check, X, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, Check, X, ShieldCheck, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CUSTOMER SELF-REGISTRATION — DISABLED
+//
+// The live system only has admin/staff accounts (provisioned via the admin
+// "Users" manager or the seed script). The public-facing customer portal
+// (/account) is a FUTURE IMPROVEMENT, so this sign-up screen is muted.
+//
+// To re-enable when customer self-service launches, flip
+// SELF_REGISTRATION_DISABLED to false — the full multi-step form + email
+// verification flow below is kept intact for that purpose.
+// ─────────────────────────────────────────────────────────────────────────────
+const SELF_REGISTRATION_DISABLED = true;
 
 const RULES = [
   { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
@@ -139,6 +152,39 @@ export default function SignUpPage() {
     } catch {
       toast.error("Network error. Please try again.");
     }
+  }
+
+  if (SELF_REGISTRATION_DISABLED) {
+    return (
+      <div className="space-y-6">
+        <div className="space-y-1.5">
+          <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-blue-50 text-[#034DA2]">
+            <ShieldCheck className="size-5" />
+          </div>
+          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#034DA2]">
+            Staff Portal
+          </p>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
+            Registration is invite-only
+          </h2>
+        </div>
+
+        <p className="text-sm leading-relaxed text-slate-500">
+          Self-service account creation is currently disabled. Admin and
+          customer accounts are provisioned by the Ufulu Finance team. The
+          customer portal will open for public self-registration in a future
+          improvement.
+        </p>
+
+        <Link
+          href="/signin"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#034DA2] px-4 py-3 text-sm font-bold text-white shadow-md shadow-blue-950/15 transition-all hover:scale-[1.02] hover:bg-[#023877]"
+        >
+          <ArrowLeft className="size-4" />
+          Back to sign in
+        </Link>
+      </div>
+    );
   }
 
   if (step === "verify") {

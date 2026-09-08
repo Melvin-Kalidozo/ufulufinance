@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+import { slugify } from "@/lib/content";
+import { usePublicData } from "@/lib/content-store";
+import { Shimmer, StaticHero } from "@/components/public/ContentSkeletons";
 import {
   Search,
   ChevronDown,
@@ -25,107 +28,61 @@ interface FAQItem {
   answer: string;
 }
 
-const FAQS: FAQItem[] = [
-  {
-    id: "who-is-ufulu",
-    category: "general",
-    categoryLabel: "General Questions",
-    question: "Who is Ufulu Finance and is the institution regulated?",
-    answer:
-      "Ufulu Finance Limited is a registered Malawian microfinance institution established in Lilongwe. We operate under national microfinance prudential regulations and consumer credit protection standards, providing non-deposit credit facilities to micro, small, and medium enterprises (MSMEs), agricultural producers, and salaried civil servants.",
-  },
-  {
-    id: "where-branches",
-    category: "general",
-    categoryLabel: "General Questions",
-    question: "Where are your branch offices located?",
-    answer:
-      "Our Head Office is in Area 3, City Centre, Lilongwe. We operate regional branches in Blantyre (Limbe Commercial District) and Mzuzu (Orton Chirwa Avenue), with field officers active across Dedza, Mchinji, Kasungu, and surrounding districts.",
-  },
-  {
-    id: "who-qualifies",
-    category: "eligibility",
-    categoryLabel: "Loan Eligibility",
-    question: "Who qualifies for an Ufulu Finance loan?",
-    answer:
-      "Malawian citizens aged 21 to 65 who own an active registered or informal enterprise operating for at least 6 months, smallholder farmers with verifiable land cultivation, or permanent civil servants and public sector employees with regular salary credits.",
-  },
-  {
-    id: "required-documents",
-    category: "eligibility",
-    categoryLabel: "Loan Eligibility",
-    question: "What documents do I need to present when applying?",
-    answer:
-      "1. Valid Malawian National ID Card (Smart Card) or passport.\n2. Recent 3 to 6 months bank statement or mobile money (Airtel Money / TNM Mpamba) transaction history.\n3. Proof of business trading location or residential utility bill/chief's letter.\n4. For civil servants: Latest 3 months payslips and confirmation letter.\n5. Two recent passport-size photos.",
-  },
-  {
-    id: "how-much-borrow",
-    category: "eligibility",
-    categoryLabel: "Loan Eligibility",
-    question: "What is the minimum and maximum amount I can borrow?",
-    answer:
-      "First-time borrowers can access loans starting from MWK 50,000 up to MWK 2,500,000 depending on cashflow assessment. Established repeat borrowers with exemplary repayment track records can scale up to MWK 15,000,000 for asset and commercial facilities.",
-  },
-  {
-    id: "interest-charges",
-    category: "repayments",
-    categoryLabel: "Repayments & Rates",
-    question: "What interest rates and fees does Ufulu Finance charge?",
-    answer:
-      "Our interest rates range between 2.8% and 3.5% flat monthly depending on the facility type, tenure, and collateral backing. We have a strict 'Zero Hidden Deductions' policy: all processing fees (1.0% to 2.0%) and insurance charges are disclosed upfront on your official sanction letter before disbursement.",
-  },
-  {
-    id: "early-repayment",
-    category: "repayments",
-    categoryLabel: "Repayments & Rates",
-    question: "Can I repay my loan before the agreed tenure without penalty?",
-    answer:
-      "Yes! Ufulu Finance encourages early debt liquidation. Borrowers who settle their balance ahead of schedule are charged interest only for the duration the facility was active, with zero penalty surcharges.",
-  },
-  {
-    id: "how-repay",
-    category: "repayments",
-    categoryLabel: "Repayments & Rates",
-    question: "How do I make my monthly or weekly loan repayments?",
-    answer:
-      "Repayments can be made through:\n- Direct Mobile Money bill pay via Airtel Money or TNM Mpamba using your Loan Account Reference.\n- Direct bank transfer or branch deposit into our designated National Bank or Standard Bank accounts.\n- Automated payroll deduction (for registered civil servants and corporate partnerships).\n- In-person at any Ufulu Finance branch cashier.",
-  },
-  {
-    id: "mobile-payout-speed",
-    category: "mobile",
-    categoryLabel: "Mobile Wallet Payouts",
-    question: "How quickly are funds disbursed to my mobile wallet?",
-    answer:
-      "Once your KYC documents are approved and your agreement is signed, funds are pushed to your registered Airtel Money or TNM Mpamba wallet within 15 to 30 minutes, or credited to your commercial bank within 24 hours.",
-  },
-  {
-    id: "data-security",
-    category: "security",
-    categoryLabel: "Security & Privacy",
-    question: "How is my personal financial data and credit record protected?",
-    answer:
-      "We strictly adhere to the Malawi Data Protection Act and Reserve Bank of Malawi confidentiality regulations. Your financial statements, phone numbers, and repayment histories are stored on encrypted servers and are never sold or shared with unauthorized commercial third parties.",
-  },
-];
-
 export default function FAQPage() {
+  const { body } = usePublicData<{
+    data: { id: number; question: string; answer: string; category: string }[];
+  }>("/api/public/faqs");
+  const loading = body === null;
+
+  const faqs: FAQItem[] = (body?.data ?? []).map((row) => ({
+    id: String(row.id),
+    category: slugify(row.category) as FAQItem["category"],
+    categoryLabel: row.category,
+    question: row.question,
+    answer: row.answer,
+  }));
+
+  const categories = [
+    { id: "all", label: "All Questions" },
+    ...Array.from(new Set((body?.data ?? []).map((row) => row.category))).map((label) => ({
+      id: slugify(label),
+      label,
+    })),
+  ];
+
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [openFaqId, setOpenFaqId] = useState<string | null>(FAQS[0].id);
+  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
-  const filteredFaqs = useMemo(() => {
-    return FAQS.filter((f) => {
-      const matchesCat = activeCategory === "all" || f.category === activeCategory;
-      const matchesSearch =
-        f.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        f.answer.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCat && matchesSearch;
-    });
-  }, [activeCategory, searchQuery]);
+  const filteredFaqs = faqs.filter((f) => {
+    const matchesCat = activeCategory === "all" || f.category === activeCategory;
+    const matchesSearch =
+      f.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      f.answer.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
 
   const toggleFaq = (id: string) => {
     setOpenFaqId((prev) => (prev === id ? null : id));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Frequently Asked Questions"
+          subtitle="Clear, Honest Answers Regarding Loans, Eligibility, Rates & Mobile Disbursements"
+        />
+        <div className="mx-auto max-w-4xl space-y-4 px-4 py-12">
+          <Shimmer className="h-11 w-full rounded-2xl" />
+          <Shimmer className="h-9 w-2/3 rounded-full" />
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Shimmer key={i} className="h-20 w-full rounded-2xl" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -194,14 +151,7 @@ export default function FAQPage() {
 
           {/* Category Filter Pills */}
           <div className="flex items-center justify-center flex-wrap gap-2">
-            {[
-              { id: "all", label: "All Questions" },
-              { id: "general", label: "General" },
-              { id: "eligibility", label: "Loan Eligibility" },
-              { id: "repayments", label: "Repayments & Rates" },
-              { id: "mobile", label: "Mobile Wallet Payouts" },
-              { id: "security", label: "Security & Privacy" },
-            ].map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}

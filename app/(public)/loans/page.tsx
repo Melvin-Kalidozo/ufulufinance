@@ -4,6 +4,8 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+import { StaticHero } from "@/components/public/ContentSkeletons";
+import { usePublicData } from "@/lib/content-store";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -46,195 +48,50 @@ interface LoanProduct {
   repaymentTerms: string;
 }
 
-const LOAN_PRODUCTS: LoanProduct[] = [
-  {
-    id: "msme-working-capital",
-    name: "MSME QuickGrowth Working Capital",
-    category: "msme",
-    categoryLabel: "MSME Business",
-    badge: "Most Popular",
-    tagline: "Speedy inventory and restocking cash for registered shops and market traders.",
-    minAmount: 100000,
-    maxAmount: 10000000,
-    minMonths: 1,
-    maxMonths: 12,
-    interestRateMonthly: 3.5,
-    processingFeePercent: 2.0,
-    image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&q=80",
-    isFeatured: true,
-    intro:
-      "A fast-response credit line created for active merchants, wholesalers, and stall operators. Avoid lost inventory sales and negotiate bulk supplier discounts with ready cash.",
-    keyDetails: [
-      "Disbursement within 24 hours of approval",
-      "Flexible weekly or monthly repayment cycles",
-      "Repeat borrowers qualify for credit limit increases up to MWK 10,000,000",
-      "Direct mobile wallet (Airtel Money / TNM Mpamba) disbursement",
-    ],
-    eligibility: [
-      "Operating business location for a minimum of 6 months",
-      "Demonstrable daily or weekly sales cashflow",
-      "Malawian citizen aged 21 years and above",
-    ],
-    kycRequirements: [
-      "Valid National ID",
-      "Proof of business (e.g. trading licence or business registration)",
-      "Proof of residence",
-      "Completed Ufulu Finance loan application and KYC forms",
-      "Any additional information or documentation requested by Ufulu Finance Limited",
-    ],
-    repaymentTerms:
-      "Flat monthly interest calculated transparently. Early repayment without penalties.",
-  },
-  {
-    id: "agri-seasonal-booster",
-    name: "Mlimi Harvest Input Booster",
-    category: "agri",
-    categoryLabel: "Agri-Finance",
-    badge: "Seasonal Special",
-    tagline: "Fertilizer, seed, and irrigation financing tailored to harvest cycles.",
-    minAmount: 150000,
-    maxAmount: 7500000,
-    minMonths: 3,
-    maxMonths: 9,
-    interestRateMonthly: 3.0,
-    processingFeePercent: 1.5,
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-    isFeatured: true,
-    intro:
-      "Engineered specifically for central Malawi smallholders cultivating maize, soya, groundnuts, and tobacco. Get inputs when rain falls, repay when you sell your crop.",
-    keyDetails: [
-      "Structured grace period during the growing window",
-      "Bullet repayment options following commodity harvest sales",
-      "Input delivery partnerships with accredited seed & fertilizer distributors",
-      "Agronomic risk advisory included at zero cost",
-    ],
-    eligibility: [
-      "Cultivating minimum 1.5 acres of farmland",
-      "Membership in an agricultural club or cooperative preferred",
-      "Historical proof of crop production for at least 2 seasons",
-    ],
-    kycRequirements: [
-      "Valid National ID",
-      "Proof of business",
-      "Proof of residence",
-      "Completed Ufulu Finance loan application and KYC forms",
-      "Any additional information or documentation requested by Ufulu Finance Limited",
-    ],
-    repaymentTerms:
-      "Flexible schedule with principal payable upon harvest commodity aggregation.",
-  },
-  {
-    id: "boma-salary-express",
-    name: "Boma Civil Servant Express",
-    category: "payroll",
-    categoryLabel: "Payroll Advances",
-    badge: "Low Interest",
-    tagline: "Low-stress salary advances for teachers, nurses, and government staff.",
-    minAmount: 50000,
-    maxAmount: 2500000,
-    minMonths: 1,
-    maxMonths: 24,
-    interestRateMonthly: 2.8,
-    processingFeePercent: 1.0,
-    image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
-    isFeatured: false,
-    intro:
-      "A dignified salary loan for civil servants facing school fee deadlines, hospital emergencies, or home improvements, protecting you from aggressive informal loan sharks.",
-    keyDetails: [
-      "Turnaround under 4 hours via Airtel Money or Mpamba",
-      "Zero collateral required — salary backed",
-      "Extended tenure up to 24 months for larger capital needs",
-      "Strict compliance with maximum 1/3 net salary take-home regulations",
-    ],
-    eligibility: [
-      "Permanent employment with Government of Malawi or approved public agency",
-      "Minimum 3 months confirmed service",
-      "Salary paid via commercial bank account",
-    ],
-    kycRequirements: [
-      "Valid National ID",
-      "Evidence of employment with the Government of Malawi",
-      "Completed Ufulu Finance loan application and KYC documentation",
-      "Any additional documents required during the assessment process",
-    ],
-    repaymentTerms:
-      "Direct payroll deduction or bank stop-order on the official government salary date.",
-  },
-  {
-    id: "tikondane-group-credit",
-    name: "Tikondane Solidarity Cluster Credit",
-    category: "group",
-    categoryLabel: "Group Lending",
-    badge: "Community First",
-    tagline: "Solidarity-backed credit lines for women cooperatives and village banking.",
-    minAmount: 50000,
-    maxAmount: 500000,
-    minMonths: 3,
-    maxMonths: 6,
-    interestRateMonthly: 3.2,
-    processingFeePercent: 1.0,
-    image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80",
-    isFeatured: false,
-    intro:
-      "Wholesale credit lines for established Village Savings and Loans Associations (VSLAs). Empowering female micro-entrepreneurs without demanding traditional real estate collateral.",
-    keyDetails: [
-      "Joint liability and peer support replace physical collateral",
-      "Fortnightly field officer collection at your community meeting place",
-      "Free financial literacy and cooperative governance training",
-    ],
-    eligibility: [
-      "Member of an active group with at least 5 to 25 verified members",
-      "Group operating with consistent savings history for at least 6 months",
-    ],
-    kycRequirements: [
-      "Valid National ID for each borrower",
-      "Proof of business",
-      "Proof of residence",
-      "Completed Ufulu Finance loan application and KYC documentation",
-      "Any additional information or documentation requested by Ufulu Finance Limited",
-    ],
-    repaymentTerms:
-      "Bi-weekly or monthly collection during standard cluster group meetings.",
-  },
-  {
-    id: "asset-finance-trike",
-    name: "Commercial Asset & Equipment Credit",
-    category: "msme",
-    categoryLabel: "MSME Business",
-    badge: "Asset Backed",
-    tagline: "Finance delivery motorcycles, trikes, solar pumps, and grain mills.",
-    minAmount: 500000,
-    maxAmount: 15000000,
-    minMonths: 6,
-    maxMonths: 36,
-    interestRateMonthly: 2.9,
-    processingFeePercent: 2.0,
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
-    isFeatured: false,
-    intro:
-      "Acquire productive equipment that generates daily revenue. Ufulu Finance pays the vendor directly, and the asset secures the facility while you generate income.",
-    keyDetails: [
-      "Up to 80% financing of asset invoice value",
-      "Asset itself serves as security",
-      "Comprehensive insurance package structured into monthly payments",
-    ],
-    eligibility: [
-      "Verifiable existing enterprise in transport, logistics, or agro-processing",
-      "Ability to contribute 20% down payment",
-    ],
-    kycRequirements: [
-      "Valid National ID",
-      "Proof of confirmed monthly salary income for at least 6 months",
-      "Employment information from a participating employer",
-      "Completed Ufulu Finance loan application and KYC documentation",
-      "Any additional information requested by Ufulu Finance Limited",
-    ],
-    repaymentTerms:
-      "Equal monthly instalments matched to the asset's productive lifespan.",
-  },
-];
+type LoanRow = Record<string, unknown>;
+const CATEGORY_KEYS = ["msme", "agri", "payroll", "group"] as const;
+const num = (r: LoanRow, k: string, d = 0) => {
+  const v = r[k];
+  return v !== undefined && v !== null && !Number.isNaN(Number(v)) ? Number(v) : d;
+};
+const arr = (r: LoanRow, k: string): string[] => {
+  const v = r[k];
+  if (Array.isArray(v)) return v.map((x) => String(x));
+  if (typeof v === "string") return v ? [v] : [];
+  return [];
+};
+function toLoan(r: LoanRow): LoanProduct {
+  const rawCat = String(r.category ?? "");
+  return {
+    id: String(r.slug ?? r.name ?? ""),
+    name: String(r.name ?? ""),
+    category: (CATEGORY_KEYS.includes(rawCat as (typeof CATEGORY_KEYS)[number]) ? rawCat : "msme") as LoanProduct["category"],
+    categoryLabel: String(r.categoryLabel ?? ""),
+    badge: String(r.badge ?? ""),
+    tagline: String(r.tagline ?? ""),
+    minAmount: num(r, "minAmount"),
+    maxAmount: num(r, "maxAmount"),
+    minMonths: num(r, "minMonths"),
+    maxMonths: num(r, "maxMonths"),
+    interestRateMonthly: num(r, "interestRateMonthly"),
+    processingFeePercent: num(r, "processingFeePercent"),
+    image: String(r.image ?? ""),
+    isFeatured: Boolean(r.isFeatured),
+    intro: String(r.intro ?? ""),
+    keyDetails: arr(r, "keyDetails"),
+    eligibility: arr(r, "eligibility"),
+    kycRequirements: arr(r, "kycRequirements"),
+    repaymentTerms: Array.isArray(r.repaymentTerms)
+      ? (r.repaymentTerms as unknown[]).join("\n")
+      : String(r.repaymentTerms ?? ""),
+  };
+}
 
 export default function LoansPage() {
+  const { body } = usePublicData<{ data: unknown[] }>("/api/public/loan-products");
+  const loading = body === null;
+  const liveProducts: LoanProduct[] = (body?.data ?? []).map((r) => toLoan(r as LoanRow));
+
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeModalProduct, setActiveModalProduct] = useState<LoanProduct | null>(null);
 
@@ -243,10 +100,12 @@ export default function LoansPage() {
   const [calcMonths, setCalcMonths] = useState<number>(6);
   const [calcRateMonthly, setCalcRateMonthly] = useState<number>(3.5);
 
+  const LOAN_PRODUCTS: LoanProduct[] = liveProducts;
+
   const filteredProducts = useMemo(() => {
     if (selectedCategory === "all") return LOAN_PRODUCTS;
     return LOAN_PRODUCTS.filter((p) => p.category === selectedCategory);
-  }, [selectedCategory]);
+  }, [selectedCategory, LOAN_PRODUCTS]);
 
   // Calculator computations
   const estimatedMonthlyPayment = useMemo(() => {
@@ -258,6 +117,25 @@ export default function LoansPage() {
   const estimatedTotalPayment = useMemo(() => {
     return estimatedMonthlyPayment * calcMonths;
   }, [estimatedMonthlyPayment, calcMonths]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Loan Products"
+          subtitle="Product Categories · Featured Facilities · Eligibility · Repayment Calculator"
+        />
+        <div className="mx-auto max-w-7xl space-y-6 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-80 animate-pulse rounded-3xl bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">

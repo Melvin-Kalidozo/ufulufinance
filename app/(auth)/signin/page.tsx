@@ -3,12 +3,14 @@
 import { useState, useEffect, Suspense } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
+
+const INPUT_CLASS =
+  "h-11 rounded-xl border-slate-200 bg-slate-50 px-3.5 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white";
 
 function SignInForm() {
   const router = useRouter();
@@ -51,6 +53,8 @@ function SignInForm() {
     }
 
     const session = await getSession();
+    // Only admin/staff accounts are active today. CUSTOMER role routing to
+    // /account is reserved for a future customer portal.
     const dest = session?.user?.role === "ADMIN" ? "/admin" : "/account";
 
     toast.success("Welcome back!");
@@ -60,38 +64,45 @@ function SignInForm() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          Welcome to Ufulu Finance
+      <div className="space-y-1.5">
+        <p className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-[0.22em] text-[#034DA2]">
+          <ShieldCheck className="size-3.5" />
+          Staff Portal
         </p>
-        <h2 className="text-2xl font-bold tracking-tight">Sign in</h2>
-        <p className="text-sm text-muted-foreground">
-          Access your account with your email and password.
+        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
+          Sign in to the portal
+        </h2>
+        <p className="text-sm text-slate-500">
+          Access the Ufulu Finance admin dashboard with your staff credentials.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
+            Email
+          </Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Mail className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="you@ufulufinance.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              className="pl-9"
+              className={`${INPUT_CLASS} pl-10`}
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-xs font-semibold text-slate-700">
+            Password
+          </Label>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Lock className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -100,12 +111,12 @@ function SignInForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="pl-9 pr-10"
+              className={`${INPUT_CLASS} pl-10 pr-11`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-700"
               tabIndex={-1}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -114,18 +125,19 @@ function SignInForm() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="mt-2 h-11 w-full rounded-xl bg-[#034DA2] text-sm font-bold text-white shadow-md shadow-blue-950/15 transition-all hover:scale-[1.02] hover:bg-[#023877] active:bg-[#022955]"
+        >
           {loading ? "Signing in..." : "Sign in"}
+          {!loading && <ArrowRight className="size-4" />}
         </Button>
       </form>
 
-      <div className="flex items-center justify-between text-xs">
-        <p className="text-muted-foreground">
-          New customer?{" "}
-          <Link href="/signup" className="font-medium text-primary underline-offset-4 hover:underline">
-            Create an account
-          </Link>
-        </p>
+      <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-center text-xs text-slate-500">
+        Access is limited to authorised staff. Customer self-registration is
+        disabled.
       </div>
     </div>
   );

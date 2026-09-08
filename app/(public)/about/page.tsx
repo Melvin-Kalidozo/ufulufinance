@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { StaticHero } from "@/components/public/ContentSkeletons";
+import { usePublicData } from "@/lib/content-store";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
@@ -34,221 +37,91 @@ import {
 export default function AboutPage() {
   const [activeLeaderTab, setActiveLeaderTab] = useState<"all" | "board" | "executive">("all");
   const [openFaqId, setOpenFaqId] = useState<string | null>("regulation");
+  const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/about");
+  const content = body?.data ?? null;
 
-  const CORE_VALUES = [
-    {
-      id: "transparency",
-      title: "Transparency",
-      description:
-        "We are fully open about our fees, interest rates, and repayment terms. Clients receive complete information before signing any agreement — no hidden charges, ever.",
-      icon: ShieldCheck,
-      badge: "Core Value",
-      isFeatured: false,
-    },
-    {
-      id: "efficiency",
-      title: "Efficiency & Timeliness",
-      description:
-        "We process applications and disburse funds swiftly because we understand that timely access to finance is what makes the difference for our customers.",
-      icon: Sparkles,
-      badge: "Core Value",
-      isFeatured: true,
-    },
-    {
-      id: "dependability",
-      title: "Dependability",
-      description:
-        "Customers, partners, and communities can count on us to deliver on our commitments consistently and reliably at every interaction.",
-      icon: BadgeCheck,
-      badge: "Core Value",
-      isFeatured: false,
-    },
-    {
-      id: "effectiveness",
-      title: "Effectiveness",
-      description:
-        "We pursue outcomes that genuinely improve the socio-economic wellbeing of our customers, measuring success by real impact on lives and livelihoods.",
-      icon: Target,
-      badge: "Core Value",
-      isFeatured: false,
-    },
-    {
-      id: "flexibility",
-      title: "Flexibility",
-      description:
-        "We tailor our solutions to the diverse needs of different customer segments — from civil servants to village banking groups — rather than applying a one-size-fits-all approach.",
-      icon: Scale,
-      badge: "Core Value",
-      isFeatured: false,
-    },
-    {
-      id: "ethicality",
-      title: "Ethicality",
-      description:
-        "We conduct our business with the highest standards of integrity, fairness, and responsibility — protecting our customers and the communities we serve.",
-      icon: HeartHandshake,
-      badge: "Core Value",
-      isFeatured: false,
-    },
-  ];
+  const aboutRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const aval = (r: unknown, k: string, d = "") => {
+    const v = aboutRow(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+  const aarr = (r: unknown, k: string): string[] => {
+    const v = aboutRow(r)[k];
+    return Array.isArray(v) ? v.map((x) => String(x)) : [];
+  };
+  const abool = (r: unknown, k: string) => Boolean(aboutRow(r)[k]);
+  const valueIcon = (key: string): LucideIcon => {
+    const map: Record<string, LucideIcon> = {
+      ShieldCheck, Sparkles, BadgeCheck, Target, Scale, HeartHandshake,
+    };
+    return map[key] ?? ShieldCheck;
+  };
+  const vId = (r: unknown) => aval(r, "title").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-  const TIMELINE = [
-    {
-      year: "2016",
-      title: "Ufulu Finance Established",
-      description:
-        "Ufulu Finance Limited commenced operations as a non-deposit-taking financial institution, with a core focus on providing accessible and reliable credit solutions to civil servants across Malawi.",
-    },
-    {
-      year: "2016–",
-      title: "Civil Service Lending Focus",
-      description:
-        "Built a strong foundation in civil service lending, providing tailored loan products with structured repayment arrangements through payroll deductions for government employees.",
-    },
-    {
-      year: "Growing",
-      title: "Expanding Into New Segments",
-      description:
-        "Progressively expanded into private sector payroll lending and village banking loans, broadening financial access for salaried private-sector employees and community groups.",
-    },
-    {
-      year: "Future",
-      title: "Path to Deposit-Taking Institution",
-      description:
-        "Pursuing our long-term strategic ambition to progress into a deposit-taking financial institution, driving deeper financial inclusion for individuals and businesses across Malawi.",
-    },
-  ];
+  const CORE_VALUES = (content?.values ?? []).map((r) => ({
+    id: vId(r),
+    title: aval(r, "title"),
+    description: aval(r, "description"),
+    icon: valueIcon(aval(r, "iconKey")),
+    badge: aval(r, "badge"),
+    isFeatured: abool(r, "isFeatured"),
+  }));
 
-  const REGIONAL_HUBS = [
-    {
-      region: "Central Region (Head Office)",
-      city: "Lilongwe",
-      location: "Area 3, City Centre",
-      focus: "MSME Wholesale Financing, Civil Servant Credit, Civil Service Payroll Operations",
-      contacts: "Phone: +265 99 123 4567 | lilongwe@ufulufinance.com",
-    },
-    {
-      region: "Southern Region Hub",
-      city: "Blantyre",
-      location: "Limbe Commercial Center",
-      focus: "Cross-Border Merchant Trade, Vegetable Cluster Banking, Transport Asset Financing",
-      contacts: "Phone: +265 88 123 4567 | blantyre@ufulufinance.com",
-    },
-    {
-      region: "Northern Region Hub",
-      city: "Mzuzu",
-      location: "Orton Chirwa Avenue",
-      focus: "Coffee & Grain Smallholder Facilities, Agro-dealer Bridging, Women Cooperative Groups",
-      contacts: "Phone: +265 99 876 5432 | mzuzu@ufulufinance.com",
-    },
-  ];
+  const TIMELINE = (content?.timeline ?? []).map((r) => ({
+    year: aval(r, "year"),
+    title: aval(r, "title"),
+    description: aval(r, "description"),
+  }));
 
-  const LEADERS = [
-    {
-      name: "Dr. Matthews Phiri",
-      role: "Board Chairperson",
-      category: "board",
-      credentials: "PhD Development Economics · F.IoD",
-      experience: "25+ Yrs Governance",
-      expertise: ["Development Banking", "SADC Monetary Policies", "Fiduciary Stewardship"],
-      bio: "Over 25 years of development banking and corporate governance leadership across Sub-Saharan Africa and Southern Africa Development Community (SADC).",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      name: "Chifundo Banda",
-      role: "Chief Executive Officer / Managing Director",
-      category: "executive",
-      credentials: "MBA Finance · B.Sc Banking",
-      experience: "18+ Yrs Microfinance",
-      expertise: ["Grassroots MSME Credit", "Digital Wallets", "Sustainable Inclusion"],
-      bio: "Pioneered grassroots MSME financing frameworks and digital credit deployment with extensive microfinance institutional management experience.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      name: "Tamika Gondwe",
-      role: "Head of Credit Risk & Compliance",
-      category: "executive",
-      credentials: "Chartered Risk Analyst (CRA) · MSc",
-      experience: "14+ Yrs Credit Risk",
-      expertise: ["Underwriting Rigor", "Consumer Protection", "RBM Regulatory Compliance"],
-      bio: "Chartered risk specialist overseeing underwriting rigor, customer protection policies, and prudential microfinance regulations.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      name: "Kelvin Mwanza",
-      role: "Head of Operations & Digital Banking",
-      category: "executive",
-      credentials: "MSc FinTech · B.Sc Computer Science",
-      experience: "12+ Yrs Digital Systems",
-      expertise: ["Core Banking Automation", "Mobile Disbursement", "Branch Ops"],
-      bio: "Leads branch operational logistics, core banking automation, and mobile wallet payment integrations across all regional centers.",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      name: "Grace Mkandawire",
-      role: "Non-Executive Director (Audit & Risk)",
-      category: "board",
-      credentials: "FCCA · CA (Malawi)",
-      experience: "20+ Yrs Financial Audit",
-      expertise: ["Internal Controls", "Prudential Assurance", "Audit Governance"],
-      bio: "Fellow Chartered Certified Accountant (FCCA) with two decades of financial sector auditing and internal governance experience.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      name: "Patrick Chimwala",
-      role: "Head of Agricultural Lending",
-      category: "executive",
-      credentials: "MSc Rural Agronomy · B.Sc Ag Econ",
-      experience: "15+ Yrs Agri-Finance",
-      expertise: ["Harvest-Cycle Facilities", "Input Packages", "Cooperative Credit"],
-      bio: "Agronomist and rural finance practitioner championing harvest cycle credit, smallholder input packages, and cooperative lending.",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80",
-    },
-  ];
+  const REGIONAL_HUBS = (content?.hubs ?? []).map((r) => ({
+    region: aval(r, "region"),
+    city: aval(r, "city"),
+    location: aval(r, "location"),
+    focus: aval(r, "focus"),
+    contacts: aarr(r, "contacts").join(" | "),
+  }));
+
+  const LEADERS = (content?.leaders ?? []).map((r) => ({
+    name: aval(r, "name"),
+    role: aval(r, "title"),
+    category: aval(r, "category"),
+    credentials: aval(r, "credentials"),
+    experience: aval(r, "experience"),
+    expertise: aarr(r, "expertise"),
+    bio: aval(r, "bio"),
+    image: aval(r, "image"),
+  }));
 
   const filteredLeaders =
     activeLeaderTab === "all"
       ? LEADERS
       : LEADERS.filter((l) => l.category === activeLeaderTab);
 
-  const ABOUT_FAQS = [
-    {
-      id: "regulation",
-      question: "Is Ufulu Finance a regulated microfinance institution in Malawi?",
-      answer:
-        "Yes. Ufulu Finance Limited operates in strict accordance with Malawian non-deposit microfinance regulations and Reserve Bank of Malawi consumer credit guidelines. We follow ethical lending protocols, responsible underwriting standards, and transparent client protection principles.",
-    },
-    {
-      id: "branches",
-      question: "Where are your physical branches located and what are the opening hours?",
-      answer:
-        "Our Head Office is in City Centre, Area 3, Lilongwe (+265 99 123 4567). We operate commercial branch hubs at Victoria Avenue, CBD, Blantyre (+265 88 123 4567), and Katoto Commercial Area, Mzuzu (info@ufulufinance.com). All branches are open Monday through Friday, 8:00 AM – 5:00 PM.",
-    },
-    {
-      id: "transparent-rates",
-      question: "How does Ufulu Finance ensure zero hidden fees?",
-      answer:
-        "Before signing any credit agreement, you receive a full sanction letter itemizing the principal amount, interest rate, administrative charges, and the exact weekly or monthly repayment sum. What you see is what you pay—with zero unexpected penalty markups.",
-    },
-    {
-      id: "qualify",
-      question: "Who qualifies for an MSME or agricultural loan?",
-      answer:
-        "Malawian entrepreneurs, retail merchants, market vendors with at least 6 months of trading activity, smallholder farmers with verifiable cultivation acreage, and salaried public service employees qualify. We evaluate real cashflow and inventory turnover rather than demanding complex real estate collateral.",
-    },
-    {
-      id: "mobile-disbursements",
-      question: "How fast are funds disbursed once my application is approved?",
-      answer:
-        "Our streamlined assessment enables same-day approvals. Once approved, funds are disbursed within 24 hours directly to your registered Airtel Money wallet, TNM Mpamba account, or commercial bank account.",
-    },
-    {
-      id: "over-indebtedness",
-      question: "How does Ufulu Finance protect clients from over-indebtedness?",
-      answer:
-        "We conduct compassionate, thorough debt-service ratio assessments. Loan officers ensure repayment instalments do not exceed 35%–40% of your verifiable net cash surplus, protecting your household livelihood and enterprise stability.",
-    },
-  ];
+  const ABOUT_FAQS = (content?.aboutFaqs ?? []).map((r) => ({
+    id: `${vId(r)}-${aval(r, "question").length}`,
+    question: aval(r, "question"),
+    answer: aval(r, "answer"),
+  }));
+
+  if (!content) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="About Ufulu Finance"
+          subtitle="Company Overview · History · Mission & Vision · Governance · Impact"
+        />
+        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-44 animate-pulse rounded-3xl bg-slate-200/70" />
+            ))}
+          </div>
+          <div className="h-72 w-full animate-pulse rounded-3xl bg-slate-200/70" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -465,7 +338,7 @@ export default function AboutPage() {
             {CORE_VALUES.map((val) => {
               const Icon = val.icon;
               if (val.isFeatured) {
-                return (
+              return (
                   <div
                     key={val.id}
                     className="rounded-3xl p-7 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"

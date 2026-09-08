@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getJobById, OPEN_ROLES } from "@/lib/jobsData";
+import type { JobRole } from "@/lib/jobsData";
+import { getJson } from "@/lib/content";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
 import { ShareJobButton } from "@/components/public/ShareJobButton";
 import {
@@ -23,11 +24,45 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 
+function jRow(r: Record<string, unknown>): Record<string, unknown> {
+  return r;
+}
+function mapJob(r: Record<string, unknown>): JobRole {
+  const v = (k: string, d = "") => {
+    const x = jRow(r)[k];
+    return x !== undefined && x !== null && String(x) !== "" ? String(x) : d;
+  };
+  const arr = (k: string): string[] => {
+    const x = jRow(r)[k];
+    return Array.isArray(x) ? x.map((i) => String(i)) : [];
+  };
+  return {
+    id: v("slug"),
+    title: v("title"),
+    department: v("department"),
+    location: v("location"),
+    type: v("type"),
+    salaryRange: v("salaryRange") || undefined,
+    experienceLevel: v("experienceLevel") || undefined,
+    deadline: v("deadline") || undefined,
+    description: v("description"),
+    overview: v("overview"),
+    responsibilities: arr("responsibilities"),
+    requirements: arr("requirements"),
+    benefits: arr("benefits"),
+    image: v("image"),
+    isFeatured: Boolean(r.isFeatured),
+  };
+}
+
 export async function generateMetadata(
   props: PageProps<"/jobs/[id]">
 ): Promise<Metadata> {
   const { id } = await props.params;
-  const job = getJobById(id);
+  const data = await getJson<{ data?: Record<string, unknown> }>(
+    `/api/public/jobs/${encodeURIComponent(id)}`
+  ).catch(() => null);
+  const job = data?.data ? mapJob(data.data) : null;
   if (!job) {
     return { title: "Job Not Found — Ufulu Finance" };
   }
@@ -39,13 +74,22 @@ export async function generateMetadata(
 
 export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
   const { id } = await props.params;
-  const job = getJobById(id);
+  const [detail, list] = await Promise.all([
+    getJson<{ data?: Record<string, unknown> }>(
+      `/api/public/jobs/${encodeURIComponent(id)}`
+    ).catch(() => null),
+    getJson<{ data: unknown[] }>("/api/public/jobs?limit=20").catch(() => null),
+  ]);
 
+  const job = detail?.data ? mapJob(detail.data) : null;
   if (!job) {
     notFound();
   }
 
-  const otherJobs = OPEN_ROLES.filter((r) => r.id !== job.id).slice(0, 3);
+  const otherJobs = (list?.data ?? [])
+    .map((r) => mapJob(r as Record<string, unknown>))
+    .filter((r) => r.id !== job.id)
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-[#fcfdfd] text-slate-900 antialiased">

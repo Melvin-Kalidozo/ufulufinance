@@ -278,14 +278,33 @@ export function LoanEnquiryDialog({
     }
 
     setSending(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setSending(false);
-
-    // Generate reference code
-    const randomRef = `UFL-LN-${Math.floor(100000 + Math.random() * 900000)}`;
-    setRefNumber(randomRef);
-    setSent(true);
-    toast.success("Enquiry received! An advisor will reach out within 24 hours.");
+    try {
+      const res = await fetch("/api/public/enquiries/loan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          productName: form.product,
+          amountRequested: form.amount,
+          message: form.message,
+          consent: agreedTerms,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || json.message || "We could not submit your enquiry.");
+      }
+      const reference = json.data?.refNumber || json.refNumber || "";
+      setRefNumber(reference);
+      setSent(true);
+      toast.success("Enquiry received! An advisor will reach out within 24 hours.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleReset() {

@@ -4,7 +4,9 @@ import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getEventById, getOtherEvents } from "@/lib/blogData";
+import type { EventItem } from "@/lib/blogData";
+import { usePublicData } from "@/lib/content-store";
+import { StaticHero } from "@/components/public/ContentSkeletons";
 import {
   Calendar,
   Clock,
@@ -25,13 +27,65 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+function toEvent(r: Record<string, unknown>): EventItem {
+  const isUpcoming = r.date ? new Date(String(r.date)) >= new Date() : true;
+  return {
+    id: String(r.slug ?? ""),
+    title: String(r.title ?? ""),
+    date: r.date
+      ? new Date(String(r.date)).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "",
+    time: String(r.time ?? ""),
+    location: String(r.location ?? ""),
+    status: (isUpcoming ? "Upcoming" : "Past") as "Upcoming" | "Past",
+    description: String(r.description ?? ""),
+    details: Array.isArray(r.details)
+      ? (r.details as unknown[]).map((x) => String(x))
+      : [],
+    image: String(r.image ?? ""),
+  };
+}
+
 export default function EventDetailPage({ params }: PageProps) {
   const { id } = use(params);
-  const event = getEventById(id);
+  const { body: detail, loading } = usePublicData<{ data?: Record<string, unknown> }>(
+    `/api/public/events/${encodeURIComponent(id)}`
+  );
+  const { body: list } = usePublicData<{ data: unknown[] }>("/api/public/events?limit=20");
+
+  const event: EventItem | undefined = detail?.data ? toEvent(detail.data) : undefined;
+  const others = (list?.data ?? [])
+    .filter((r) => String((r as Record<string, unknown>).slug ?? "") !== id)
+    .slice(0, 2)
+    .map((r) => toEvent(r as Record<string, unknown>));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f8f9fa]">
+        <StaticHero
+          title="Community Clinics & Events"
+          subtitle="Upcoming and past Ufulu Finance workshops, forums and gatherings."
+        />
+        <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
+          <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="h-7 w-3/4 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="h-3 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="space-y-3 pt-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-4 w-full animate-pulse rounded-full bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!event) return notFound();
 
-  const others = getOtherEvents(id, 2);
   const isUpcoming = event.status === "Upcoming";
 
   return (

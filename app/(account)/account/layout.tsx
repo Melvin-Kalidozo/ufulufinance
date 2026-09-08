@@ -1,5 +1,14 @@
 "use client";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CUSTOMER ACCOUNT PORTAL — DISABLED (FUTURE IMPROVEMENT)
+//
+// The live system only has ADMIN/staff accounts, so this portal is not linked
+// from anywhere and customers cannot self-register. The route protection in
+// proxy.ts keeps it guarded. Keep this code intact — it will power the public
+// customer portal in a future improvement.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SessionProvider, useSession } from "next-auth/react";

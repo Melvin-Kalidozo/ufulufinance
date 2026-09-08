@@ -4,7 +4,9 @@ import { use, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getArticleById, getRelatedArticles } from "@/lib/blogData";
+import type { Article } from "@/lib/blogData";
+import { usePublicData } from "@/lib/content-store";
+import { StaticHero } from "@/components/public/ContentSkeletons";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   Calendar,
@@ -30,18 +32,88 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+function toArticle(r: Record<string, unknown>): Article {
+  const content =
+    r.content && typeof r.content === "object"
+      ? (r.content as Record<string, unknown>)
+      : {};
+  const paragraphs = Array.isArray(content.paragraphs)
+    ? (content.paragraphs as unknown[]).map((x) => String(x))
+    : [];
+  const quoteRaw = content.quote as Record<string, unknown> | undefined;
+  const takeaways = Array.isArray(r.keyTakeaways)
+    ? (r.keyTakeaways as unknown[]).map((x) => String(x))
+    : [];
+  return {
+    id: String(r.slug ?? ""),
+    type: String(r.kind) === "NEWS" ? "news" : "blog",
+    title: String(r.title ?? ""),
+    category: String(r.category ?? ""),
+    date: r.date
+      ? new Date(String(r.date)).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "",
+    author: String(r.author ?? ""),
+    authorRole: r.authorRole ? String(r.authorRole) : undefined,
+    authorImage: r.authorImage ? String(r.authorImage) : undefined,
+    readTime: r.readTime ? `${Number(r.readTime)} min read` : "",
+    excerpt: String(r.excerpt ?? ""),
+    content: paragraphs,
+    keyTakeaways: takeaways.length ? takeaways : undefined,
+    quote: quoteRaw?.text
+      ? { text: String(quoteRaw.text), author: String(quoteRaw.author ?? "") }
+      : undefined,
+    image: String(r.image ?? ""),
+    isFeatured: Boolean(r.isFeatured),
+  };
+}
+
 export default function DedicatedArticlePage({ params }: PageProps) {
   const resolvedParams = use(params);
-  const article = getArticleById(resolvedParams.slug);
+  const slug = resolvedParams.slug;
+  const { body: detail, loading } = usePublicData<{ data?: Record<string, unknown> }>(
+    `/api/public/articles/${encodeURIComponent(slug)}`
+  );
+  const { body: list } = usePublicData<{ data: unknown[] }>("/api/public/articles?limit=20");
 
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  if (!article) return notFound();
+  const article: Article | undefined = detail?.data
+    ? toArticle(detail.data)
+    : undefined;
+  const relatedArticles = (list?.data ?? [])
+    .filter((r) => String((r as Record<string, unknown>).slug ?? "") !== slug)
+    .slice(0, 3)
+    .map((r) => toArticle(r as Record<string, unknown>));
 
-  const relatedArticles = getRelatedArticles(article.id, 3);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Insights & News"
+          subtitle="Our Perspective · Practical Business Coaching · Announcements"
+        />
+        <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
+          <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="h-7 w-3/4 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="h-3 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="space-y-3 pt-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-4 w-full animate-pulse rounded-full bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!article) return notFound();
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {

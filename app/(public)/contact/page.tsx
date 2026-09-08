@@ -134,10 +134,38 @@ export default function ContactPage() {
     }
 
     setSending(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setSending(false);
-    setSent(true);
-    toast.success("Message sent! We will get back to you shortly.");
+    try {
+      const categoryMap = (subject: string) => {
+        const t = subject.toLowerCase();
+        if (t.includes("loan")) return "Loan Info";
+        if (t.includes("partnership")) return "Partnership";
+        if (t.includes("complaint")) return "Complaints";
+        if (t.includes("career") || t.includes("job")) return "Careers";
+        if (t.includes("media") || t.includes("press")) return "Media";
+        return "General Information";
+      };
+      const res = await fetch("/api/public/enquiries/company", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          category: categoryMap(form.subject),
+          message: `${form.subject}\n\n${form.message}`,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || json.message || "We could not send your message.");
+      }
+      setSent(true);
+      toast.success("Message sent! We will get back to you shortly.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleReset() {

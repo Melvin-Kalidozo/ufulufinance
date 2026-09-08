@@ -51,6 +51,12 @@ type UserRow = {
 
 type Filter = "ALL" | "ADMIN" | "CUSTOMER";
 
+// Customer accounts are disabled on the live system — the /account portal is
+// a future improvement. Creation is limited to ADMIN accounts here so no
+// customer route entrances are generated. Re-enable the "Customer" option
+// when the customer portal ships.
+const CUSTOMER_SELF_SERVICE_ENABLED = false;
+
 const EMPTY_FORM = {
   name: "",
   email: "",
@@ -211,20 +217,34 @@ export function UsersManager() {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)}>
-          <TabsList>
-            <TabsTrigger value="ALL">All</TabsTrigger>
-            <TabsTrigger value="ADMIN">
+          <TabsList className="h-10 rounded-xl border border-slate-200/80 bg-slate-100/70 p-1">
+            <TabsTrigger
+              value="ALL"
+              className="rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
+            >
+              All
+            </TabsTrigger>
+            <TabsTrigger
+              value="ADMIN"
+              className="rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
+            >
               <ShieldCheck className="size-4" />
               Admins
             </TabsTrigger>
-            <TabsTrigger value="CUSTOMER">
+            <TabsTrigger
+              value="CUSTOMER"
+              className="rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
+            >
               <UserRound className="size-4" />
               Customers
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
-        <Button onClick={openCreate}>
+        <Button
+          onClick={openCreate}
+          className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 transition-all hover:scale-[1.02] hover:bg-[#023877]"
+        >
           <Plus className="size-4" />
           Add user
         </Button>
@@ -233,73 +253,107 @@ export function UsersManager() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Skeleton key={i} className="h-12 w-full rounded-xl" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
-          No users found in this category.
+        <div className="rounded-2xl border border-dashed border-slate-200 px-6 py-16 text-center">
+          <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-xl bg-blue-50 text-[#034DA2]">
+            <UserRound className="size-6" />
+          </div>
+          <p className="text-sm font-semibold text-slate-700">
+            No users found in this category
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Try a different filter or add a new user.
+          </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-md border">
+        <div className="overflow-hidden rounded-xl border border-slate-200/80 shadow-sm">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="border-slate-100 bg-slate-50/60 hover:bg-transparent">
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Name
+                </TableHead>
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Email
+                </TableHead>
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Phone
+                </TableHead>
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Role
+                </TableHead>
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Status
+                </TableHead>
+                <TableHead className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Joined
+                </TableHead>
+                <TableHead className="px-4 py-3 text-right text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filtered.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                  <TableCell className="text-muted-foreground">
+                <TableRow key={user.id} className="border-slate-100 hover:bg-blue-50/40">
+                  <TableCell className="px-4 py-3.5 font-semibold text-slate-900">
+                    {user.name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3.5 text-sm text-slate-500">{user.email}</TableCell>
+                  <TableCell className="px-4 py-3.5 text-sm text-slate-500">
                     {user.phone || "—"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="px-4 py-3.5">
                     <Badge
                       variant={user.role === "ADMIN" ? "default" : "outline"}
-                      className="text-[10px] uppercase tracking-wide"
+                      className={cn(
+                        "rounded-lg text-[10px] font-bold uppercase tracking-wide",
+                        user.role === "ADMIN"
+                          ? "bg-[#034DA2] text-white"
+                          : "border-slate-200 bg-slate-50 text-slate-500"
+                      )}
                     >
                       {user.role}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="px-4 py-3.5">
                     <button
                       onClick={() => handleToggleActive(user)}
                       className={cn(
-                        "inline-flex items-center gap-1.5 text-xs font-medium hover:underline",
-                        user.isActive ? "text-success" : "text-muted-foreground"
+                        "inline-flex items-center gap-1.5 text-xs font-semibold hover:underline",
+                        user.isActive ? "text-[#00A3E0]" : "text-slate-400"
                       )}
                       title={user.isActive ? "Click to deactivate" : "Click to activate"}
                     >
                       <span
                         className={cn(
                           "size-1.5 rounded-full",
-                          user.isActive ? "bg-success" : "bg-muted-foreground"
+                          user.isActive ? "bg-[#00A3E0]" : "bg-slate-300"
                         )}
                       />
                       {user.isActive ? "Active" : "Inactive"}
                     </button>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="px-4 py-3.5 text-sm text-slate-500">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="px-4 py-3.5 text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(user)}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        className="rounded-lg text-slate-500 hover:bg-blue-50 hover:text-[#034DA2]"
+                        onClick={() => openEdit(user)}
+                      >
                         <Pencil className="size-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="text-destructive hover:bg-destructive/10"
+                        className="rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600"
                         onClick={() => setDeleteTarget(user)}
                       >
                         <Trash2 className="size-4" />
@@ -321,7 +375,7 @@ export function UsersManager() {
             <DialogDescription>
               {editing
                 ? "Update the user's details. Leave password blank to keep it unchanged."
-                : "Create a new admin or customer account."}
+                : "Create a new admin account. Customer accounts are a future improvement."}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
@@ -363,9 +417,18 @@ export function UsersManager() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ADMIN">Admin</SelectItem>
-                  <SelectItem value="CUSTOMER">Customer</SelectItem>
+                  <SelectItem value="CUSTOMER" disabled={!CUSTOMER_SELF_SERVICE_ENABLED}>
+                    Customer
+                    {!CUSTOMER_SELF_SERVICE_ENABLED ? " (future improvement)" : ""}
+                  </SelectItem>
                 </SelectContent>
               </Select>
+              {!editing && !CUSTOMER_SELF_SERVICE_ENABLED && (
+                <p className="text-xs text-slate-500">
+                  Only Admin accounts can be created right now. The Customer
+                  portal is disabled — it will return as a future improvement.
+                </p>
+              )}
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="password">
@@ -382,7 +445,11 @@ export function UsersManager() {
               />
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={saving}>
+              <Button
+                type="submit"
+                disabled={saving}
+                className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
+              >
                 {saving ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />

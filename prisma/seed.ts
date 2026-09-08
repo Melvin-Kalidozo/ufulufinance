@@ -2,6 +2,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma";
 import { UserRole } from "@prisma/client";
+import { seedContent } from "./seed-content";
 
 async function main() {
   const passwordHash = await bcrypt.hash("Admin@123", 10);
@@ -49,6 +50,7 @@ async function main() {
     console.log("Demo customer already exists");
   }
 
+  await seedContent();
   console.log("Seeding completed.");
 }
 

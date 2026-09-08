@@ -6,9 +6,40 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CMS + enquiry data model (SRS v1.1)
+//
+// Deferred to a later round (schema reserved, see code comments where relevant):
+// Roles/Permissions (multi-role RBAC), AuditLog, Notification/email-template
+// management, and a full Media library. Content media today is stored as
+// Cloudinary URLs inline on each model; a future Media model can reference them.
+// ─────────────────────────────────────────────────────────────────────────────
+
 enum UserRole {
   ADMIN
   CUSTOMER
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum BlogType {
+  BLOG
+  NEWS
+}
+
+enum EnquiryStatus {
+  PENDING
+  RESOLVED
+}
+
+enum JobApplicationStatus {
+  PENDING
+  SHORTLISTED
+  REJECTED
+  HIRED
 }
 
 model User {
@@ -26,4 +57,411 @@ model User {
   resetTokenExpiry        DateTime?
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
+}
+
+// ── Website settings (singleton row id = 1) ────────────────────────────────
+model WebsiteSetting {
+  id            Int     @id @default(1)
+  siteName      String  @default("Ufulu Finance")
+  tagline       String  @default("Loans, savings and financial freedom for every community.")
+  aboutLine     String  @default("")
+  footerAbout   String  @default("")
+
+  primaryEmail  String  @default("info@ufulufinance.com")
+  supportEmail  String  @default("support@ufulufinance.com")
+  loansEmail    String  @default("loans@ufulufinance.com")
+  phone         String  @default("+265 99 123 4567")
+  whatsapp      String?
+  addressLine1  String  @default("City Centre, Area 3")
+  addressLine2  String  @default("Lilongwe, Malawi")
+  officeHours   String  @default("Mon – Fri, 8:00 AM – 5:00 PM")
+  mapEmbedUrl   String  @default("")
+
+  // Offices/branches: [{ region, city, address, phones, hours }]
+  offices       Json?
+  // Social media links: [{ platform, name, url }]
+  socialLinks   Json?
+  // Legal pages body: { privacy: blocks[], terms: blocks[] }
+  legal         Json?
+
+  updatedAt     DateTime @updatedAt
+}
+
+model LegalPage {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique // "privacy" | "terms"
+  title     String
+  content   Json // { sections: [{ heading, body?, bullets?: string[] }] }
+  updatedAt DateTime @updatedAt
+}
+
+// ── Home page card content ─────────────────────────────────────────────────
+model Stat {
+  id          Int     @id @default(autoincrement())
+  value       String
+  label       String
+  description String?
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SectorCard {
+  id          Int     @id @default(autoincrement())
+  title       String
+  subtitle    String?
+  description String
+  iconKey     String  @default("Landmark")
+  link        String  @default("#")
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WhyChooseItem {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ImpactMetric {
+  id          Int     @id @default(autoincrement())
+  value       String
+  label       String
+  sub         String?
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id          Int     @id @default(autoincrement())
+  name        String
+  role        String?
+  category    String?
+  quote       String
+  rating      Int     @default(5)
+  image       String?
+  meta        Json? // { location?, facility?, amount?, date?, highlight?, categoryLabel? }
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Services page ──────────────────────────────────────────────────────────
+model Service {
+  id            Int           @id @default(autoincrement())
+  title         String
+  slug          String        @unique
+  tagline       String?
+  description   String
+  image         String?
+  imageAlt      String?
+  idealFor      String?
+  limit         String?
+  tenure        String?
+  turnaround    String?
+  repayment     String?
+  collateral    String?
+  isFeatured    Boolean       @default(false)
+  status        ContentStatus @default(PUBLISHED)
+  sortOrder     Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model ServiceAudience {
+  id          Int     @id @default(autoincrement())
+  title       String
+  subtitle    String?
+  description String
+  iconKey     String  @default("Users")
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ServiceAdvantage {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Loan products (drives home showcase, loans page, enquiry product picker) ─
+model LoanProduct {
+  id                   Int           @id @default(autoincrement())
+  name                 String
+  slug                 String        @unique
+  category             String? // filter key: msme | agri | payroll | group | civil-service | business | other
+  categoryLabel        String? // display group e.g. "Government & Civil Service"
+  badge                String?
+  tagline              String?
+  intro                String?
+  description          String?
+  image                String?
+  imageAlt             String?
+  minAmount            Int?
+  maxAmount            Int?
+  minMonths            Int?
+  maxMonths            Int?
+  interestRateMonthly  Float?
+  processingFeePercent Float?
+  amountText           String? // display "Subject to assessment"
+  tenureText           String? // display "Flexible terms"
+  disbursementText     String?
+  repaymentText        String?
+  collateralText       String?
+  keyDetails           Json? // string[]
+  eligibility          Json? // string[]
+  kycRequirements      Json? // string[]
+  repaymentTerms       Json? // string[]
+  isFeatured           Boolean @default(false)
+  isHomeFeatured       Boolean @default(false)
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder            Int     @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  enquiries            LoanEnquiry[]
+}
+
+model Faq {
+  id          Int     @id @default(autoincrement())
+  question    String
+  answer      String
+  category    String  @default("general")
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Editorial: blogs & news ────────────────────────────────────────────────
+model Article {
+  id            Int           @id @default(autoincrement())
+  kind          BlogType      @default(BLOG)
+  title         String
+  slug          String        @unique
+  category      String        @default("General")
+  excerpt       String?
+  content       Json? // { paragraphs: string[], quote?: {text,author}, image?: string }
+  keyTakeaways  Json? // string[]
+  author        String?
+  authorRole    String?
+  authorImage   String?
+  image         String?
+  imageAlt      String?
+  date          DateTime      @default(now())
+  readTime      Int?
+  isFeatured    Boolean       @default(false)
+  status        ContentStatus @default(PUBLISHED)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Event {
+  id          Int           @id @default(autoincrement())
+  title       String
+  slug        String        @unique
+  date        DateTime
+  time        String?
+  location    String?
+  description String?
+  details     Json? // string[]
+  image       String?
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+// ── Careers ────────────────────────────────────────────────────────────────
+model Perk {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  iconKey     String  @default("Sparkles")
+  sortOrder   Int     @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Job {
+  id              Int            @id @default(autoincrement())
+  title           String
+  slug            String         @unique
+  department      String?
+  location        String?
+  type            String? // Full-time | Part-time | Contract | Internship
+  salaryRange     String?
+  experienceLevel String?
+  deadline        DateTime?
+  image           String?
+  overview        String?
+  description     String?
+  responsibilities Json? // string[]
+  requirements    Json? // string[]
+  benefits        Json? // string[]
+  isFeatured      Boolean        @default(false)
+  status          ContentStatus  @default(PUBLISHED)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  applications    JobApplication[]
+}
+
+model JobApplication {
+  id          Int                  @id @default(autoincrement())
+  jobId       Int
+  job         Job                  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  phone       String?
+  coverNote   String?
+  cvUrl       String
+  cvPublicId  String?
+  status      JobApplicationStatus @default(PENDING)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+}
+
+// ── About / Governance ─────────────────────────────────────────────────────
+model GovernanceMember {
+  id          Int     @id @default(autoincrement())
+  name        String
+  title       String
+  category    String  @default("board") // board | executive
+  credentials String?
+  experience  String?
+  expertise   Json? // string[]
+  bio         String?
+  image       String?
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutValue {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  iconKey     String  @default("ShieldCheck")
+  badge       String?
+  isFeatured  Boolean @default(false)
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutTimeline {
+  id          Int     @id @default(autoincrement())
+  year        String
+  title       String
+  description String?
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RegionalHub {
+  id          Int     @id @default(autoincrement())
+  region      String
+  city        String
+  location    String?
+  focus       String?
+  contacts    Json? // string[]
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Impact / Portfolio ─────────────────────────────────────────────────────
+model Project {
+  id          Int     @id @default(autoincrement())
+  title       String
+  category    String?
+  location    String?
+  description String?
+  metrics     String?
+  image       String?
+  imageAlt    String?
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CommunityInitiative {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  image       String?
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SuccessStory {
+  id          Int     @id @default(autoincrement())
+  name        String
+  enterprise  String?
+  location    String?
+  quote       String?
+  image       String?
+  stats       Json? // [{label,value}]
+  statsText   String?
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Enquiries (no customer account required per SRS) ───────────────────────
+model LoanEnquiry {
+  id                Int            @id @default(autoincrement())
+  refNumber         String         @unique
+  name              String
+  phone             String
+  email             String
+  location          String?
+  productId         Int?
+  product           LoanProduct?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName       String?
+  amountRequested   String?
+  purpose           String?
+  employment        String?
+  preferredContact  String?
+  consent           Boolean        @default(false)
+  message           String?
+  status            EnquiryStatus  @default(PENDING)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model CompanyEnquiry {
+  id        Int           @id @default(autoincrement())
+  refNumber String        @unique
+  name      String
+  email     String
+  phone     String?
+  category  String        @default("General Information")
+  message   String
+  status    EnquiryStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }

@@ -17,17 +17,20 @@ function AdminShell({ children }: { children: React.ReactNode }) {
     if (status === "unauthenticated") {
       router.replace("/signin");
     } else if (session?.user?.role !== "ADMIN") {
+      // Customer portal (/account) is disabled — future improvement.
       router.replace("/account");
     }
   }, [status, session, router]);
 
   if (status === "loading" || !session) {
     return (
-      <div className="flex min-h-[100dvh] flex-col gap-4 p-6">
-        <Skeleton className="h-16 w-full" />
+      <div className="flex min-h-[100dvh] flex-col gap-4 bg-[#fcfdfd] p-6">
+        <div className="flex h-16 items-center gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 shadow-sm">
+          <Skeleton className="h-6 w-24" />
+        </div>
         <div className="flex flex-1 gap-4">
-          <Skeleton className="hidden w-64 lg:block" />
-          <Skeleton className="flex-1" />
+          <Skeleton className="hidden w-64 rounded-2xl lg:block" />
+          <Skeleton className="flex-1 rounded-2xl" />
         </div>
       </div>
     );
@@ -36,9 +39,9 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   if (session.user.role !== "ADMIN") return null;
 
   return (
-    <div className="flex min-h-[100dvh] bg-background">
+    <div className="flex min-h-[100dvh] bg-[#fcfdfd] text-slate-900">
       {/* Desktop sidebar */}
-      <aside className="hidden w-64 shrink-0 border-r bg-card lg:block">
+      <aside className="hidden w-64 shrink-0 border-r border-slate-200/90 bg-white lg:block">
         <div className="sticky top-0 h-[100dvh]">
           <AppSidebar />
         </div>
@@ -46,7 +49,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile sidebar */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-72 p-0">
+        <SheetContent side="left" className="w-72 border-slate-200/90 p-0">
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <AppSidebar />
         </SheetContent>
