@@ -95,7 +95,7 @@ export default function JobsPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-jobs.jpg"
             alt="Careers at Ufulu Finance"
             fill
             priority
@@ -189,7 +189,7 @@ export default function JobsPage() {
 
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
                 <Image
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80"
+                  src="/images/jobs-section.jpg"
                   alt="Ufulu Finance Team"
                   fill
                   className="object-cover"

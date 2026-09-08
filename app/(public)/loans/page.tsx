@@ -143,7 +143,7 @@ export default function LoansPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-loans.jpg"
             alt="Ufulu Finance Loan Products"
             fill
             priority

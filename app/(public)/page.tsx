@@ -117,7 +117,7 @@ export default async function HomePage() {
       <section className="relative min-h-[500px] sm:min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=2200&q=80"
+            src="/images/hero-home.jpg"
             alt="Ufulu Finance Operations and Trade"
             fill
             priority
@@ -245,7 +245,7 @@ export default async function HomePage() {
           <div className="lg:col-span-6 relative">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
               <Image
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
+                src="/images/about-section.jpg"
                 alt="Malawian enterprise and commercial trade"
                 fill
                 className="object-cover"
@@ -609,7 +609,7 @@ export default async function HomePage() {
       <section className="relative min-h-[380px] sm:min-h-[440px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=2000&q=80"
+            src="/images/cta-home.jpg"
             alt="Cultivate Your Financial Future"
             fill
             priority

@@ -98,7 +98,7 @@ export default function ImpactPortfolioPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-impact.jpg"
             alt="Ufulu Finance Impact & Portfolio"
             fill
             priority

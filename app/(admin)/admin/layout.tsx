@@ -39,10 +39,10 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   if (session.user.role !== "ADMIN") return null;
 
   return (
-    <div className="flex min-h-[100dvh] bg-[#fcfdfd] text-slate-900">
-      {/* Desktop sidebar */}
-      <aside className="hidden w-64 shrink-0 border-r border-slate-200/90 bg-white lg:block">
-        <div className="sticky top-0 h-[100dvh]">
+    <div className="flex h-[100dvh] overflow-hidden bg-[#fcfdfd] text-slate-900">
+      {/* Desktop sidebar (fixed) */}
+      <aside className="hidden w-64 shrink-0 overflow-hidden border-r border-slate-200/90 bg-white lg:block">
+        <div className="h-full">
           <AppSidebar />
         </div>
       </aside>
@@ -55,10 +55,12 @@ function AdminShell({ children }: { children: React.ReactNode }) {
         </SheetContent>
       </Sheet>
 
-      {/* Main */}
-      <div className="flex min-w-0 flex-1 flex-col">
+      {/* Main (header pinned, content scrolls internally) */}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <AdminHeader onMenuClick={() => setMobileOpen(true)} />
-        <main className="mx-auto w-full max-w-6xl flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 lg:p-8">{children}</div>
+        </main>
       </div>
     </div>
   );

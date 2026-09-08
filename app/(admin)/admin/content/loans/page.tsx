@@ -14,9 +14,9 @@ export default function ContentLoansPage() {
         title="Loan Products"
         subtitle="Manage loan products shown on the Loans and Home pages and used by the enquiry picker."
       />
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+      
         <ResourceTabs tabs={tabs} />
-      </section>
+      
     </div>
   );
 }

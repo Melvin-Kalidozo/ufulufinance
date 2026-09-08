@@ -16,9 +16,9 @@ export default function ContentImpactPage() {
         title="Impact & Portfolio"
         subtitle="Manage projects, community initiatives and client success stories."
       />
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+      
         <ResourceTabs tabs={tabs} />
-      </section>
+      
     </div>
   );
 }

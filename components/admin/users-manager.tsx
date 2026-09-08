@@ -7,11 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +33,14 @@ import {
 } from "@/components/ui/table";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { cn } from "@/lib/utils";
-import { Plus, Pencil, Trash2, UserRound, ShieldCheck, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  UserRound,
+  ShieldCheck,
+  Loader2,
+} from "lucide-react";
 
 type UserRow = {
   id: number;
@@ -224,20 +227,20 @@ export function UsersManager() {
             >
               All
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="ADMIN"
               className="rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
             >
               <ShieldCheck className="size-4" />
               Admins
-            </TabsTrigger>
-            <TabsTrigger
+            </TabsTrigger> */}
+            {/* <TabsTrigger
               value="CUSTOMER"
               className="rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
             >
               <UserRound className="size-4" />
               Customers
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
         </Tabs>
 
@@ -298,11 +301,16 @@ export function UsersManager() {
             </TableHeader>
             <TableBody>
               {filtered.map((user) => (
-                <TableRow key={user.id} className="border-slate-100 hover:bg-blue-50/40">
+                <TableRow
+                  key={user.id}
+                  className="border-slate-100 hover:bg-blue-50/40"
+                >
                   <TableCell className="px-4 py-3.5 font-semibold text-slate-900">
                     {user.name}
                   </TableCell>
-                  <TableCell className="px-4 py-3.5 text-sm text-slate-500">{user.email}</TableCell>
+                  <TableCell className="px-4 py-3.5 text-sm text-slate-500">
+                    {user.email}
+                  </TableCell>
                   <TableCell className="px-4 py-3.5 text-sm text-slate-500">
                     {user.phone || "—"}
                   </TableCell>
@@ -313,7 +321,7 @@ export function UsersManager() {
                         "rounded-lg text-[10px] font-bold uppercase tracking-wide",
                         user.role === "ADMIN"
                           ? "bg-[#034DA2] text-white"
-                          : "border-slate-200 bg-slate-50 text-slate-500"
+                          : "border-slate-200 bg-slate-50 text-slate-500",
                       )}
                     >
                       {user.role}
@@ -324,14 +332,18 @@ export function UsersManager() {
                       onClick={() => handleToggleActive(user)}
                       className={cn(
                         "inline-flex items-center gap-1.5 text-xs font-semibold hover:underline",
-                        user.isActive ? "text-[#00A3E0]" : "text-slate-400"
+                        user.isActive ? "text-[#00A3E0]" : "text-slate-400",
                       )}
-                      title={user.isActive ? "Click to deactivate" : "Click to activate"}
+                      title={
+                        user.isActive
+                          ? "Click to deactivate"
+                          : "Click to activate"
+                      }
                     >
                       <span
                         className={cn(
                           "size-1.5 rounded-full",
-                          user.isActive ? "bg-[#00A3E0]" : "bg-slate-300"
+                          user.isActive ? "bg-[#00A3E0]" : "bg-slate-300",
                         )}
                       />
                       {user.isActive ? "Active" : "Inactive"}
@@ -417,9 +429,14 @@ export function UsersManager() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ADMIN">Admin</SelectItem>
-                  <SelectItem value="CUSTOMER" disabled={!CUSTOMER_SELF_SERVICE_ENABLED}>
+                  <SelectItem
+                    value="CUSTOMER"
+                    disabled={!CUSTOMER_SELF_SERVICE_ENABLED}
+                  >
                     Customer
-                    {!CUSTOMER_SELF_SERVICE_ENABLED ? " (future improvement)" : ""}
+                    {!CUSTOMER_SELF_SERVICE_ENABLED
+                      ? " (future improvement)"
+                      : ""}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -439,7 +456,9 @@ export function UsersManager() {
                 type="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                placeholder={editing ? "Leave blank to keep current" : "Min 8 characters"}
+                placeholder={
+                  editing ? "Leave blank to keep current" : "Min 8 characters"
+                }
                 minLength={editing ? undefined : 8}
                 required={!editing}
               />

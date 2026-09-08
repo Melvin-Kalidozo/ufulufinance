@@ -80,7 +80,7 @@ export function AppSidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+      <nav className="min-h-0 flex-1 space-y-4 overflow-y-auto p-3">
         {GROUPS.map((group, i) => (
           <div key={i}>
             {group.label && (

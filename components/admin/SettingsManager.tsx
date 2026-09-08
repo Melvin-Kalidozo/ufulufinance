@@ -107,10 +107,10 @@ export function SettingsManager() {
               <div key={j} className="sm:col-span-2">
                 <Label className="text-xs font-semibold text-slate-700 capitalize">{j} (JSON)</Label>
                 <textarea
-                  rows={4}
+                  rows={6}
                   value={form[j] ?? ""}
                   onChange={(e) => set(j, e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs outline-none focus:border-[#034DA2]"
+                  className="mt-1 w-full min-h-24 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs outline-none focus:border-[#034DA2]"
                   placeholder='[{ "platform":"facebook", "name":"Facebook", "url":"https://facebook.com" }]'
                 />
               </div>

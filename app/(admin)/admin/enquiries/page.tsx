@@ -9,9 +9,9 @@ export default function AdminEnquiriesPage() {
         title="Enquiries"
         subtitle="Manage loan applicants, company enquiries and job applications submitted through the website."
       />
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+      
         <EnquiriesTabs />
-      </section>
+      
     </div>
   );
 }

@@ -223,7 +223,7 @@ export default function ContactPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-28 sm:pb-36 text-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-contact.jpg"
             alt="Contact Ufulu Finance"
             fill
             priority

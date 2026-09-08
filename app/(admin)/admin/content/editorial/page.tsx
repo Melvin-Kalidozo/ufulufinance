@@ -22,9 +22,9 @@ export default function ContentEditorialPage() {
         title="Editorial"
         subtitle="Publish and manage articles, news, events and careers content."
       />
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+      
         <ResourceTabs tabs={tabs} />
-      </section>
+      
     </div>
   );
 }

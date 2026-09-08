@@ -136,14 +136,14 @@ export function LegalManager() {
                 className="h-10 rounded-xl border-slate-200 bg-white font-semibold"
               />
               <textarea
-                rows={3}
+                rows={7}
                 value={section.body ?? ""}
                 onChange={(e) => updateSection(i, { body: e.target.value })}
                 placeholder="Body paragraphs (blank line = new paragraph)"
-                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[#034DA2]"
+                className="w-full min-h-36 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[#034DA2]"
               />
               <textarea
-                rows={2}
+                rows={4}
                 value={section.bullets?.join("\n") ?? ""}
                 onChange={(e) =>
                   updateSection(i, {
@@ -151,7 +151,7 @@ export function LegalManager() {
                   })
                 }
                 placeholder="Bullet points (one per line)"
-                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[#034DA2]"
+                className="w-full min-h-20 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[#034DA2]"
               />
             </div>
           </div>

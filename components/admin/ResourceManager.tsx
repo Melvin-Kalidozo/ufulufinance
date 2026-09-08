@@ -563,11 +563,11 @@ function FieldControl({
         />
       ) : field.type === "textarea" ? (
         <textarea
-          rows={field.rows ?? 4}
+          rows={Math.max(field.rows ?? 4, 6)}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.placeholder}
-          className={cn("w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100", errorCls)}
+          className={cn("w-full min-h-28 resize-y rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100", errorCls)}
         />
       ) : field.type === "select" ? (
         <Select value={value || undefined} onValueChange={onChange}>
@@ -594,19 +594,19 @@ function FieldControl({
         </label>
       ) : field.type === "json-array" ? (
         <textarea
-          rows={field.rows ?? 5}
+          rows={Math.max(field.rows ?? 5, 6)}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.placeholder ?? "One item per line"}
-          className={cn("w-full rounded-xl border bg-white px-3.5 py-2.5 font-mono text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100", errorCls)}
+          className={cn("w-full min-h-24 resize-y rounded-xl border bg-white px-3.5 py-2.5 font-mono text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100", errorCls)}
         />
       ) : field.type === "json-object" ? (
         <textarea
-          rows={5}
+          rows={6}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder='{"location":"Lilongwe"}'
-          className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100"
+          className="w-full min-h-24 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100"
         />
       ) : field.type === "image" ? (
         <ImagePicker

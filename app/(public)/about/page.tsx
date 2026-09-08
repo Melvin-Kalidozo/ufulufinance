@@ -129,7 +129,7 @@ export default function AboutPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-about.jpg"
             alt="About Ufulu Finance"
             fill
             priority

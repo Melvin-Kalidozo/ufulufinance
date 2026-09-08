@@ -22,9 +22,9 @@ export default function ContentAboutPage() {
         title="About page"
         subtitle="Manage core values, institutional timeline, regional hubs and the leadership team."
       />
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+      
         <ResourceTabs tabs={tabs} />
-      </section>
+      
     </div>
   );
 }
