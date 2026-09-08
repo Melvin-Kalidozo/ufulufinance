@@ -70,8 +70,8 @@ export async function POST(req: Request) {
   ];
 
   // Fire-and-forget notifications (makaztech pattern)
-  void sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields).catch(() => {});
-  void sendCustomerEnquiryConfirmation(email, "loan enquiry", enquiry.refNumber).catch(() => {});
+  void sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields).catch((e) => console.error("[mail]", e));
+  void sendCustomerEnquiryConfirmation(email, "loan enquiry", enquiry.refNumber).catch((e) => console.error("[mail]", e));
 
   return ok({ refNumber: enquiry.refNumber });
 }

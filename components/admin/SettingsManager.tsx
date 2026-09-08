@@ -36,16 +36,38 @@ const CONTACT_FIELDS = [
   { name: "mapEmbedUrl", label: "Map embed URL" },
 ];
 
-type OfficeRow = { label: string; city: string; address: string; phone: string; email: string; hours: string };
+type OfficeRow = {
+  label: string;
+  city: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+};
 type SocialRow = { platform: string; name: string; url: string };
 
-const EMPTY_OFFICE: OfficeRow = { label: "", city: "", address: "", phone: "", email: "", hours: "" };
+const EMPTY_OFFICE: OfficeRow = {
+  label: "",
+  city: "",
+  address: "",
+  phone: "",
+  email: "",
+  hours: "",
+};
 const EMPTY_SOCIAL: SocialRow = { platform: "facebook", name: "", url: "" };
 
-const SOCIAL_PLATFORMS = ["facebook", "twitter", "linkedin", "instagram", "youtube"];
+const SOCIAL_PLATFORMS = [
+  "facebook",
+  "twitter",
+  "linkedin",
+  "instagram",
+  "youtube",
+];
 
 const strOf = (r: unknown, key: string) =>
-  r && typeof r === "object" && (r as Record<string, unknown>)[key] !== undefined
+  r &&
+  typeof r === "object" &&
+  (r as Record<string, unknown>)[key] !== undefined
     ? String((r as Record<string, unknown>)[key])
     : "";
 
@@ -54,6 +76,7 @@ export function SettingsManager() {
   const [contact, setContact] = useState<Record<string, string>>({});
   const [offices, setOffices] = useState<OfficeRow[]>([]);
   const [socials, setSocials] = useState<SocialRow[]>([]);
+  const [notifEmail, setNotifEmail] = useState("");
   const [legalText, setLegalText] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -78,17 +101,21 @@ export function SettingsManager() {
             phone: strOf(o, "phone"),
             email: strOf(o, "email"),
             hours: strOf(o, "hours"),
-          }))
+          })),
         );
-        const rawSocials = Array.isArray(row.socialLinks) ? row.socialLinks : [];
+        const rawSocials = Array.isArray(row.socialLinks)
+          ? row.socialLinks
+          : [];
         setSocials(
           rawSocials.map((o: unknown) => ({
-            platform: strOf(o, "platform") || strOf(o, "name")?.toLowerCase() || "",
+            platform:
+              strOf(o, "platform") || strOf(o, "name")?.toLowerCase() || "",
             name: strOf(o, "name") || strOf(o, "platform"),
             url: strOf(o, "url"),
-          }))
+          })),
         );
         setLegalText(JSON.stringify(row.legal ?? null, null, 2));
+        setNotifEmail(strOf(row, "notificationEmail"));
         setGeneral(g);
         setContact(c);
       } catch {
@@ -99,7 +126,11 @@ export function SettingsManager() {
     })();
   }, []);
 
-  const setField = (group: "general" | "contact", name: string, value: string) => {
+  const setField = (
+    group: "general" | "contact",
+    name: string,
+    value: string,
+  ) => {
     const setter = group === "general" ? setGeneral : setContact;
     setter((prev) => ({ ...prev, [name]: value }));
   };
@@ -110,13 +141,19 @@ export function SettingsManager() {
       const fd = new FormData();
       for (const f of GENERAL_FIELDS) fd.append(f.name, general[f.name] ?? "");
       for (const f of CONTACT_FIELDS) fd.append(f.name, contact[f.name] ?? "");
-      const cleanOffices = offices.filter((o) => o.label || o.address || o.city);
+      fd.append("notificationEmail", notifEmail.trim());
+      const cleanOffices = offices.filter(
+        (o) => o.label || o.address || o.city,
+      );
       const cleanSocials = socials.filter((s) => s.url.trim());
       fd.append("offices", JSON.stringify(cleanOffices));
       fd.append("socialLinks", JSON.stringify(cleanSocials));
       const legal = legalText.trim();
       fd.append("legal", legal ? legal : "null");
-      const res = await fetch("/api/admin/settings", { method: "PATCH", body: fd });
+      const res = await fetch("/api/admin/settings", {
+        method: "PATCH",
+        body: fd,
+      });
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Save failed");
       toast.success("Settings saved");
@@ -145,8 +182,13 @@ export function SettingsManager() {
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {GENERAL_FIELDS.map((f) => (
-              <div key={f.name} className={f.name !== "siteName" ? "sm:col-span-2" : ""}>
-                <Label className="text-xs font-semibold text-slate-700">{f.label}</Label>
+              <div
+                key={f.name}
+                className={f.name !== "siteName" ? "sm:col-span-2" : ""}
+              >
+                <Label className="text-xs font-semibold text-slate-700">
+                  {f.label}
+                </Label>
                 <Input
                   value={general[f.name] ?? ""}
                   onChange={(e) => setField("general", f.name, e.target.value)}
@@ -165,8 +207,17 @@ export function SettingsManager() {
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {CONTACT_FIELDS.map((f) => (
-              <div key={f.name} className={f.name === "officeHours" || f.name === "mapEmbedUrl" ? "sm:col-span-2" : ""}>
-                <Label className="text-xs font-semibold text-slate-700">{f.label}</Label>
+              <div
+                key={f.name}
+                className={
+                  f.name === "officeHours" || f.name === "mapEmbedUrl"
+                    ? "sm:col-span-2"
+                    : ""
+                }
+              >
+                <Label className="text-xs font-semibold text-slate-700">
+                  {f.label}
+                </Label>
                 <Input
                   value={contact[f.name] ?? ""}
                   onChange={(e) => setField("contact", f.name, e.target.value)}
@@ -178,13 +229,17 @@ export function SettingsManager() {
 
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <p className="text-sm font-semibold text-slate-800">Branch offices</p>
+              <p className="text-sm font-semibold text-slate-800">
+                Branch offices
+              </p>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 className="rounded-lg"
-                onClick={() => setOffices((prev) => [...prev, { ...EMPTY_OFFICE }])}
+                onClick={() =>
+                  setOffices((prev) => [...prev, { ...EMPTY_OFFICE }])
+                }
               >
                 <Plus className="size-4" /> Add office
               </Button>
@@ -196,7 +251,10 @@ export function SettingsManager() {
             )}
             <div className="space-y-3">
               {offices.map((office, i) => (
-                <div key={i} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+                <div
+                  key={i}
+                  className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4"
+                >
                   <div className="mb-3 flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Office {i + 1}
@@ -206,7 +264,9 @@ export function SettingsManager() {
                       variant="ghost"
                       size="icon-sm"
                       className="rounded-lg text-red-500 hover:bg-red-50"
-                      onClick={() => setOffices((prev) => prev.filter((_, idx) => idx !== i))}
+                      onClick={() =>
+                        setOffices((prev) => prev.filter((_, idx) => idx !== i))
+                      }
                       aria-label="Remove office"
                     >
                       <Trash2 className="size-4" />
@@ -224,12 +284,16 @@ export function SettingsManager() {
                       ] as const
                     ).map(([key, label]) => (
                       <div key={key}>
-                        <Label className="text-[11px] font-semibold text-slate-600">{label}</Label>
+                        <Label className="text-[11px] font-semibold text-slate-600">
+                          {label}
+                        </Label>
                         <Input
                           value={office[key]}
                           onChange={(e) =>
                             setOffices((prev) =>
-                              prev.map((o, idx) => (idx === i ? { ...o, [key]: e.target.value } : o))
+                              prev.map((o, idx) =>
+                                idx === i ? { ...o, [key]: e.target.value } : o,
+                              ),
                             )
                           }
                           className="mt-0.5 h-9 rounded-lg border-slate-200 bg-white"
@@ -241,6 +305,28 @@ export function SettingsManager() {
               ))}
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Notifications</CardTitle>
+        </CardHeader>
+        <CardContent className="max-w-xl">
+          <Label className="text-xs font-semibold text-slate-700">
+            Notification email
+          </Label>
+          <Input
+            type="email"
+            value={notifEmail}
+            onChange={(e) => setNotifEmail(e.target.value)}
+            placeholder="hr@ufulufinance.com"
+            className="mt-1 h-10 rounded-xl border-slate-200 bg-white"
+          />
+          <p className="mt-1.5 text-[11px] text-slate-400">
+            New job applications, loan enquiries and company enquiries are
+            emailed here. Leave blank to use the configured SMTP user.
+          </p>
         </CardContent>
       </Card>
 
@@ -258,7 +344,9 @@ export function SettingsManager() {
               variant="outline"
               size="sm"
               className="rounded-lg"
-              onClick={() => setSocials((prev) => [...prev, { ...EMPTY_SOCIAL }])}
+              onClick={() =>
+                setSocials((prev) => [...prev, { ...EMPTY_SOCIAL }])
+              }
             >
               <Plus className="size-4" /> Add link
             </Button>
@@ -270,9 +358,14 @@ export function SettingsManager() {
           )}
           <div className="space-y-3">
             {socials.map((social, i) => (
-              <div key={i} className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:flex-row sm:items-end">
+              <div
+                key={i}
+                className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:flex-row sm:items-end"
+              >
                 <div className="w-full sm:w-44">
-                  <Label className="text-[11px] font-semibold text-slate-600">Platform</Label>
+                  <Label className="text-[11px] font-semibold text-slate-600">
+                    Platform
+                  </Label>
                   <Select
                     value={social.platform}
                     onValueChange={(v) =>
@@ -280,8 +373,8 @@ export function SettingsManager() {
                         prev.map((o, idx) =>
                           idx === i
                             ? { ...o, platform: v, name: o.name || v }
-                            : o
-                        )
+                            : o,
+                        ),
                       )
                     }
                   >
@@ -298,24 +391,32 @@ export function SettingsManager() {
                   </Select>
                 </div>
                 <div className="flex-1">
-                  <Label className="text-[11px] font-semibold text-slate-600">Name</Label>
+                  <Label className="text-[11px] font-semibold text-slate-600">
+                    Name
+                  </Label>
                   <Input
                     value={social.name}
                     onChange={(e) =>
                       setSocials((prev) =>
-                        prev.map((o, idx) => (idx === i ? { ...o, name: e.target.value } : o))
+                        prev.map((o, idx) =>
+                          idx === i ? { ...o, name: e.target.value } : o,
+                        ),
                       )
                     }
                     className="mt-0.5 h-9 rounded-lg border-slate-200 bg-white"
                   />
                 </div>
                 <div className="flex-1">
-                  <Label className="text-[11px] font-semibold text-slate-600">URL</Label>
+                  <Label className="text-[11px] font-semibold text-slate-600">
+                    URL
+                  </Label>
                   <Input
                     value={social.url}
                     onChange={(e) =>
                       setSocials((prev) =>
-                        prev.map((o, idx) => (idx === i ? { ...o, url: e.target.value } : o))
+                        prev.map((o, idx) =>
+                          idx === i ? { ...o, url: e.target.value } : o,
+                        ),
                       )
                     }
                     className="mt-0.5 h-9 rounded-lg border-slate-200 bg-white"
@@ -326,7 +427,9 @@ export function SettingsManager() {
                   variant="ghost"
                   size="icon-sm"
                   className="rounded-lg text-red-500 hover:bg-red-50"
-                  onClick={() => setSocials((prev) => prev.filter((_, idx) => idx !== i))}
+                  onClick={() =>
+                    setSocials((prev) => prev.filter((_, idx) => idx !== i))
+                  }
                   aria-label="Remove link"
                 >
                   <Trash2 className="size-4" />
@@ -337,31 +440,17 @@ export function SettingsManager() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Legal (advanced JSON)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <textarea
-            rows={5}
-            value={legalText}
-            onChange={(e) => setLegalText(e.target.value)}
-            className="w-full min-h-20 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs outline-none focus:border-[#034DA2]"
-            placeholder="null"
-          />
-          <p className="mt-1 text-[11px] text-slate-400">
-            Privacy &amp; Terms content is managed under Admin → Legal.
-          </p>
-        </CardContent>
-      </Card>
-
       <div className="flex justify-end">
         <Button
           onClick={save}
           disabled={saving}
           className="rounded-xl bg-[#034DA2] px-6 text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
         >
-          {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+          {saving ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Save className="size-4" />
+          )}
           {saving ? "Saving…" : "Save settings"}
         </Button>
       </div>

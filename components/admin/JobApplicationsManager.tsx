@@ -212,7 +212,7 @@ export function JobApplicationsManager() {
                 </dl>
               </div>
               <a
-                href={selected.cvUrl}
+                href={`/api/admin/job-applications/${selected.id}/cv`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl bg-[#034DA2] px-4 py-2.5 text-xs font-bold text-white shadow hover:bg-[#023877]"

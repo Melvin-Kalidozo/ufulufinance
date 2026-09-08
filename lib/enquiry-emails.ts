@@ -1,4 +1,5 @@
 import { brandShell, escapeHtml, sendMail } from "@/lib/mailer";
+import { getNotificationRecipient } from "@/lib/notify";
 
 type Field = { label: string; value: string | number | null | undefined };
 
@@ -22,7 +23,8 @@ export async function sendAdminEnquiryEmail(kind: string, ref: string, fields: F
     ${tableHtml(fields)}
     <p style="margin:18px 0 0;color:#94a3b8;font-size:12px;">Open the Ufulu Finance admin portal to review and respond.</p>
   `);
-  return sendMail(process.env.SMTP_USER || "info@ufulufinance.com", `New ${kind} ${ref}`, html);
+  const to = await getNotificationRecipient();
+  return sendMail(to, `New ${kind} ${ref}`, html);
 }
 
 export async function sendCustomerEnquiryConfirmation(

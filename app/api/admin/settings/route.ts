@@ -18,6 +18,7 @@ const TEXT_FIELDS = [
   "addressLine2",
   "officeHours",
   "mapEmbedUrl",
+  "notificationEmail",
 ] as const;
 
 const JSON_FIELDS = ["offices", "socialLinks", "legal"] as const;

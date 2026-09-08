@@ -64,7 +64,9 @@ export async function sendMail(to: string, subject: string, html: string) {
     return { devFallback: true };
   }
   await t.sendMail({
-    from: process.env.MAIL_FROM || "Ufulu Finance <no-reply@ufulufinance.com>",
+    from:
+      process.env.MAIL_FROM ||
+      `"Ufulu Finance" <${process.env.SMTP_USER || "info@ufulufinance.com"}>`,
     to,
     subject,
     html,

@@ -57,8 +57,8 @@ export async function POST(req: Request) {
     { label: "Message", value: enquiry.message },
   ];
 
-  void sendAdminEnquiryEmail("company enquiry", enquiry.refNumber, fields).catch(() => {});
-  void sendCustomerEnquiryConfirmation(email, "company enquiry", enquiry.refNumber).catch(() => {});
+  void sendAdminEnquiryEmail("company enquiry", enquiry.refNumber, fields).catch((e) => console.error("[mail]", e));
+  void sendCustomerEnquiryConfirmation(email, "company enquiry", enquiry.refNumber).catch((e) => console.error("[mail]", e));
 
   return ok({ refNumber: enquiry.refNumber });
 }

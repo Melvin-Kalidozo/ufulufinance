@@ -5,6 +5,7 @@ import { uploadBufferToCloudinary } from "@/lib/cloudinary";
 import { isValidEmail, isValidPhone } from "@/lib/validators";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { brandShell, escapeHtml, sendMail } from "@/lib/mailer";
+import { getNotificationRecipient } from "@/lib/notify";
 
 export const dynamic = "force-dynamic";
 
@@ -77,17 +78,18 @@ export async function POST(
     </table>
     <p style="margin:16px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
   `);
+  const adminTo = await getNotificationRecipient();
   void sendMail(
-    process.env.SMTP_USER || "info@ufulufinance.com",
+    adminTo,
     `New job application — ${job.title}`,
     html
-  ).catch(() => {});
+  ).catch((e) => console.error("[mail]", e));
 
   const confirmHtml = brandShell(`
     <p style="margin:0 0 12px;color:#0f172a;font-weight:700;">Application received</p>
     <p style="margin:0;color:#475569;">Thank you for applying for <strong>${escapeHtml(job.title)}</strong> at Ufulu Finance. Our team will review your application and contact you directly if you are shortlisted.</p>
   `);
-  void sendMail(email, `Application received — ${job.title}`, confirmHtml).catch(() => {});
+  void sendMail(email, `Application received — ${job.title}`, confirmHtml).catch((e) => console.error("[mail]", e));
 
   return ok({ id: application.id });
 }
