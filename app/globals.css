@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant data-active (&:where([data-state="active"]));
 
 /* ─────────────────────────────────────────────
    Ufulu Finance — Flat Corporate (light only)

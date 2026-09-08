@@ -10,30 +10,10 @@ import {
   MapPin,
   Mail,
   Phone,
+  Link2,
+  Clock,
 } from "lucide-react";
-
-const SOCIAL = [
-  {
-    name: "Facebook",
-    href: "https://facebook.com",
-    d: "M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.889C10.5 0 9 1.5 9 4.667V8z",
-  },
-  {
-    name: "Instagram",
-    href: "https://instagram.com",
-    d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689-.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z",
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com",
-    d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
-  },
-  {
-    name: "YouTube",
-    href: "https://youtube.com",
-    d: "M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z",
-  },
-];
+import { usePublicData } from "@/lib/content-store";
 
 interface FormData {
   name: string;
@@ -44,7 +24,54 @@ interface FormData {
   message: string;
 }
 
+type ContactRow = Record<string, unknown>;
+
+const BRAND_PATHS: Record<string, string> = {
+  facebook:
+    "M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.889C10.5 0 9 1.5 9 4.667V8z",
+  twitter:
+    "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
+  x: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
+  linkedin:
+    "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z",
+  instagram:
+    "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689-.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z",
+  youtube:
+    "M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z",
+};
+
 export default function ContactPage() {
+  const { body: settingsBody } = usePublicData<{ data: ContactRow | null }>(
+    "/api/public/settings"
+  );
+  const settings: ContactRow | null = settingsBody?.data ?? null;
+  const s = (key: string, fallback = "") =>
+    settings && settings[key] !== undefined && settings[key] !== null
+      ? String(settings[key])
+      : fallback;
+  const offices: ContactRow[] = Array.isArray(settings?.offices)
+    ? (settings?.offices as unknown[]).map((o) =>
+        o && typeof o === "object" ? (o as ContactRow) : {}
+      )
+    : [];
+  const socials: ContactRow[] = Array.isArray(settings?.socialLinks)
+    ? (settings?.socialLinks as unknown[]).map((o) =>
+        o && typeof o === "object" ? (o as ContactRow) : {}
+      )
+    : [];
+  const str = (r: ContactRow, k: string) =>
+    r[k] !== undefined && r[k] !== null ? String(r[k]) : "";
+  const firstOffice = offices[0];
+  const addressLine =
+    s("addressLine1") ||
+    (firstOffice ? str(firstOffice, "address") : "Address coming soon");
+  const addressLine2 = s("addressLine2") || "";
+  const supportEmail = s("supportEmail") || "";
+  const loansEmail = s("loansEmail") || "";
+  const directPhone = s("phone") || "";
+  const whatsapp = s("whatsapp") || "";
+  const mapEmbed = s("mapEmbedUrl") || "";
+
   const [form, setForm] = useState<FormData>({
     name: "",
     company: "",
@@ -268,68 +295,102 @@ export default function ContactPage() {
                   </p>
 
                   <div className="mt-8 space-y-6">
-                    {/* Head Office */}
-                    <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
-                        <MapPin className="size-5 text-[#009FE0]" />
+                    {(addressLine || addressLine2) && (
+                      <div className="flex items-start gap-4">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                          <MapPin className="size-5 text-[#009FE0]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-900">Head Office</p>
+                          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                            {addressLine}
+                            {addressLine2 ? <><br />{addressLine2}</> : null}
+                            {s("officeHours") ? (
+                              <>
+                                <br />
+                                {s("officeHours")}
+                              </>
+                            ) : null}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900">Head Office</p>
-                        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                          City Centre, Area 3, Lilongwe<br />
-                          Regional Hubs: Blantyre (Limbe) &amp; Mzuzu (Orton Chirwa Ave)
-                        </p>
-                      </div>
-                    </div>
+                    )}
 
-                    {/* Email Us */}
-                    <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
-                        <Mail className="size-5 text-[#009FE0]" />
+                    {[supportEmail, loansEmail].filter(Boolean).length > 0 && (
+                      <div className="flex items-start gap-4">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                          <Mail className="size-5 text-[#009FE0]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-900">Email Us</p>
+                          {[supportEmail, loansEmail]
+                            .filter(Boolean)
+                            .map((email) => (
+                              <p key={email} className="text-xs text-slate-500 mt-1">
+                                {email}
+                              </p>
+                            ))}
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900">Email Us</p>
-                        <p className="text-xs text-slate-500 mt-1">support@ufulufinance.com</p>
-                        <p className="text-xs text-slate-500">loans@ufulufinance.com</p>
-                      </div>
-                    </div>
+                    )}
 
-                    {/* Call Us */}
-                    <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
-                        <Phone className="size-5 text-[#009FE0]" />
+                    {(directPhone || whatsapp) && (
+                      <div className="flex items-start gap-4">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
+                          <Phone className="size-5 text-[#009FE0]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-900">Call Us</p>
+                          {directPhone ? (
+                            <p className="text-xs text-slate-500 mt-1">
+                              Direct: {directPhone}
+                            </p>
+                          ) : null}
+                          {whatsapp ? (
+                            <p className="text-xs text-slate-500 mt-1">
+                              WhatsApp: {whatsapp}
+                            </p>
+                          ) : null}
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900">Call Us</p>
-                        <p className="text-xs text-slate-500 mt-1">Direct: +265 99 123 4567</p>
-                        <p className="text-xs text-slate-500">Toll-Free WhatsApp: +265 88 123 4567</p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Social media */}
-                <div className="mt-10 pt-6 border-t border-slate-100">
-                  <p className="text-xs font-semibold text-slate-800 mb-3">
-                    Follow our social media
-                  </p>
-                  <div className="flex items-center gap-2.5">
-                    {SOCIAL.map((s) => (
-                      <a
-                        key={s.name}
-                        href={s.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={s.name}
-                        className="flex size-8 items-center justify-center rounded-full bg-[#034DA2] hover:bg-[#023877] text-white transition-transform hover:scale-110 shadow-xs"
-                      >
-                        <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
-                          <path d={s.d} />
-                        </svg>
-                      </a>
-                    ))}
+                {socials.length > 0 && (
+                  <div className="mt-10 pt-6 border-t border-slate-100">
+                    <p className="text-xs font-semibold text-slate-800 mb-3">
+                      Follow our social media
+                    </p>
+                    <div className="flex items-center gap-2.5">
+                      {socials.map((social, i) => {
+                        const platform = String(social.platform ?? social.name ?? "").toLowerCase();
+                        const label = String(social.name ?? platform) || "Social";
+                        const url = String(social.url ?? "");
+                        if (!url) return null;
+                        const path = BRAND_PATHS[platform];
+                        return (
+                          <a
+                            key={`${label}-${i}`}
+                            href={url}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={label}
+                            className="flex size-8 items-center justify-center rounded-full bg-[#034DA2] hover:bg-[#023877] text-white transition-transform hover:scale-110 shadow-xs"
+                          >
+                            {path ? (
+                              <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
+                                <path d={path} />
+                              </svg>
+                            ) : (
+                              <Link2 className="size-3.5" />
+                            )}
+                          </a>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* ── RIGHT COLUMN: SEND US A MESSAGE ────────────────── */}
@@ -569,19 +630,62 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── GOOGLE MAP SECTION ───────────────────────────────────────── */}
-      <section className="mt-14 sm:mt-20 w-full overflow-hidden">
-        <iframe
-          title="Ufulu Finance — Lilongwe, Malawi"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3856.883711905626!2d33.78572187510842!3d-13.96692298628286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1921d47e3e2e7b29%3A0xf05c81d52c14d7c1!2sLilongwe%2C%20Malawi!5e0!3m2!1sen!2smw!4v1700000000000!5m2!1sen!2smw"
-          width="100%"
-          height="460"
-          style={{ border: 0, display: "block" }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </section>
+      {/* ── OUR OFFICES (from admin settings) ─────────────────────── */}
+      {offices.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Our offices</h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {offices.map((office, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <h3 className="text-sm font-bold text-slate-900">
+                  {str(office, "label") || str(office, "city") || "Office"}
+                </h3>
+                {str(office, "address") ? (
+                  <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                    {str(office, "address")}
+                  </p>
+                ) : null}
+                <div className="mt-4 space-y-1.5 text-xs text-slate-600">
+                  {str(office, "phone") ? (
+                    <p className="flex items-center gap-1.5">
+                      <Phone className="size-3.5 text-[#00A3E0]" /> {str(office, "phone")}
+                    </p>
+                  ) : null}
+                  {str(office, "email") ? (
+                    <p className="flex items-center gap-1.5">
+                      <Mail className="size-3.5 text-[#00A3E0]" /> {str(office, "email")}
+                    </p>
+                  ) : null}
+                  {str(office, "hours") ? (
+                    <p className="flex items-center gap-1.5">
+                      <Clock className="size-3.5 text-[#00A3E0]" /> {str(office, "hours")}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── MAP (only when a map embed URL is configured) ─────────────── */}
+      {mapEmbed && (
+        <section className="mt-2 w-full overflow-hidden sm:mt-6">
+          <iframe
+            title="Ufulu Finance location map"
+            src={mapEmbed}
+            width="100%"
+            height="460"
+            style={{ border: 0, display: "block" }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </section>
+      )}
 
     </div>
   );
