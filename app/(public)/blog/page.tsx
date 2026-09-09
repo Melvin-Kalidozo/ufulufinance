@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { StaticHero } from "@/components/public/ContentSkeletons";
+import { usePublicData } from "@/lib/content-store";
 import {
   Search,
   ChevronRight,
@@ -18,27 +20,88 @@ import {
   Users,
 } from "lucide-react";
 
-import { ARTICLES, EVENTS, type Article, type EventItem } from "@/lib/blogData";
+import type { Article, EventItem } from "@/lib/blogData";
 
 export default function BlogInsightsPage() {
   const [activeTab, setActiveTab] = useState<"all" | "blog" | "news" | "events">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const { body: arts } = usePublicData<Record<string, unknown[]>>("/api/public/articles");
+  const { body: evts } = usePublicData<Record<string, unknown[]>>("/api/public/events");
+  const live =
+    arts && evts ? { articles: arts.data ?? [], events: evts.data ?? [] } : null;
 
-  const filteredArticles = useMemo(() => {
-    return ARTICLES.filter((art) => {
-      const matchesTab =
-        activeTab === "all" ||
-        (activeTab === "blog" && art.type === "blog") ||
-        (activeTab === "news" && art.type === "news");
+  const blRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const bval = (r: unknown, k: string, d = "") => {
+    const v = blRow(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+  const longDate = (iso?: string) =>
+    iso ? new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "";
 
-      const matchesSearch =
-        art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        art.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        art.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+  const ARTICLES: Article[] = live?.articles?.length
+    ? (live.articles.map((r) => ({
+        id: bval(r, "slug"),
+        type: (bval(r, "kind") === "NEWS" ? "news" : "blog") as "blog" | "news",
+        title: bval(r, "title"),
+        category: bval(r, "category"),
+        date: longDate(bval(r, "date")),
+        author: bval(r, "author"),
+        authorRole: bval(r, "authorRole"),
+        authorImage: bval(r, "authorImage") || null,
+        readTime: bval(r, "readTime") ? `${bval(r, "readTime")} min read` : "",
+        excerpt: bval(r, "excerpt"),
+        image: bval(r, "image"),
+        isFeatured: Boolean(blRow(r).isFeatured),
+        content: [],
+      })) as Article[])
+    : [];
 
-      return matchesTab && matchesSearch;
-    });
-  }, [activeTab, searchQuery]);
+  const EVENTS: EventItem[] = live?.events?.length
+    ? (live.events.map((r) => ({
+        id: bval(r, "slug"),
+        title: bval(r, "title"),
+        date: longDate(bval(r, "date")),
+        time: bval(r, "time"),
+        location: bval(r, "location"),
+        status: (new Date(bval(r, "date")) >= new Date() ? "Upcoming" : "Past") as "Upcoming" | "Past",
+        description: bval(r, "description"),
+        details: (Array.isArray(blRow(r).details) ? (blRow(r).details as unknown[]) : []) as string[],
+        image: bval(r, "image"),
+      })) as unknown as EventItem[])
+    : [];
+
+  const filteredArticles = ARTICLES.filter((art) => {
+    const matchesTab =
+      activeTab === "all" ||
+      (activeTab === "blog" && art.type === "blog") ||
+      (activeTab === "news" && art.type === "news");
+
+    const matchesSearch =
+      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesTab && matchesSearch;
+  });
+
+  if (!live) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Insights & News"
+          subtitle="Our Perspective · Practical Business Coaching · Announcements · Community Events"
+        />
+        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-96 animate-pulse rounded-2xl bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -46,7 +109,7 @@ export default function BlogInsightsPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-blog.jpg"
             alt="Ufulu Finance Insights"
             fill
             priority

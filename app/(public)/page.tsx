@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import { ClientTestimonialSlider } from "@/components/public/ClientTestimonialSlider";
+import { getHomeContent } from "@/lib/cms-data";
+import { HomePreload } from "@/components/public/HomePreload";
 import {
   ArrowRight,
   ShieldCheck,
@@ -33,206 +36,77 @@ export const metadata = {
     "Providing Civil Service Loans, Private Sector Payroll Loans, Village Banking Facilities, and Business Lending across Malawi.",
 };
 
-const STATS = [
-  {
-    number: "250+",
-    label: "SMEs & Groups Financed",
-    description: "Empowering small enterprises, community clusters, and public servants with accessible credit.",
-  },
-  {
-    number: "15,000+",
-    label: "Loans Disbursed",
-    description: "Delivering rapid financial support directly to mobile wallets and bank accounts nationwide.",
-  },
-  {
-    number: "100%",
-    label: "Transparent Pricing",
-    description: "Guaranteed clear terms, predictable payroll deductions, and zero hidden penalties.",
-  },
-];
+export default async function HomePage() {
+  const SECTOR_ICON: Record<string, LucideIcon> = {
+    Landmark, Building2, Users, TrendingUp, Wallet, Briefcase, Wheat, Zap, ShieldCheck, Sparkles,
+  };
+  const iconOf = (key: string) => SECTOR_ICON[key] ?? Sparkles;
+  const fmtDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
 
-const WHO_WE_EMPOWER = [
-  {
-    id: "civil-servants",
-    title: "Civil Servants & Public Officers",
-    subtitle: "Ministries, Healthcare, Education & Uniformed Services",
-    description:
-      "Structured personal financing with automated, predictable payroll deductions that simplify debt management.",
-    icon: Landmark,
-    link: "#facilities",
-  },
-  {
-    id: "private-sector",
-    title: "Private Sector Employees",
-    subtitle: "Corporate, NGO & Commercial Enterprises",
-    description:
-      "Reliable salary-linked credit facilities arranged through approved employer participation and direct payroll linkage.",
-    icon: Building2,
-    link: "#facilities",
-  },
-  {
-    id: "village-banking",
-    title: "Village Banking Groups",
-    subtitle: "Solidarity Clusters & Savings Collectives",
-    description:
-      "Group-level credit facilities empowering community clusters to expand income-generating activities together.",
-    icon: Users,
-    link: "#facilities",
-  },
-  {
-    id: "business-loans",
-    title: "Businesses & MSMEs",
-    subtitle: "Retailers, Wholesalers & Growing Enterprises",
-    description:
-      "Expanding capital access to finance bulk stock replenishment, commercial machinery, and business expansion.",
-    icon: TrendingUp,
-    link: "#facilities",
-  },
-];
+  const payload = (await getHomeContent().catch(() => null)) as {
+    settings?: Record<string, unknown> | null;
+    stats?: Record<string, unknown>[];
+    sectors?: Record<string, unknown>[];
+    whyChoose?: Record<string, unknown>[];
+    impactMetrics?: Record<string, unknown>[];
+    loanProducts?: Record<string, unknown>[];
+    recentArticles?: Record<string, unknown>[];
+  } | null;
 
-const LOAN_PRODUCTS = [
-  {
-    id: "civil-service",
-    name: "Civil Service Loans",
-    category: "Government & Civil Service",
-    tagline: "Structured financing designed specifically for government employees.",
-    description:
-      "Our Civil Service Loans provide eligible government employees with access to financing to meet their personal and financial needs. We understand the unique needs of civil servants and provide structured loan solutions with convenient repayment arrangements through payroll deductions.",
-    amount: "Subject to assessment",
-    tenure: "Flexible terms",
-    disbursement: "Efficient processing",
-    repayment: "Payroll deduction",
-    collateral: "Employment confirmation",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Civil service professional reviewing official paperwork",
-  },
-  {
-    id: "private-sector-payroll",
-    name: "Private Sector Payroll Loans",
-    category: "Corporate & Enterprise",
-    tagline: "Payroll-based lending solutions for eligible private sector employees.",
-    description:
-      "Our Private Sector Payroll Loans provide financing solutions for eligible employees working in vetted private sector organisations. Designed to assist with personal financial needs with structured repayments deducted directly or arranged through employer partnerships.",
-    amount: "Subject to assessment",
-    tenure: "Flexible terms",
-    disbursement: "Efficient processing",
-    repayment: "Linked to payroll",
-    collateral: "Employer participation required",
-    image:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Private sector professionals in modern office workspace",
-  },
-  {
-    id: "village-banking",
-    name: "Village Banking Loans",
-    category: "Community & Micro-Clusters",
-    tagline: "Community-based financing supporting income-generating activities.",
-    description:
-      "Supporting organised community groups that participate in village banking and other community-based financial activities. The facility helps groups access financing that can support income-generating activities and small businesses.",
-    amount: "Subject to group assessment",
-    tenure: "Flexible terms",
-    disbursement: "Group-based processing",
-    repayment: "Community group schedule",
-    collateral: "Group guarantee",
-    image:
-      "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Malawian community group and women cooperative members",
-  },
-  {
-    id: "business-loans",
-    name: "Business Loans",
-    category: "Commercial & MSME Growth",
-    tagline: "Financing solutions for businesses and entrepreneurs — expanding now.",
-    description:
-      "As part of our growth strategy, Ufulu Finance is expanding its lending portfolio to provide financing solutions for businesses and entrepreneurs across Malawi, helping access capital for business expansion, working capital, and equipment.",
-    amount: "Subject to business assessment",
-    tenure: "Flexible terms",
-    disbursement: "Business assessment period",
-    repayment: "Agreed repayment schedule",
-    collateral: "Business assets / documentation",
-    image:
-      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Malawian retail and enterprise trade entrepreneur",
-  },
-];
 
-const WHY_CHOOSE_ITEMS = [
-  {
-    title: "Transparent Terms & Zero Hidden Fees",
-    description:
-      "Every fee and interest charge is declared upfront. No unexpected insurance deductions or hidden administration penalties.",
-  },
-  {
-    title: "Direct Mobile & Bank Disbursal",
-    description:
-      "Receive approved loan funds within minutes directly to your Airtel Money, TNM Mpamba, or commercial bank account.",
-  },
-  {
-    title: "Seasonal Cashflow Matching",
-    description:
-      "Repayment schedules customized to align with your business revenue cycles or agricultural harvest seasons.",
-  },
-  {
-    title: "Respectful & Ethical Advisory",
-    description:
-      "Our accredited credit officers provide dignified, professional guidance in English, Chichewa, and Tumbuka.",
-  },
-];
+  const STATS = (payload?.stats ?? []).map((x) => ({
+    number: String(x.value ?? ''),
+    label: String(x.label ?? ''),
+    description: String(x.description ?? ''),
+  }));
 
-const IMPACT_METRICS = [
-  {
-    value: "65%+",
-    label: "Women Entrepreneurs",
-    sub: "Directly empowering female traders, grocers, and farmers",
-  },
-  {
-    value: "MWK 3.5B+",
-    label: "Capital Disbursed",
-    sub: "Injected into local Malawian grassroots economies",
-  },
-  {
-    value: "15,000+",
-    label: "Livelihoods Transformed",
-    sub: "Supporting families, school fees, and community resilience",
-  },
-  {
-    value: "98.4%",
-    label: "Client Retention Rate",
-    sub: "Borrowers returning to expand their businesses year after year",
-  },
-];
+  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => ({
+    id: String(x.slug ?? x.title ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    title: String(x.title ?? ''),
+    subtitle: String(x.subtitle ?? ''),
+    description: String(x.description ?? ''),
+    icon: iconOf(String(x.iconKey ?? '')),
+    link: String(x.link ?? '#facilities'),
+  }));
 
-const RECENT_INSIGHTS = [
-  {
-    id: "working-capital",
-    title: "5 Proven Working Capital Strategies for Malawian SMEs in 2026",
-    category: "MSME Business",
-    date: "Nov 17, 2026",
-    excerpt: "Managing liquidity during supplier lead times is critical for retail survival across Lilongwe and Blantyre.",
-    image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "harvest-credit",
-    title: "Navigating Input Financing: How Farmers Maximize Harvest Yields",
-    category: "Agri-Finance",
-    date: "Nov 16, 2026",
-    excerpt: "Structured fertilizer and seed input acquisition aligned directly with commercial harvest cycles.",
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "salary-advances",
-    title: "Understanding Salary Advances: Transparent Payroll Support",
-    category: "Personal Credit",
-    date: "Nov 14, 2026",
-    excerpt: "How regulated payroll advances protect civil servants from high-interest predatory money lenders.",
-    image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
-  },
-];
+  const LOAN_PRODUCTS = (payload?.loanProducts ?? []).map((x) => ({
+    id: String(x.slug ?? x.name ?? ''),
+    name: String(x.name ?? ''),
+    category: String(x.categoryLabel ?? ''),
+    tagline: String(x.tagline ?? ''),
+    description: String(x.description ?? x.intro ?? ''),
+    amount: String(x.amountText ?? ''),
+    tenure: String(x.tenureText ?? ''),
+    disbursement: String(x.disbursementText ?? ''),
+    repayment: String(x.repaymentText ?? ''),
+    collateral: String(x.collateralText ?? ''),
+    image: String(x.image ?? ''),
+    imageAlt: String(x.imageAlt ?? x.name ?? ''),
+  }));
 
-export default function HomePage() {
+  const WHY_CHOOSE_ITEMS = (payload?.whyChoose ?? []).map((x) => ({
+    title: String(x.title ?? ''),
+    description: String(x.description ?? ''),
+  }));
+
+  const IMPACT_METRICS = (payload?.impactMetrics ?? []).map((x) => ({
+    value: String(x.value ?? ''),
+    label: String(x.label ?? ''),
+    sub: String(x.sub ?? ''),
+  }));
+
+  const RECENT_INSIGHTS = (payload?.recentArticles ?? []).map((x) => ({
+    id: String(x.slug ?? x.id ?? ''),
+    title: String(x.title ?? ''),
+    category: String(x.category ?? ''),
+    date: fmtDate(String(x.date ?? '')),
+    excerpt: String(x.excerpt ?? ''),
+    image: String(x.image ?? ''),
+  }));
+
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased overflow-hidden">
+      <HomePreload />
 
       {/* ─────────────────────────────────────────────────────────────────
           1. HERO SECTION
@@ -240,7 +114,7 @@ export default function HomePage() {
       <section className="relative min-h-[500px] sm:min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=2200&q=80"
+            src="/images/hero-home.jpg"
             alt="Ufulu Finance Operations and Trade"
             fill
             priority
@@ -368,7 +242,7 @@ export default function HomePage() {
           <div className="lg:col-span-6 relative">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
               <Image
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
+                src="/images/about-section.jpg"
                 alt="Malawian enterprise and commercial trade"
                 fill
                 className="object-cover"
@@ -732,7 +606,7 @@ export default function HomePage() {
       <section className="relative min-h-[380px] sm:min-h-[440px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=2000&q=80"
+            src="/images/cta-home.jpg"
             alt="Cultivate Your Financial Future"
             fill
             priority

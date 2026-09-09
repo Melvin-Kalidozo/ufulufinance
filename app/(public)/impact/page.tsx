@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+import { StaticHero } from "@/components/public/ContentSkeletons";
+import { usePublicData } from "@/lib/content-store";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -22,89 +25,72 @@ import {
 } from "lucide-react";
 
 export default function ImpactPortfolioPage() {
-  const PROJECTS = [
-    {
-      id: "solar-agri",
-      title: "Solar Irrigation Pilot for Smallholders",
-      category: "Green Agri-Finance",
-      location: "Dedza & Mchinji Districts",
-      description:
-        "Financed 280 solar-powered water pump kits for commercial horticulture smallholders, replacing expensive petrol generators and enabling continuous dry-season harvest cycles.",
-      metrics: "280 Pumps Installed &middot; 42% Cost Reduction",
-      image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-      icon: SunMedium,
-    },
-    {
-      id: "market-vendor",
-      title: "Urban Market Vendor Liquidity Corridor",
-      category: "MSME Working Capital",
-      location: "Lilongwe (Area 2, Tsoka) & Blantyre (Limbe)",
-      description:
-        "Provided revolving micro-inventory credit to over 4,500 market traders, protecting them from predatory informal lenders and sustaining essential food supply chains.",
-      metrics: "4,500+ Traders &middot; MWK 1.2B Capital Rotated",
-      image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&q=80",
-      icon: Briefcase,
-    },
-    {
-      id: "women-cluster",
-      title: "Chikondi Women Cooperative Revolving Fund",
-      category: "Village Banking",
-      location: "Central & Southern Regions",
-      description:
-        "Structured solidarity wholesale loans for 120 village savings clusters, enabling rural women to aggregate produce, purchase commercial trikes, and invest in grain mills.",
-      metrics: "120 Clusters &middot; 68% Female Borrowers",
-      image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80",
-      icon: HeartHandshake,
-    },
-  ];
+  const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/impact");
+  const content = body?.data ?? null;
 
-  const COMMUNITY_INITIATIVES = [
-    {
-      title: "Grassroots Financial Literacy Clinics",
-      desc: "Delivered 140 free in-person workshops across trading centers on bookkeeping, pricing discipline, and cashflow separation.",
-      icon: GraduationCap,
-    },
-    {
-      title: "Agro-Forestry & Soil Restoration Pledge",
-      desc: "Planted over 25,000 indigenous trees across farming communities in Dedza and Kasungu to mitigate seasonal flood risks.",
-      icon: Trees,
-    },
-    {
-      title: "Emergency Educational Hardship Grants",
-      desc: "Provided short-term relief advances and zero-interest hardship deferrals for families impacted by seasonal weather shocks.",
-      icon: HeartHandshake,
-    },
-  ];
+  const iconOf = (title: string): LucideIcon => {
+    const t = title.toLowerCase();
+    if (t.includes("solar") || t.includes("irrigation")) return SunMedium;
+    if (t.includes("vendor") || t.includes("market")) return Briefcase;
+    if (t.includes("women") || t.includes("chikondi") || t.includes("grant")) return HeartHandshake;
+    if (t.includes("literacy") || t.includes("clinic")) return GraduationCap;
+    if (t.includes("tree") || t.includes("forest")) return Trees;
+    if (t.includes("grower") || t.includes("farmer") || t.includes("agro")) return Wheat;
+    return TrendingUp;
+  };
 
-  const SUCCESS_STORIES = [
-    {
-      name: "Grace Banda",
-      enterprise: "Maize & Legume Aggregation",
-      location: "Mchinji Boma",
-      quote:
-        "Before Ufulu Finance, informal lenders charged 40% per month, consuming all my profits. With Ufulu’s Mlimi Harvest loan, I purchased certified seeds and rented a warehouse. My seasonal turnover doubled within two harvest cycles.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
-      stats: "Turnover: +110% | 4 Seasonal Employees Hired",
-    },
-    {
-      name: "Chikondi Phiri",
-      enterprise: "Secondary School Educator & Poultry Farmer",
-      location: "Lilongwe City",
-      quote:
-        "The Civil Servant advance was approved on the same day via Airtel Money. I invested in 500 broiler chicks and automated drinkers. The predictable salary deductions make repayment effortless.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-      stats: "500 Broilers Financed | 0 Loan Delinquencies",
-    },
-    {
-      name: "Tikondane Women’s Cluster",
-      enterprise: "Vegetable Trading & Processing",
-      location: "Limbe Market, Blantyre",
-      quote:
-        "Our village banking group received joint credit within 48 hours. We pooled our capital to purchase wholesale tomatoes and onions directly from Ntcheu growers, increasing our group savings reserve by 65%.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-      stats: "18 Women Members | 100% Repayment Record",
-    },
-  ];
+  const row = (r: unknown): Record<string, unknown> =>
+    (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const str = (r: unknown, k: string, d = ""): string => {
+    const v = row(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+  const slugId = (r: unknown) => str(r, "title").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+  const PROJECTS = (content?.projects ?? []).map((r) => ({
+    id: slugId(r),
+    title: str(r, "title"),
+    category: str(r, "category"),
+    location: str(r, "location"),
+    description: str(r, "description"),
+    metrics: str(r, "metrics"),
+    image: str(r, "image"),
+    icon: iconOf(str(r, "title")),
+  }));
+
+  const COMMUNITY_INITIATIVES = (content?.initiatives ?? []).map((r) => ({
+    title: str(r, "title"),
+    desc: str(r, "description"),
+    icon: iconOf(str(r, "title")),
+  }));
+
+  const SUCCESS_STORIES = (content?.stories ?? []).map((r) => ({
+    name: str(r, "name"),
+    image: str(r, "image"),
+    enterprise: str(r, "enterprise"),
+    location: str(r, "location"),
+    quote: str(r, "quote"),
+    stats: str(r, "statsText"),
+  }));
+
+  if (!content) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Impact & Portfolio"
+          subtitle="Projects, community initiatives and client success stories transforming livelihoods across Malawi."
+        />
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mb-10 h-4 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-80 animate-pulse rounded-3xl bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -112,7 +98,7 @@ export default function ImpactPortfolioPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-impact.jpg"
             alt="Ufulu Finance Impact & Portfolio"
             fill
             priority

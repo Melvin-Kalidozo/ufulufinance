@@ -1,5 +1,14 @@
 "use client";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CUSTOMER ACCOUNT PORTAL — DISABLED (FUTURE IMPROVEMENT)
+//
+// The live system only has ADMIN/staff accounts, so this page is unreachable
+// for now (no customers exist and /account is not linked anywhere). Keep it
+// intact — it will be the foundation of the public customer portal in a
+// future improvement.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";

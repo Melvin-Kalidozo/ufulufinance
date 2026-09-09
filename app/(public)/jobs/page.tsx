@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
+import { StaticHero } from "@/components/public/ContentSkeletons";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -26,16 +26,76 @@ import {
   Check,
 } from "lucide-react";
 
-import { OPEN_ROLES, PERKS, JobRole } from "@/lib/jobsData";
+import type { JobRole } from "@/lib/jobsData";
+import { usePublicData } from "@/lib/content-store";
 
 export default function JobsPage() {
+  const { body } = usePublicData<{ data: unknown[]; perks: unknown[] }>("/api/public/jobs");
+  const live = body;
+
+  const jRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const jval = (r: unknown, k: string, d = "") => {
+    const v = jRow(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+  const jarr = (r: unknown, k: string): string[] => {
+    const v = jRow(r)[k];
+    return Array.isArray(v) ? v.map((x) => String(x)) : [];
+  };
+
+  const OPEN_ROLES: JobRole[] = live?.data?.length
+    ? (live.data.map((r) => ({
+        id: jval(r, "slug"),
+        title: jval(r, "title"),
+        department: jval(r, "department"),
+        location: jval(r, "location"),
+        type: jval(r, "type"),
+        salaryRange: jval(r, "salaryRange") || undefined,
+        experienceLevel: jval(r, "experienceLevel") || undefined,
+        deadline: jval(r, "deadline") || undefined,
+        description: jval(r, "description"),
+        overview: jval(r, "overview"),
+        responsibilities: jarr(r, "responsibilities"),
+        requirements: jarr(r, "requirements"),
+        benefits: jarr(r, "benefits"),
+        image: jval(r, "image"),
+        isFeatured: Boolean(jRow(r).isFeatured),
+      })) as JobRole[])
+    : [];
+
+  const PERKS = live?.perks?.length
+    ? live.perks.map((r) => ({
+        title: jval(r, "title"),
+        desc: jval(r, "description"),
+      }))
+    : [];
+
+  if (!live) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Careers at Ufulu"
+          subtitle="Why Work With Us · Open Positions · Growth Opportunities · Apply Online"
+        />
+        <div className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="space-y-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-24 animate-pulse rounded-2xl bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
       {/* ── 1. FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-jobs.jpg"
             alt="Careers at Ufulu Finance"
             fill
             priority
@@ -129,7 +189,7 @@ export default function JobsPage() {
 
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
                 <Image
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80"
+                  src="/images/jobs-section.jpg"
                   alt="Ufulu Finance Team"
                   fill
                   className="object-cover"

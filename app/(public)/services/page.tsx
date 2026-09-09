@@ -3,7 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+import { EmptyState, StaticHero } from "@/components/public/ContentSkeletons";
+import { usePublicData } from "@/lib/content-store";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -27,125 +30,100 @@ import {
 
 export default function ServicesPage() {
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
+  const { body } = usePublicData<{ data: Record<string, unknown[]> }>(
+    "/api/public/services-data"
+  );
+  const svc = body?.data ?? null;
 
-  const SERVICES = [
-    {
-      id: "civil-service",
-      title: "Civil Service Loans",
-      tagline: "Structured financing designed specifically for government employees.",
-      description:
-        "Our Civil Service Loans provide eligible government employees with access to financing to meet their personal and financial needs. We understand the unique needs of civil servants and provide structured loan solutions with convenient repayment arrangements through payroll deductions, subject to applicable eligibility and lending requirements.",
-      limit: "Subject to assessment",
-      tenure: "Flexible terms",
-      turnaround: "Efficient processing",
-      repayment: "Payroll deduction",
-      collateral: "Employment confirmation",
-      image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
-      icon: Wallet,
-      isFeatured: true,
-      idealFor: "Government employees seeking convenient access to personal financing.",
-    },
-    {
-      id: "private-sector-payroll",
-      title: "Private Sector Payroll Loans",
-      tagline: "Payroll-based lending solutions for eligible private sector employees.",
-      description:
-        "Ufulu Finance provides payroll-based lending solutions to eligible employees working in the private sector. These loans are designed to give salaried employees access to financing while offering convenient repayment arrangements linked to their payroll, subject to employer participation, eligibility, and applicable lending requirements.",
-      limit: "Subject to assessment",
-      tenure: "Flexible terms",
-      turnaround: "Efficient processing",
-      repayment: "Linked to payroll",
-      collateral: "Employer participation required",
-      image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&q=80",
-      icon: Briefcase,
-      isFeatured: false,
-      idealFor: "Employees of eligible private-sector organisations.",
-    },
-    {
-      id: "village-banking",
-      title: "Village Banking Loans",
-      tagline: "Community-based financing supporting income-generating activities.",
-      description:
-        "Our Village Banking Loans support organised community groups that participate in village banking and other community-based financial activities. The facility helps groups access financing that can support income-generating activities, small businesses, and other productive financial needs.",
-      limit: "Subject to group assessment",
-      tenure: "Flexible terms",
-      turnaround: "Group-based processing",
-      repayment: "Community group schedule",
-      collateral: "Group guarantee",
-      image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80",
-      icon: Users,
-      isFeatured: false,
-      idealFor: "Eligible village banking groups and community-based financial groups.",
-    },
-    {
-      id: "business-loans",
-      title: "Business Loans",
-      tagline: "Financing solutions for businesses and entrepreneurs — expanding now.",
-      description:
-        "As part of our growth strategy, Ufulu Finance is expanding its lending portfolio to provide financing solutions for businesses and entrepreneurs. Our Business Loans are intended to help eligible businesses access capital for activities such as business expansion, working capital, purchasing equipment, and other legitimate business needs.",
-      limit: "Subject to business assessment",
-      tenure: "Flexible terms",
-      turnaround: "Business assessment period",
-      repayment: "Agreed repayment schedule",
-      collateral: "Business assets / documentation",
-      image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-      icon: TrendingUp,
-      isFeatured: false,
-      idealFor: "Entrepreneurs, small businesses, and eligible established businesses seeking financing for growth and working capital.",
-    },
-  ];
+  const svcRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const sval = (r: unknown, k: string, d = "") => {
+    const v = svcRow(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+  const iconOf = (key: string): LucideIcon => {
+    const icons: Record<string, LucideIcon> = {
+      Wallet, Briefcase, Users, TrendingUp, Wheat, Zap, Percent, ShieldCheck, HeartHandshake, Award, Sliders, Car, PiggyBank,
+    };
+    return icons[key] ?? TrendingUp;
+  };
+  const serviceIcon = (slug: string): LucideIcon => {
+    const map: Record<string, LucideIcon> = {
+      "civil-service": Wallet,
+      "private-sector-payroll": Briefcase,
+      "village-banking": Users,
+      "business-loans": TrendingUp,
+    };
+    return map[slug] ?? TrendingUp;
+  };
+  const advantageIcon = (title: string): LucideIcon => {
+    const t = title.toLowerCase();
+    if (t.includes("payout")) return Zap;
+    if (t.includes("grace") || t.includes("harvest")) return Wheat;
+    if (t.includes("rate")) return Percent;
+    return TrendingUp;
+  };
 
-  const WHO_WE_SERVE = [
-    {
-      title: "Market Vendors & Retailers",
-      subtitle: "Area 2, Tsoka Market, Limbe, and Regional Trade Hubs",
-      desc: "Fast working capital for bulk purchases, seasonal inventory build-up, and rapid stock turn.",
-      icon: Briefcase,
-    },
-    {
-      title: "Smallholder Farmers & Growers",
-      subtitle: "Mchinji, Dedza, Kasungu, and Central Food Belts",
-      desc: "Timely fertilizer and seed packages structured to match rainfall patterns and harvest commodity sales.",
-      icon: Wheat,
-    },
-    {
-      title: "Civil Servants & Teachers",
-      subtitle: "Ministries, District Councils, Health & Education Services",
-      desc: "Transparent salary advances with zero hidden fees and automated payroll deduction convenience.",
-      icon: Wallet,
-    },
-    {
-      title: "Women Entrepreneurs & Savings Groups",
-      subtitle: "Village Banking Clusters & Cooperative Federations",
-      desc: "Solidarity-backed credit lines supporting women-led micro-enterprises and community wealth building.",
-      icon: Users,
-    },
-  ];
+  const SERVICES = (svc?.services ?? []).map((r) => ({
+    id: sval(r, "slug"),
+    title: sval(r, "title"),
+    tagline: sval(r, "tagline"),
+    description: sval(r, "description"),
+    limit: sval(r, "limit"),
+    tenure: sval(r, "tenure"),
+    turnaround: sval(r, "turnaround"),
+    repayment: sval(r, "repayment"),
+    collateral: sval(r, "collateral"),
+    image: sval(r, "image"),
+    icon: serviceIcon(sval(r, "slug")),
+    isFeatured: Boolean(svcRow(r).isFeatured),
+    idealFor: sval(r, "idealFor"),
+  }));
 
-  const SERVICE_ADVANTAGES = [
-    {
-      title: "Same-Day Mobile Payouts",
-      desc: "Funds pushed directly to Airtel Money or TNM Mpamba within minutes of agreement verification.",
-      icon: Zap,
-    },
-    {
-      title: "Harvest-Aligned Grace Periods",
-      desc: "Repayment dates matched specifically to crop marketing cycles so farmers never struggle during growing seasons.",
-      icon: Wheat,
-    },
-    {
-      title: "Transparent & Published Rates",
-      desc: "Every kwacha of interest and processing fee is clearly itemized with zero surprise deductions.",
-      icon: Percent,
-    },
-    {
-      title: "Credit Limit Escalator",
-      desc: "Timely repayments automatically unlock higher credit limits up to MWK 15,000,000 for your business.",
-      icon: TrendingUp,
-    },
-  ];
+  const WHO_WE_SERVE = (svc?.audiences ?? []).map((r) => ({
+    title: sval(r, "title"),
+    subtitle: sval(r, "subtitle"),
+    desc: sval(r, "description"),
+    icon: iconOf(sval(r, "iconKey")),
+  }));
 
-  const activeService = SERVICES[selectedServiceIndex];
+  const SERVICE_ADVANTAGES = (svc?.advantages ?? []).map((r) => ({
+    title: sval(r, "title"),
+    desc: sval(r, "description"),
+    icon: advantageIcon(sval(r, "title")),
+  }));
+
+  const activeService = SERVICES[Math.min(selectedServiceIndex, SERVICES.length - 1)];
+
+  if (!svc) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Credit Facilities & Services"
+          subtitle="Explore the Ufulu Finance facilities designed for civil servants, businesses, groups and communities."
+        />
+        <div className="mx-auto max-w-7xl space-y-6 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
+          <div className="h-64 w-full animate-pulse rounded-3xl bg-slate-200/70" />
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-32 animate-pulse rounded-2xl bg-slate-200/70" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (SERVICES.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd] px-4 py-20">
+        <EmptyState
+          title="No published services yet"
+          description="Available credit facilities will appear here once they are published from the admin portal."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -153,7 +131,7 @@ export default function ServicesPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=2400&q=80"
+            src="/images/hero-services.jpg"
             alt="Ufulu Finance Credit Services"
             fill
             priority

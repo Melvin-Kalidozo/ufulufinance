@@ -60,6 +60,7 @@ export function JobApplicationDialog({
   });
 
   const [cvFile, setCvFile] = useState<{ name: string; size: string } | null>(null);
+  const [cvRaw, setCvRaw] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -93,6 +94,7 @@ export function JobApplicationDialog({
       return;
     }
 
+    setCvRaw(file);
     const sizeFormatted =
       file.size > 1024 * 1024
         ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
@@ -106,6 +108,7 @@ export function JobApplicationDialog({
 
   function handleRemoveFile() {
     setCvFile(null);
+    setCvRaw(null);
     setCvError("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -151,13 +154,30 @@ export function JobApplicationDialog({
     }
 
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setSending(false);
+    try {
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("email", form.email);
+      fd.append("phone", form.phone);
+      fd.append("coverNote", form.coverLetter);
+      if (cvRaw) fd.append("cv", cvRaw);
 
-    const generatedRef = `UFL-JOB-${Math.floor(10000 + Math.random() * 90000)}`;
-    setRefId(generatedRef);
-    setSent(true);
-    toast.success("Application submitted successfully!");
+      const res = await fetch(`/api/public/jobs/${encodeURIComponent(job.id)}/apply`, {
+        method: "POST",
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || json.message || "We could not submit your application.");
+      }
+      setRefId("Application received");
+      setSent(true);
+      toast.success("Application submitted successfully!");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleReset() {
@@ -171,6 +191,7 @@ export function JobApplicationDialog({
       coverLetter: "",
     });
     setCvFile(null);
+    setCvRaw(null);
     setCvError("");
     setTouched({});
     setOpen(false);

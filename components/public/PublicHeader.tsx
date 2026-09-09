@@ -51,7 +51,9 @@ export function PublicHeader() {
 
   const user = session?.user;
   const isAdmin = user?.role === "ADMIN";
-  const accountHref = isAdmin ? "/admin" : "/customer";
+  // The customer portal (/account) is DISABLED — customer accounts are a
+  // future improvement. Only admin/staff accounts exist today, so the signed-in
+  // menu below only links into /admin for now.
   const initials = user?.name
     ? user.name
         .split(" ")
@@ -181,16 +183,20 @@ export function PublicHeader() {
                     <span className="text-xs text-muted-foreground">{user.email}</span>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href={accountHref} className="cursor-pointer">
-                      {isAdmin ? (
+                  {isAdmin ? (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer">
                         <LayoutDashboard className="size-4" />
-                      ) : (
-                        <UserRound className="size-4" />
-                      )}
-                      {isAdmin ? "Admin portal" : "My account"}
-                    </Link>
-                  </DropdownMenuItem>
+                        Admin portal
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : (
+                    // Customer portal (/account) is disabled — future improvement.
+                    <DropdownMenuItem disabled className="opacity-60">
+                      <UserRound className="size-4" />
+                      My account (coming soon)
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     className="text-destructive focus:text-destructive cursor-pointer"
                     onClick={() => signOut({ callbackUrl: "/" })}

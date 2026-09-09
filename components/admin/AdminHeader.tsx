@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "sonner";
@@ -24,7 +25,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Menu, KeyRound, LogOut, ChevronDown } from "lucide-react";
+import { Menu, KeyRound, LogOut, ChevronDown, Globe } from "lucide-react";
+import Link from "next/link";
 
 export function AdminHeader({ onMenuClick }: { onMenuClick: () => void }) {
   const pathname = usePathname();
@@ -82,35 +84,71 @@ export function AdminHeader({ onMenuClick }: { onMenuClick: () => void }) {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-card">
+    <header className="sticky top-0 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
-        <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuClick}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-xl text-slate-600 lg:hidden"
+          onClick={onMenuClick}
+          aria-label="Open navigation"
+        >
           <Menu className="size-5" />
         </Button>
 
-        <div>
-          <h1 className="text-lg font-bold leading-tight">{pageTitle}</h1>
+        {/* Brand (mobile only — desktop uses the sidebar brand) */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <div className="rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <Image
+              src="/logo.png"
+              alt="Ufulu Finance"
+              width={120}
+              height={40}
+              priority
+              className="h-5 w-auto object-contain"
+            />
+          </div>
+        </div>
+
+        <div className="leading-tight">
+          <p className="hidden text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#009FE0] sm:block">
+            Ufulu Finance
+          </p>
+          <h1 className="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">
+            {pageTitle}
+          </h1>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <Link
+            href="/"
+            className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-50 hover:text-[#034DA2] md:inline-flex"
+          >
+            <Globe className="size-3.5" />
+            View website
+          </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="gap-2">
-                <span className="flex size-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+              <button className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white py-1.5 pl-1.5 pr-2.5 text-slate-700 shadow-sm transition-colors hover:bg-slate-50">
+                <span className="flex size-6 items-center justify-center rounded-full bg-[#034DA2] text-[10px] font-bold text-white">
                   {initials}
                 </span>
-                <span className="hidden text-sm font-medium sm:inline">
+                <span className="hidden text-xs font-semibold sm:inline">
                   {user?.name}
                 </span>
-                <ChevronDown className="size-3.5 text-muted-foreground" />
-              </Button>
+                <ChevronDown className="size-3.5 text-slate-400" />
+              </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 rounded-xl border-slate-200 shadow-md">
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm font-medium">{user?.name}</span>
-                  <span className="text-xs text-muted-foreground">{user?.email}</span>
-                  <Badge variant="outline" className="mt-1 w-fit text-[10px] uppercase tracking-wide">
+                  <span className="text-sm font-bold text-slate-900">{user?.name}</span>
+                  <span className="text-xs text-slate-500">{user?.email}</span>
+                  <Badge
+                    variant="outline"
+                    className="mt-1 w-fit rounded-lg border-blue-200 bg-blue-50 text-[10px] font-bold uppercase tracking-wide text-[#034DA2]"
+                  >
                     {user?.role}
                   </Badge>
                 </div>
@@ -171,7 +209,11 @@ export function AdminHeader({ onMenuClick }: { onMenuClick: () => void }) {
                 />
               </div>
               <DialogFooter>
-                <Button type="submit" disabled={saving}>
+                <Button
+                  type="submit"
+                  disabled={saving}
+                  className="rounded-xl bg-[#034DA2] text-white hover:bg-[#023877]"
+                >
                   {saving ? "Saving..." : "Update password"}
                 </Button>
               </DialogFooter>

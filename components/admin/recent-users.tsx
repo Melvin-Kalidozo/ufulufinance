@@ -21,55 +21,77 @@ type RecentUser = {
 export function RecentUsers({ users }: { users: RecentUser[] }) {
   if (users.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-muted-foreground">
+      <p className="px-6 py-12 text-center text-sm text-slate-500">
         No users yet.
       </p>
     );
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Role</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Joined</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user) => (
-          <TableRow key={user.id}>
-            <TableCell className="font-medium">{user.name}</TableCell>
-            <TableCell className="text-muted-foreground">{user.email}</TableCell>
-            <TableCell>
-              <Badge variant="outline" className="text-[10px] uppercase tracking-wide">
-                {user.role}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <span
-                className={cn(
-                  "inline-flex items-center gap-1.5 text-xs font-medium",
-                  user.isActive ? "text-success" : "text-muted-foreground"
-                )}
-              >
+    <div className="px-3 py-4 sm:px-6">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-slate-100 hover:bg-transparent">
+            <TableHead className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Name
+            </TableHead>
+            <TableHead className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Email
+            </TableHead>
+            <TableHead className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Role
+            </TableHead>
+            <TableHead className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Status
+            </TableHead>
+            <TableHead className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Joined
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={user.id} className="border-slate-100 hover:bg-blue-50/40">
+              <TableCell className="px-3 py-3.5 text-sm font-semibold text-slate-900">
+                {user.name}
+              </TableCell>
+              <TableCell className="px-3 py-3.5 text-sm text-slate-500">
+                {user.email}
+              </TableCell>
+              <TableCell className="px-3 py-3.5">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "rounded-lg border-blue-200 bg-blue-50 text-[10px] font-bold uppercase tracking-wide text-[#034DA2]",
+                    user.role !== "ADMIN" && "border-slate-200 bg-slate-50 text-slate-500"
+                  )}
+                >
+                  {user.role}
+                </Badge>
+              </TableCell>
+              <TableCell className="px-3 py-3.5">
                 <span
                   className={cn(
-                    "size-1.5 rounded-full",
-                    user.isActive ? "bg-success" : "bg-muted-foreground"
+                    "inline-flex items-center gap-1.5 text-xs font-semibold",
+                    user.isActive ? "text-[#00A3E0]" : "text-slate-400"
                   )}
-                />
-                {user.isActive ? "Active" : "Inactive"}
-              </span>
-            </TableCell>
-            <TableCell className="text-muted-foreground">
-              {new Date(user.createdAt).toLocaleDateString()}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                >
+                  <span
+                    className={cn(
+                      "size-1.5 rounded-full",
+                      user.isActive ? "bg-[#00A3E0]" : "bg-slate-300"
+                    )}
+                  />
+                  {user.isActive ? "Active" : "Inactive"}
+                </span>
+              </TableCell>
+              <TableCell className="px-3 py-3.5 text-sm text-slate-500">
+                {new Date(user.createdAt).toLocaleDateString()}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
