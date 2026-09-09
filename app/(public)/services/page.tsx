@@ -26,6 +26,9 @@ import {
   CheckCircle2,
   HelpCircle,
   Percent,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
 } from "lucide-react";
 
 export default function ServicesPage() {
@@ -199,11 +202,79 @@ export default function ServicesPage() {
             </div>
           </div>
 
+          {/* ── MOBILE FILTER BAR (Tabs + Dropdown Selector for Fast Navigation) ── */}
+          <div className="lg:hidden mb-6 space-y-3">
+            {/* Quick dropdown + Stepper */}
+            <div className="flex items-center justify-between gap-2 bg-white border border-slate-200/90 rounded-2xl p-2.5 shadow-xs">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Filter className="size-4 text-[#009FE0] shrink-0 ml-1" />
+                <select
+                  value={selectedServiceIndex}
+                  onChange={(e) => setSelectedServiceIndex(Number(e.target.value))}
+                  className="w-full bg-transparent text-xs sm:text-sm font-bold text-slate-800 focus:outline-none cursor-pointer truncate"
+                  aria-label="Select facility"
+                >
+                  {SERVICES.map((srv, idx) => (
+                    <option key={srv.id} value={idx}>
+                      {idx + 1}. {srv.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Stepper buttons */}
+              <div className="flex items-center gap-1 shrink-0 border-l border-slate-200 pl-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedServiceIndex((prev) => (prev > 0 ? prev - 1 : SERVICES.length - 1))}
+                  className="size-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+                  aria-label="Previous facility"
+                >
+                  <ChevronLeft className="size-4" />
+                </button>
+                <span className="text-[11px] font-bold text-slate-500 px-1">
+                  {selectedServiceIndex + 1}/{SERVICES.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedServiceIndex((prev) => (prev < SERVICES.length - 1 ? prev + 1 : 0))}
+                  className="size-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+                  aria-label="Next facility"
+                >
+                  <ChevronRight className="size-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Horizontal scrollable facility chips */}
+            <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              {SERVICES.map((srv, idx) => {
+                const Icon = srv.icon;
+                const isActive = selectedServiceIndex === idx;
+                return (
+                  <button
+                    key={srv.id}
+                    type="button"
+                    onClick={() => setSelectedServiceIndex(idx)}
+                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                      isActive
+                        ? "bg-[#034DA2] text-white shadow-md shadow-blue-900/20 scale-[1.02]"
+                        : "bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    <Icon className={`size-3.5 ${isActive ? "text-[#009FE0]" : "text-slate-500"}`} />
+                    <span>{srv.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Two-panel grid */}
           <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-5 items-start">
 
-            {/* ── LEFT: Service list ── */}
-            <div className="flex flex-col gap-2">
+            {/* ── LEFT: Desktop Service list (Hidden on mobile to eliminate excessive scrolling) ── */}
+            <div className="hidden lg:flex flex-col gap-2">
               {SERVICES.map((srv, idx) => {
                 const Icon = srv.icon;
                 const isActive = selectedServiceIndex === idx;
@@ -252,7 +323,7 @@ export default function ServicesPage() {
               })}
             </div>
 
-            {/* ── RIGHT: Detail panel ── */}
+            {/* ── RIGHT: Detail panel (Renders immediately on mobile and sticky on desktop) ── */}
             <div className="lg:sticky lg:top-24">
               <div className="rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-xl">
 
@@ -319,25 +390,50 @@ export default function ServicesPage() {
                   </div>
 
                   {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-2.5 pt-1">
-                    <LoanEnquiryDialog
-                      defaultFacility={activeService.title}
-                      triggerButton={
-                        <button
-                          type="button"
-                          className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-5 py-2.5 text-xs font-bold transition-all cursor-pointer hover:shadow-md"
-                        >
-                          Enquire for This Service
-                          <ArrowRight className="size-3.5" />
-                        </button>
-                      }
-                    />
-                    <Link
-                      href="/loans"
-                      className="inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 px-5 py-2.5 text-xs font-semibold transition-colors"
-                    >
-                      Loan Calculator
-                    </Link>
+                  <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <LoanEnquiryDialog
+                        defaultFacility={activeService.title}
+                        triggerButton={
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-5 py-2.5 text-xs font-bold transition-all cursor-pointer hover:shadow-md"
+                          >
+                            Enquire for This Service
+                            <ArrowRight className="size-3.5" />
+                          </button>
+                        }
+                      />
+                      <Link
+                        href="/loans"
+                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 px-5 py-2.5 text-xs font-semibold transition-colors"
+                      >
+                        Loan Calculator
+                      </Link>
+                    </div>
+
+                    {/* Mobile Stepper in card footer */}
+                    <div className="lg:hidden flex items-center gap-1.5 text-xs font-bold text-slate-500 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedServiceIndex((prev) => (prev > 0 ? prev - 1 : SERVICES.length - 1))}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition-colors cursor-pointer"
+                      >
+                        <ChevronLeft className="size-3.5" />
+                        Prev
+                      </button>
+                      <span className="text-[11px] text-slate-400 px-1">
+                        {selectedServiceIndex + 1} of {SERVICES.length}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedServiceIndex((prev) => (prev < SERVICES.length - 1 ? prev + 1 : 0))}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition-colors cursor-pointer"
+                      >
+                        Next
+                        <ChevronRight className="size-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

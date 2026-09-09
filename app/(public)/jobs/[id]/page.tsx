@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ArrowLeft,
   Calendar,
+  Clock,
   CheckCircle2,
   Check,
   Building2,
@@ -23,6 +24,17 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import type { Metadata } from "next";
+
+function formatDate(val: string | undefined): string {
+  if (!val) return "Rolling Basis";
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return val;
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 function jRow(r: Record<string, unknown>): Record<string, unknown> {
   return r;
@@ -82,9 +94,9 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
     notFound();
   }
 
-  const otherJobs = (all ?? [])
-    .map((r) => mapJob(r as unknown as Record<string, unknown>))
-    .filter((r) => r.id !== job.id)
+  const otherJobs: JobRole[] = (all ?? [])
+    .map((r: unknown) => mapJob(r as unknown as Record<string, unknown>))
+    .filter((r: JobRole) => r.id !== job.id)
     .slice(0, 3);
 
   return (
@@ -134,15 +146,15 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
             <div className="space-y-4 max-w-3xl">
               {/* Badges */}
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#00A3E0] text-slate-950 uppercase tracking-wider shadow-sm">
+                <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#00A3E0] text-white uppercase tracking-wider shadow-sm">
                   {job.department}
                 </span>
                 <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-xs border border-white/10">
                   {job.type}
                 </span>
                 {job.isFeatured && (
-                  <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-[#38bdf8] text-slate-950 flex items-center gap-1 shadow-sm">
-                    <Sparkles className="size-3" />
+                  <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-[#034DA2] text-white flex items-center gap-1 shadow-sm border border-white/20">
+                    <Sparkles className="size-3 text-[#009FE0]" />
                     Priority Vacancy
                   </span>
                 )}
@@ -153,29 +165,25 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 {job.title}
               </h1>
 
-              {/* Quick Meta Pills */}
-              <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs sm:text-sm text-sky-100/90 font-medium pt-1">
-                <span className="inline-flex items-center gap-1.5">
+              {/* Quick Metadata Row */}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-slate-200">
+                <div className="flex items-center gap-2">
                   <MapPin className="size-4 text-[#38bdf8]" />
-                  {job.location}
-                </span>
-                {job.experienceLevel && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <Briefcase className="size-4 text-[#38bdf8]" />
-                    {job.experienceLevel}
-                  </span>
-                )}
-                {job.deadline && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <Calendar className="size-4 text-[#38bdf8]" />
-                    Application Deadline: {job.deadline}
-                  </span>
-                )}
+                  <span>{job.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="size-4 text-[#38bdf8]" />
+                  <span>{job.department}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="size-4 text-[#38bdf8]" />
+                  <span>Deadline: {formatDate(job.deadline)}</span>
+                </div>
               </div>
             </div>
 
-            {/* Header Action Buttons — always side-by-side */}
-            <div className="flex flex-row items-center gap-3 shrink-0">
+            {/* Top CTA Actions */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
               <JobApplicationDialog
                 job={{
                   id: job.id,
@@ -187,7 +195,7 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 triggerButton={
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-extrabold px-7 py-3.5 text-sm transition-all hover:scale-105 shadow-lg cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284c7] text-white font-extrabold px-7 py-3.5 text-sm transition-all hover:scale-105 shadow-lg shadow-sky-950/30 cursor-pointer whitespace-nowrap"
                   >
                     <span>Apply for this Role</span>
                     <Send className="size-4" />
@@ -493,7 +501,7 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {otherJobs.map((oj) => (
+              {otherJobs.map((oj: JobRole) => (
                 <div
                   key={oj.id}
                   className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs hover:shadow-md transition-all flex flex-col justify-between hover:-translate-y-1"
