@@ -345,21 +345,21 @@ export default function AboutPage() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="px-3 py-1 rounded-full bg-slate-950 text-white text-[10px] font-extrabold uppercase tracking-wide">
+                        <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide border border-white/20">
                           {val.badge}
                         </span>
                         <div className="size-10 rounded-full bg-white/20 text-white flex items-center justify-center">
                           <Icon className="size-5" />
                         </div>
                       </div>
-                      <h3 className="text-lg font-extrabold leading-snug">{val.title}</h3>
-                      <p className="text-xs text-slate-900 font-medium mt-3 leading-relaxed">
+                      <h3 className="text-lg font-extrabold leading-snug text-white">{val.title}</h3>
+                      <p className="text-xs text-blue-100 font-medium mt-3 leading-relaxed">
                         {val.description}
                       </p>
                     </div>
-                    <div className="mt-6 pt-4 border-t border-slate-950/10 flex items-center justify-between text-xs font-bold">
+                    <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between text-xs font-bold text-blue-100">
                       <span>Guaranteed Standard</span>
-                      <ArrowRight className="size-4" />
+                      <ArrowRight className="size-4 text-[#009FE0]" />
                     </div>
                   </div>
                 );
@@ -514,13 +514,22 @@ export default function AboutPage() {
                 className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col justify-between overflow-hidden"
               >
                 <div>
-                  {/* Portrait: Flush edge-to-edge as part of the card, NO SHADE */}
-                  <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-slate-100">
+                  {/* Portrait: Content-aware contain with ambient blurred backdrop */}
+                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100">
+                    {/* Blurred ambient background to smoothly fill card */}
+                    <Image
+                      src={lead.image}
+                      alt=""
+                      fill
+                      aria-hidden
+                      className="object-cover blur-xl scale-125 opacity-40 pointer-events-none"
+                    />
+                    {/* Foreground portrait fully contained without cropping faces */}
                     <Image
                       src={lead.image}
                       alt={lead.name}
                       fill
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      className="relative z-10 object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
 

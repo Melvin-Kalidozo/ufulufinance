@@ -158,10 +158,10 @@ export function NotFoundContent() {
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <a
-              href="tel:+265990000000"
+              href="tel:+265994485444"
               className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-[#034DA2] transition-colors"
             >
-              +265 99 000 0000
+              +265 994 485 444
             </a>
             <Link
               href="/contact"
