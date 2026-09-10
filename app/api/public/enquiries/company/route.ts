@@ -29,16 +29,18 @@ export async function POST(req: Request) {
   }
 
   const name = String(body.name ?? "").trim();
-  const email = String(body.email ?? "").toLowerCase().trim();
+  const emailRaw = String(body.email ?? "").toLowerCase().trim();
   const phone = body.phone ? String(body.phone).trim() : "";
   const category = String(body.category ?? "").trim();
   const message = String(body.message ?? "").trim();
 
   if (name.length < 2) return fail("Your name is required.");
-  if (!isValidEmail(email)) return fail("A valid email address is required.");
-  if (phone && !isValidPhone(phone)) return fail("A valid phone number is required.");
+  if (emailRaw && !isValidEmail(emailRaw)) return fail("Please enter a valid email address.");
+  if (!phone || !isValidPhone(phone)) return fail("A valid phone number is required.");
   if (!CATEGORIES.includes(category)) return fail("Please select an enquiry category.");
   if (message.length < 10) return fail("Please enter a message (at least 10 characters).");
+
+  const email = emailRaw || null;
 
   const refNumber = await generateRef("UFL-EN", async (r) =>
     Boolean(await prisma.companyEnquiry.findUnique({ where: { refNumber: r } }))
@@ -58,7 +60,11 @@ export async function POST(req: Request) {
   ];
 
   void sendAdminEnquiryEmail("company enquiry", enquiry.refNumber, fields).catch((e) => console.error("[mail]", e));
-  void sendCustomerEnquiryConfirmation(email, "company enquiry", enquiry.refNumber).catch((e) => console.error("[mail]", e));
+  if (email) {
+    void sendCustomerEnquiryConfirmation(email, "company enquiry", enquiry.refNumber).catch((e) =>
+      console.error("[mail]", e)
+    );
+  }
 
   return ok({ refNumber: enquiry.refNumber });
 }

@@ -99,6 +99,7 @@ export function LoanEnquiryDialog({
     size: string;
     dataUrl?: string;
   } | null>(null);
+  const [idRaw, setIdRaw] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -128,20 +129,20 @@ export function LoanEnquiryDialog({
     setTouched((prev) => ({ ...prev, [field]: true }));
   }
 
-  // File upload processing
+  // File upload processing — images only (front of National ID)
   function processFile(file: File) {
     setFileError("");
 
-    // Validate size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setFileError("File exceeds 5MB limit. Please upload an image or PDF under 5MB.");
+    // Validate size (max 8MB)
+    if (file.size > 8 * 1024 * 1024) {
+      setFileError("Image exceeds 8MB. Please upload a smaller photo.");
       return;
     }
 
-    // Validate type (images or pdf)
-    const validTypes = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    // Validate type (images only — PDFs are not accepted)
+    const validTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!validTypes.includes(file.type)) {
-      setFileError("Please upload a valid document (JPG, PNG, WebP or PDF).");
+      setFileError("Only JPG, PNG or WebP images are accepted — PDFs are not allowed.");
       return;
     }
 
@@ -150,22 +151,16 @@ export function LoanEnquiryDialog({
         ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
         : `${Math.round(file.size / 1024)} KB`;
 
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setIdFile({
-          name: file.name,
-          size: sizeFormatted,
-          dataUrl: reader.result as string,
-        });
-      };
-      reader.readAsDataURL(file);
-    } else {
+    setIdRaw(file);
+    const reader = new FileReader();
+    reader.onload = () => {
       setIdFile({
         name: file.name,
         size: sizeFormatted,
+        dataUrl: reader.result as string,
       });
-    }
+    };
+    reader.readAsDataURL(file);
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -192,6 +187,7 @@ export function LoanEnquiryDialog({
 
   function handleRemoveFile() {
     setIdFile(null);
+    setIdRaw(null);
     setFileError("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -277,20 +273,27 @@ export function LoanEnquiryDialog({
       return;
     }
 
+    if (!idRaw) {
+      setFileError("Please upload a clear photo of your National ID (front).");
+      toast.error("A National ID image is required.");
+      return;
+    }
+
     setSending(true);
     try {
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("phone", form.phone);
+      fd.append("email", form.email);
+      fd.append("productName", form.product);
+      fd.append("amountRequested", form.amount);
+      fd.append("message", form.message);
+      fd.append("consent", agreedTerms ? "true" : "false");
+      fd.append("idImage", idRaw);
+
       const res = await fetch("/api/public/enquiries/loan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          productName: form.product,
-          amountRequested: form.amount,
-          message: form.message,
-          consent: agreedTerms,
-        }),
+        body: fd,
       });
       const json = await res.json();
       if (!res.ok) {
@@ -321,6 +324,7 @@ export function LoanEnquiryDialog({
       message: "",
     });
     setIdFile(null);
+    setIdRaw(null);
     setFileError("");
     setTouched({});
     setOpen(false);
@@ -683,10 +687,10 @@ export function LoanEnquiryDialog({
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
                       <label className="block text-xs font-bold text-slate-700">
-                        National ID / Passport Photo{" "}
-                        <span className="text-slate-400 font-normal">(Optional)</span>
+                        National ID Photo (Front){" "}
+                        <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-[10px] text-slate-500 font-medium">Max 5MB (JPG, PNG, PDF)</span>
+                      <span className="text-[10px] text-slate-500 font-medium">Max 8MB (JPG, PNG, WebP)</span>
                     </div>
 
                     {!idFile ? (
@@ -707,17 +711,17 @@ export function LoanEnquiryDialog({
                           </div>
                           <div className="text-left">
                             <span className="text-xs font-bold text-slate-800 block leading-tight">
-                              Upload National ID or Passport
+                              Upload National ID (front)
                             </span>
                             <span className="text-[10px] text-slate-500 block leading-tight">
-                              Click or drag front side photo or document
+                              Click or drag a clear photo (JPG, PNG, WebP)
                             </span>
                           </div>
                         </div>
                         <input
                           ref={fileInputRef}
                           type="file"
-                          accept=".jpg,.jpeg,.png,.webp,.pdf"
+                          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                           onChange={handleFileChange}
                           className="hidden"
                         />

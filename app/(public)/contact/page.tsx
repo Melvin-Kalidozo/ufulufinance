@@ -111,9 +111,7 @@ export default function ContactPage() {
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!form.email.trim()) {
-      errs.email = "Email is required";
-    } else if (!emailRegex.test(form.email.trim())) {
+    if (form.email.trim() && !emailRegex.test(form.email.trim())) {
       errs.email = "Please enter a valid email address";
     }
 
@@ -515,7 +513,7 @@ export default function ContactPage() {
                           htmlFor="contact-email"
                           className="block text-xs text-slate-500 mb-1"
                         >
-                          Email
+                          Email <span className="text-slate-400">(optional)</span>
                         </label>
                         <div className="relative">
                           <input
