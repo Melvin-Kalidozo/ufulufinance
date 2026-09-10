@@ -384,7 +384,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 Borrow from MWK 100,000 to MWK 10,000,000 with flat rates and zero surprise deductions.
               </p>
               <Link
-                href="/loans"
+                href="/loans#calculator"
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold text-xs transition-colors"
               >
                 Open Loan Calculator

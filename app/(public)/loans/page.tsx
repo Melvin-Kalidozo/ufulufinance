@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
@@ -101,6 +101,19 @@ export default function LoansPage() {
   const [calcRateMonthly, setCalcRateMonthly] = useState<number>(3.5);
 
   const LOAN_PRODUCTS: LoanProduct[] = liveProducts;
+
+  // Deep-link: scroll to the calculator once content (and its anchor) is rendered.
+  useEffect(() => {
+    if (loading) return;
+    if (typeof window !== "undefined" && window.location.hash === "#calculator") {
+      const el = document.getElementById("calculator");
+      if (el) {
+        requestAnimationFrame(() =>
+          el.scrollIntoView({ behavior: "smooth", block: "start" })
+        );
+      }
+    }
+  }, [loading]);
 
   const filteredProducts = useMemo(() => {
     if (selectedCategory === "all") return LOAN_PRODUCTS;
@@ -349,7 +362,7 @@ export default function LoansPage() {
       </section>
 
       {/* ── 3. REPAYMENT INFORMATION & LIVE CALCULATOR (FULL-WIDTH) ──── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#021833] via-[#0a2540] to-[#034DA2] text-white py-20 sm:py-28">
+      <section id="calculator" className="relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-[#021833] via-[#0a2540] to-[#034DA2] text-white py-20 sm:py-28 sm:scroll-mt-28">
         <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,_#009FE0_0%,_transparent_60%)]" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#009FE0]/15 rounded-full blur-3xl pointer-events-none" />
 

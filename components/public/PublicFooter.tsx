@@ -175,7 +175,7 @@ export function PublicFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/loans" className="hover:text-[#38bdf8] transition-colors">
+                  <Link href="/loans#calculator" className="hover:text-[#38bdf8] transition-colors">
                     Loan Calculator
                   </Link>
                 </li>
