@@ -265,23 +265,23 @@ export default function JobsPage() {
                           {role.title}
                         </Link>
                       </h3>
-                      <p className="text-xs text-slate-900 font-medium mt-2 leading-relaxed">
+                      <p className="text-xs text-blue-100 font-medium mt-2 leading-relaxed">
                         {role.description}
                       </p>
 
-                      <div className="mt-4 flex items-center gap-3 text-xs text-slate-950 font-bold">
+                      <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
                         <span className="flex items-center gap-1">
-                          <MapPin className="size-3.5" /> {role.location}
+                          <MapPin className="size-3.5 text-[#00A3E0]" /> {role.location}
                         </span>
                         <span>&bull;</span>
                         <span>{role.type}</span>
                       </div>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-slate-950/10 flex items-center justify-between">
+                    <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
                       <Link
                         href={`/jobs/${role.id}`}
-                        className="text-xs font-bold underline hover:text-slate-800"
+                        className="text-xs font-bold text-white underline hover:text-sky-200"
                       >
                         View Job Details
                       </Link>

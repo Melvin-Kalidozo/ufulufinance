@@ -630,7 +630,7 @@ export default function ContactPage() {
 
       {/* ── OUR OFFICES (from admin settings) ─────────────────────── */}
       {offices.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Our offices</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {offices.map((office, i) => (
