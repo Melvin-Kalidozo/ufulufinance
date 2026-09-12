@@ -21,7 +21,7 @@ const TEXT_FIELDS = [
   "notificationEmail",
 ] as const;
 
-const JSON_FIELDS = ["offices", "socialLinks", "legal"] as const;
+const JSON_FIELDS = ["offices", "socialLinks"] as const;
 
 export async function GET() {
   const auth = await requireAdmin();
@@ -58,8 +58,6 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ message: `${field} must be valid JSON.` }, { status: 400 });
     }
   }
-
-  const existing = await prisma.websiteSetting.findFirst();
 
   try {
     const updated = await prisma.websiteSetting.upsert({

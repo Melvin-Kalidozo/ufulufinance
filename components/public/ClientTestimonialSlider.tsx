@@ -324,8 +324,8 @@ export function ClientTestimonialSlider() {
                     <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors truncate">
                       {item.name}
                     </h4>
-                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#00A3E0]">
-                      <BadgeCheck className="size-3 text-[#00A3E0]" />
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-brand-green">
+                      <BadgeCheck className="size-3 text-brand-green" />
                       <span>Verified</span>
                     </span>
                   </div>

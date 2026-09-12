@@ -45,7 +45,7 @@ const FILTERS = [
 
 const STATUS_STYLE: Record<string, string> = {
   PENDING: "border-amber-200 bg-amber-50 text-amber-600",
-  RESOLVED: "border-emerald-200 bg-emerald-50 text-emerald-600",
+  RESOLVED: "border-brand-green/20 bg-brand-green-soft text-brand-green",
 };
 
 export function EnquiriesManager({ kind }: { kind: "loan" | "company" }) {

@@ -72,7 +72,7 @@ function imageValue(row: Row, def: ResourceDef): string | null {
 }
 
 const statusColor: Record<string, string> = {
-  PUBLISHED: "bg-emerald-50 text-emerald-600 border-emerald-200",
+  PUBLISHED: "bg-brand-green-soft text-brand-green border-brand-green/20",
   DRAFT: "bg-slate-100 text-slate-500 border-slate-200",
   UNPUBLISHED: "bg-amber-50 text-amber-600 border-amber-200",
   ARCHIVED: "bg-slate-100 text-slate-400 border-slate-200",
@@ -296,10 +296,10 @@ export function ResourceManager({
                           <span
                             className={cn(
                               "inline-flex items-center gap-1.5 text-xs font-semibold",
-                              active ? "text-[#00A3E0]" : "text-slate-400"
+                              active ? "text-brand-green" : "text-slate-400"
                             )}
                           >
-                            <span className={cn("size-1.5 rounded-full", active ? "bg-[#00A3E0]" : "bg-slate-300")} />
+                            <span className={cn("size-1.5 rounded-full", active ? "bg-brand-green" : "bg-slate-300")} />
                             {active === false ? "Inactive" : "Active"}
                           </span>
                         )}

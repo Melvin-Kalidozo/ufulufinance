@@ -399,7 +399,7 @@ export default function ContactPage() {
 
                 {sent ? (
                   <div className="mt-10 flex flex-col items-center gap-4 py-16 text-center">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-blue-50 text-[#034DA2]">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-brand-green-soft text-brand-green">
                       <CheckCircle2 className="size-8" />
                     </div>
                     <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>

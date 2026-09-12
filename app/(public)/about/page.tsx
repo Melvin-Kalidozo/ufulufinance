@@ -257,8 +257,8 @@ export default function AboutPage() {
                     {step.description}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-[#034DA2]">
-                  <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-brand-green">
+                  <CheckCircle2 className="size-3.5 text-brand-green" />
                   <span>Milestone Verified</span>
                 </div>
               </div>
@@ -579,8 +579,8 @@ export default function AboutPage() {
                 {/* Footer: Verified Authority */}
                 <div className="px-5 pb-5 pt-0">
                   <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                    <span className="inline-flex items-center gap-1 text-[#034DA2] font-semibold">
-                      <BadgeCheck className="size-3.5 text-[#00A3E0]" />
+                    <span className="inline-flex items-center gap-1 text-brand-green font-semibold">
+                      <BadgeCheck className="size-3.5 text-brand-green" />
                       Verified Credentials
                     </span>
                     <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
@@ -740,7 +740,7 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-brand-green-light">
                   98.4%
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">

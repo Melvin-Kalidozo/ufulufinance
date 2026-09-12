@@ -234,8 +234,8 @@ export function JobApplicationDialog({
           {sent ? (
             /* ── Success State ── */
             <div className="py-8 px-4 text-center space-y-5">
-              <div className="size-16 rounded-2xl bg-blue-50 border border-blue-200/80 text-[#034DA2] flex items-center justify-center mx-auto shadow-xs">
-                <CheckCircle2 className="size-9 text-[#16a34a]" />
+              <div className="size-16 rounded-2xl bg-brand-green-soft border border-brand-green/20 text-brand-green flex items-center justify-center mx-auto shadow-xs">
+                <CheckCircle2 className="size-9 text-brand-green" />
               </div>
 
               <div className="space-y-2">
@@ -482,7 +482,7 @@ export function JobApplicationDialog({
                 <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 px-1">
                   <span>Equal Opportunity Employer</span>
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="size-3 text-[#16a34a]" />
+                    <ShieldCheck className="size-3 text-brand-green" />
                     Confidential HR Review
                   </span>
                 </div>

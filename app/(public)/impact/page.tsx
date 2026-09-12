@@ -163,7 +163,7 @@ export default function ImpactPortfolioPage() {
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Women Entrepreneurs</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">98.4%</span>
+                <span className="text-2xl font-extrabold text-brand-green block">98.4%</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">On-Time Repayment</span>
               </div>
             </div>

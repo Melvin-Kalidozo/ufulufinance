@@ -355,8 +355,8 @@ export default function DedicatedArticlePage({ params }: PageProps) {
               <div className="space-y-1.5">
                 <div className="flex flex-wrap items-center gap-2">
                   <h4 className="text-sm font-bold text-slate-900">{article.author}</h4>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-100 text-[#01214A] text-[10px] font-bold">
-                    <ShieldCheck className="size-2.5 text-[#00A3E0]" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-green-soft text-brand-green text-[10px] font-bold">
+                    <ShieldCheck className="size-2.5 text-brand-green" />
                     Verified Contributor
                   </span>
                 </div>

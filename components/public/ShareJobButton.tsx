@@ -23,8 +23,8 @@ export function ShareJobButton({ jobTitle }: { jobTitle?: string }) {
     >
       {copied ? (
         <>
-          <Check className="size-3.5 text-[#38bdf8]" />
-          <span className="text-[#38bdf8] font-bold">Link Copied!</span>
+          <Check className="size-3.5 text-brand-green-light" />
+          <span className="text-brand-green-light font-bold">Link Copied!</span>
         </>
       ) : (
         <>

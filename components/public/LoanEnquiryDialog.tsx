@@ -417,8 +417,8 @@ export function LoanEnquiryDialog({
           {sent ? (
             /* ── Success State ── */
             <div className="py-6 px-2 text-center space-y-5">
-              <div className="size-16 rounded-2xl bg-blue-50 border border-blue-200/80 text-[#034DA2] flex items-center justify-center mx-auto shadow-xs">
-                <CheckCircle2 className="size-9 text-[#00A3E0]" />
+              <div className="size-16 rounded-2xl bg-brand-green-soft border border-brand-green/20 text-brand-green flex items-center justify-center mx-auto shadow-xs">
+                <CheckCircle2 className="size-9 text-brand-green" />
               </div>
 
               <div className="space-y-2">
@@ -438,7 +438,7 @@ export function LoanEnquiryDialog({
 
               <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-left text-xs space-y-2 text-slate-600">
                 <div className="flex items-center gap-2 text-slate-900 font-bold">
-                  <ShieldCheck className="size-4 text-[#00A3E0]" />
+                  <ShieldCheck className="size-4 text-brand-green" />
                   <span>What happens next:</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-500 pl-1">

@@ -333,7 +333,7 @@ export function UsersManager() {
                       onClick={() => handleToggleActive(user)}
                       className={cn(
                         "inline-flex items-center gap-1.5 text-xs font-semibold hover:underline",
-                        user.isActive ? "text-[#00A3E0]" : "text-slate-400",
+                        user.isActive ? "text-brand-green" : "text-slate-400",
                       )}
                       title={
                         user.isActive
@@ -344,7 +344,7 @@ export function UsersManager() {
                       <span
                         className={cn(
                           "size-1.5 rounded-full",
-                          user.isActive ? "bg-[#00A3E0]" : "bg-slate-300",
+                          user.isActive ? "bg-brand-green" : "bg-slate-300",
                         )}
                       />
                       {user.isActive ? "Active" : "Inactive"}
