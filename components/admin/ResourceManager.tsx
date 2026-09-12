@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { type ResourceDef, type FieldDef } from "@/lib/admin-resource";
+import { type FieldStep, fieldSteps } from "@/lib/admin-form";
+import { Stepper } from "@/components/ui/stepper";
 import {
   Dialog,
   DialogContent,
@@ -36,7 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { Plus, Pencil, Trash2, Search, Loader2, ImagePlus, X } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Loader2, ImagePlus, X, ArrowLeft, ArrowRight } from "lucide-react";
 
 type Row = Record<string, any>;
 
@@ -96,6 +98,12 @@ export function ResourceManager({
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Row | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [statusBusy, setStatusBusy] = useState<number | null>(null);
+
+  const statusField = useMemo(
+    () => def.fields.find((f) => f.name === "status" && f.type === "select") ?? null,
+    [def]
+  );
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -142,6 +150,25 @@ export function ResourceManager({
       toast.error(e instanceof Error ? e.message : "Delete failed");
     } finally {
       setDeleting(false);
+    }
+  }
+
+  async function handleStatusChange(row: Row, next: string) {
+    setStatusBusy(row.id);
+    try {
+      const res = await fetch(`${apiBase}/${row.id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Status update failed");
+      toast.success("Status updated");
+      fetchData();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Status update failed");
+    } finally {
+      setStatusBusy(null);
     }
   }
 
@@ -218,8 +245,8 @@ export function ResourceManager({
                       {showImageColumn && (
                         <TableCell className="px-4 py-3">
                           {img ? (
-                            <div className="relative h-10 w-14 overflow-hidden rounded-lg border border-slate-200">
-                              <Image src={img} alt="" fill className="object-cover" sizes="56px" unoptimized={img.startsWith("https://res.cloudinary.com")} />
+                            <div className="relative h-10 w-14 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                              <Image src={img} alt="" fill className="object-contain" sizes="56px" unoptimized={img.startsWith("https://res.cloudinary.com")} />
                             </div>
                           ) : (
                             <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-slate-100 text-slate-300">
@@ -235,7 +262,30 @@ export function ResourceManager({
                         {secondaryValue(row, def)}
                       </TableCell>
                       <TableCell className="hidden px-4 py-3 sm:table-cell">
-                        {status ? (
+                        {statusField && status ? (
+                          <Select
+                            value={status}
+                            onValueChange={(v) => handleStatusChange(row, v)}
+                            disabled={statusBusy === row.id}
+                          >
+                            <SelectTrigger
+                              className={cn(
+                                "h-7 w-auto gap-1 rounded-lg border px-2.5 text-[10px] font-bold uppercase tracking-wide shadow-none focus-visible:ring-0",
+                                statusColor[status] ?? "border-slate-200 text-slate-500"
+                              )}
+                            >
+                              <SelectValue />
+                              {statusBusy === row.id && <Loader2 className="size-3 animate-spin" />}
+                            </SelectTrigger>
+                            <SelectContent>
+                              {statusField.options?.map((opt) => (
+                                <SelectItem key={opt} value={opt} className="text-xs font-semibold">
+                                  {opt}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : status ? (
                           <Badge
                             variant="outline"
                             className={cn("rounded-lg border text-[10px] font-bold uppercase tracking-wide", statusColor[status] ?? "border-slate-200 text-slate-500")}
@@ -352,6 +402,13 @@ function ResourceDialog({
   const [files, setFiles] = useState<Record<string, File | null>>({});
   const [removes, setRemoves] = useState<Record<string, boolean>>({});
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [currentStep, setCurrentStep] = useState(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const steps = useMemo(() => fieldSteps(def.fields), [def]);
+  const multiStep = steps.length > 1;
+  const lastStep = steps.length - 1;
+  const activeStep = Math.min(currentStep, lastStep);
 
   useEffect(() => {
     if (!open) return;
@@ -370,11 +427,47 @@ function ResourceDialog({
     setFiles({});
     setRemoves({});
     setFieldErrors({});
+    setCurrentStep(0);
   }, [open, editing, def]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [currentStep]);
 
   function setField(name: string, value: string) {
     setForm((f) => ({ ...f, [name]: value }));
     setFieldErrors((e) => ({ ...e, [name]: "" }));
+  }
+
+  function requiredMissing(f: FieldDef): boolean {
+    if (!f.required || f.type === "boolean") return false;
+    if (f.type === "image") return !files[f.name] && !editing?.[f.name] && !removes[f.name];
+    return !(form[f.name] ?? "").trim();
+  }
+
+  function stepValid(step: FieldStep): boolean {
+    return step.fields.every((f) => !requiredMissing(f));
+  }
+
+  function validateStep(step: FieldStep): boolean {
+    const errors: Record<string, string> = {};
+    for (const f of step.fields) {
+      if (requiredMissing(f)) errors[f.name] = `${f.label} is required.`;
+    }
+    setFieldErrors((e) => ({ ...e, ...errors }));
+    return Object.keys(errors).length === 0;
+  }
+
+  function goNext() {
+    if (!validateStep(steps[activeStep])) {
+      toast.error("Please complete the required fields.");
+      return;
+    }
+    setCurrentStep((s) => Math.min(s + 1, lastStep));
+  }
+
+  function goBack() {
+    setCurrentStep((s) => Math.max(s - 1, 0));
   }
 
   function validate(): boolean {
@@ -393,10 +486,17 @@ function ResourceDialog({
     return Object.keys(errors).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
+    if (multiStep && currentStep < lastStep) {
+      goNext();
+      return;
+    }
     if (!validate()) {
       toast.error("Please complete the required fields.");
+      if (multiStep) {
+        const firstInvalid = steps.findIndex((s) => !stepValid(s));
+        if (firstInvalid >= 0) setCurrentStep(firstInvalid);
+      }
       return;
     }
     setSaving(true);
@@ -442,52 +542,121 @@ function ResourceDialog({
     }
   }
 
+  function renderFields(fields: FieldDef[]) {
+    return fields.map((field) => (
+      <FieldControl
+        key={field.name}
+        field={field}
+        fullWidth={field.type === "textarea" || field.type === "image" || field.type === "json-object"}
+        value={form[field.name] ?? ""}
+        error={fieldErrors[field.name]}
+        onChange={(v) => setField(field.name, v)}
+        file={files[field.name] ?? null}
+        onFile={(file) => {
+          setFiles((s) => ({ ...s, [field.name]: file }));
+          setRemoves((r) => ({ ...r, [field.name]: false }));
+        }}
+        existingImage={editing?.[field.name] ?? null}
+        removeImage={removes[field.name] ?? false}
+        onRemoveImage={(rm) => {
+          setRemoves((r) => ({ ...r, [field.name]: rm }));
+          if (rm) {
+            setFiles((s) => ({ ...s, [field.name]: null }));
+          }
+        }}
+      />
+    ));
+  }
+
+  const submitButton = (
+    <Button
+      type="button"
+      onClick={() => handleSubmit()}
+      disabled={saving}
+      className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
+    >
+      {saving && <Loader2 className="size-4 animate-spin" />}
+      {saving ? "Saving…" : editing ? "Save changes" : "Create"}
+    </Button>
+  );
+
+  if (!multiStep) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="w-[95vw] max-w-2xl overflow-y-auto sm:max-w-2xl max-h-[92vh]">
+          <DialogHeader>
+            <DialogTitle>{editing ? `Edit ${def.singular}` : `Add ${def.singular}`}</DialogTitle>
+            <DialogDescription>
+              Fields marked with <span className="text-red-500">*</span> are required.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => e.preventDefault()} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {renderFields(def.fields)}
+            <DialogFooter className="col-span-full pt-2">
+              <div className="flex w-full justify-end gap-2">
+                <Button type="button" variant="outline" className="rounded-xl" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                {submitButton}
+              </div>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-2xl overflow-y-auto sm:max-w-2xl max-h-[92vh]">
-        <DialogHeader>
+      <DialogContent className="flex max-h-[92vh] w-[95vw] max-w-2xl flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b border-slate-100 px-6 py-5">
           <DialogTitle>{editing ? `Edit ${def.singular}` : `Add ${def.singular}`}</DialogTitle>
           <DialogDescription>
             Fields marked with <span className="text-red-500">*</span> are required.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {def.fields.map((field) => (
-            <FieldControl
-              key={field.name}
-              field={field}
-              fullWidth={field.type === "textarea" || field.type === "image" || field.type === "json-object"}
-              value={form[field.name] ?? ""}
-              error={fieldErrors[field.name]}
-              onChange={(v) => setField(field.name, v)}
-              file={files[field.name] ?? null}
-              onFile={(file) => {
-                setFiles((s) => ({ ...s, [field.name]: file }));
-                setRemoves((r) => ({ ...r, [field.name]: false }));
-              }}
-              existingImage={editing?.[field.name] ?? null}
-              removeImage={removes[field.name] ?? false}
-              onRemoveImage={(rm) => {
-                setRemoves((r) => ({ ...r, [field.name]: rm }));
-                if (rm) {
-                  setFiles((s) => ({ ...s, [field.name]: null }));
-                }
-              }}
-            />
-          ))}
-          <DialogFooter className="col-span-full pt-2">
-            <div className="flex w-full justify-end gap-2">
-              <Button type="button" variant="outline" className="rounded-xl" onClick={() => onOpenChange(false)}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={saving}
-                className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
-              >
-                {saving && <Loader2 className="size-4 animate-spin" />}
-                {saving ? "Saving…" : editing ? "Save changes" : "Create"}
-              </Button>
+
+        <div className="border-b border-slate-100 bg-slate-50/60 px-6 py-4">
+          <Stepper
+            steps={steps.map((s) => ({ label: s.label }))}
+            current={activeStep}
+            onSelect={setCurrentStep}
+            isSelectable={(i) => steps.slice(0, i).every((s) => stepValid(s))}
+          />
+        </div>
+
+        <form onSubmit={(e) => e.preventDefault()} className="flex min-h-0 flex-1 flex-col">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-5">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{renderFields(steps[activeStep].fields)}</div>
+          </div>
+
+          <DialogFooter className="border-t border-slate-100 px-6 py-4">
+            <div className="flex w-full items-center justify-between gap-2">
+              {currentStep > 0 ? (
+                <Button type="button" variant="outline" className="rounded-xl" onClick={goBack}>
+                  <ArrowLeft className="size-4" />
+                  Back
+                </Button>
+              ) : (
+                <div />
+              )}
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" className="rounded-xl" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                {currentStep < lastStep ? (
+                  <Button
+                    type="button"
+                    onClick={goNext}
+                    className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
+                  >
+                    Continue
+                    <ArrowRight className="size-4" />
+                  </Button>
+                ) : (
+                  submitButton
+                )}
+              </div>
             </div>
           </DialogFooter>
         </form>
@@ -664,7 +833,7 @@ function ImagePicker({
             src={showNew ? preview! : existingImage!}
             alt="Preview"
             fill
-            className="object-cover"
+            className="object-contain"
             sizes="(max-width:640px) 100vw, 50vw"
             unoptimized={showNew ? false : existingImage?.startsWith("https://res.cloudinary.com")}
           />

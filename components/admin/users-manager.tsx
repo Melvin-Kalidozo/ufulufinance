@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,6 +77,7 @@ export function UsersManager() {
   const [editing, setEditing] = useState<UserRow | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const [deleteTarget, setDeleteTarget] = useState<UserRow | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -142,8 +143,8 @@ export function UsersManager() {
     setDialogOpen(true);
   }
 
-  async function handleSave(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSave() {
+    if (formRef.current && !formRef.current.reportValidity()) return;
     setSaving(true);
     try {
       if (editing) {
@@ -390,7 +391,7 @@ export function UsersManager() {
                 : "Create a new admin account. Customer accounts are a future improvement."}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSave} className="space-y-4">
+          <form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="name">Full name</Label>
               <Input
@@ -465,7 +466,8 @@ export function UsersManager() {
             </div>
             <DialogFooter>
               <Button
-                type="submit"
+                type="button"
+                onClick={() => handleSave()}
                 disabled={saving}
                 className="rounded-xl bg-[#034DA2] text-white shadow-md shadow-blue-950/15 hover:bg-[#023877]"
               >

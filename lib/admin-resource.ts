@@ -30,6 +30,8 @@ export type FieldDef = {
   rows?: number;
   /** when set, json-array/json-object input is wrapped in { [jsonWrapper]: value } */
   jsonWrapper?: string;
+  /** step label used to group fields into a multi-step form; omit for single-step forms */
+  step?: string;
 };
 
 export type ResourceDef = {
@@ -41,7 +43,40 @@ export type ResourceDef = {
   addLabel?: string;
   folderPrefix?: string;
   defaultOrderBy?: Record<string, "asc" | "desc">;
+  /** when set, a unique slug is generated from this field's value on create */
+  slugFrom?: string;
 };
+
+/** Converts a title/name into a URL-safe slug. */
+export function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** Returns a slug that is unique for the model, suffixing -2, -3, … on collision. */
+export async function uniqueSlug(
+  delegate: any,
+  base: string,
+  excludeId?: number
+): Promise<string> {
+  const root = base || "item";
+  let candidate = root;
+  let n = 2;
+  for (;;) {
+    const existing = await delegate.findFirst({
+      where: excludeId ? { slug: candidate, id: { not: excludeId } } : { slug: candidate },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+    candidate = `${root}-${n++}`;
+  }
+}
 
 function asDelegate(model: keyof typeof prisma): any {
   return (prisma as any)[model];
@@ -180,6 +215,10 @@ export async function handleCreate(def: ResourceDef, req: Request) {
       values[field.name] = url;
     }
     const delegate = asDelegate(def.model);
+    if (def.slugFrom) {
+      const base = slugify(String(values[def.slugFrom] ?? ""));
+      values.slug = await uniqueSlug(delegate, base);
+    }
     const row = await delegate.create({ data: values });
     revalidateTag("cms", { expire: 0 });
     return NextResponse.json({ data: row }, { status: 201 });
@@ -219,6 +258,33 @@ export async function handleUpdate(def: ResourceDef, req: Request, id: number) {
       { status: 400 }
     );
   }
+}
+
+export async function handleUpdateStatus(def: ResourceDef, req: Request, id: number) {
+  const statusField = def.fields.find((f) => f.name === "status" && f.type === "select");
+  if (!statusField) {
+    return NextResponse.json({ message: "This resource has no status field." }, { status: 400 });
+  }
+
+  let body: any;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: "Invalid request." }, { status: 400 });
+  }
+
+  const status = String(body?.status ?? "");
+  if (statusField.options && !statusField.options.includes(status)) {
+    return NextResponse.json({ message: "Invalid status." }, { status: 400 });
+  }
+
+  const delegate = asDelegate(def.model);
+  const existing = await delegate.findUnique({ where: { id } });
+  if (!existing) return NextResponse.json({ message: "Record not found." }, { status: 404 });
+
+  const row = await delegate.update({ where: { id }, data: { status } });
+  revalidateTag("cms", { expire: 0 });
+  return NextResponse.json({ data: row });
 }
 
 export async function handleDelete(def: ResourceDef, id: number) {
