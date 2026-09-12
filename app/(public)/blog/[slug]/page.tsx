@@ -254,17 +254,17 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
             {/* Key Takeaways */}
             {article.keyTakeaways && article.keyTakeaways.length > 0 && (
-              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 space-y-4">
+              <div className="bg-brand-green-soft border border-brand-green/20 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="size-7 rounded-lg bg-[#00A3E0] flex items-center justify-center shrink-0">
-                    <Sparkles className="size-3.5 text-slate-950" />
+                  <div className="size-7 rounded-lg bg-brand-green flex items-center justify-center shrink-0">
+                    <Sparkles className="size-3.5 text-white" />
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-[#01214A]">Key Takeaways</span>
                 </div>
                 <ul className="space-y-3">
                   {article.keyTakeaways.map((point, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
-                      <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="size-4 text-brand-green shrink-0 mt-0.5" />
                       <span>{point}</span>
                     </li>
                   ))}

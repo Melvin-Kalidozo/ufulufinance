@@ -122,7 +122,7 @@ export default function FAQPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-            <span className="size-2 rounded-full bg-[#009FE0]" />
+            <span className="size-2 rounded-full bg-brand-green" />
             <span>FAQs Introduction</span>
           </div>
 

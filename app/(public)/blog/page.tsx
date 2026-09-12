@@ -142,7 +142,7 @@ export default function BlogInsightsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Our Perspective</span>
             </div>
 
@@ -325,7 +325,7 @@ export default function BlogInsightsPage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-[#00A3E0]" />
+                <span className="size-2 rounded-full bg-brand-green" />
                 <span>Upcoming & Past Events</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">

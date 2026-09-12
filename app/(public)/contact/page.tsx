@@ -285,6 +285,7 @@ export default function ContactPage() {
               {/* ── LEFT COLUMN: GET IN TOUCH ──────────────────────── */}
               <div className="lg:col-span-5 p-8 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between">
                 <div>
+                  <span className="mb-3 block h-1 w-8 rounded-full bg-brand-green" />
                   <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                     Get in touch
                   </h2>
@@ -393,6 +394,7 @@ export default function ContactPage() {
 
               {/* ── RIGHT COLUMN: SEND US A MESSAGE ────────────────── */}
               <div className="lg:col-span-7 p-8 sm:p-10 lg:p-12">
+                <span className="mb-3 block h-1 w-8 rounded-full bg-brand-green" />
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                   Send us a message
                 </h2>

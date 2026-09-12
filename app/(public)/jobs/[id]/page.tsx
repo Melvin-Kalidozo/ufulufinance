@@ -221,7 +221,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   <Building2 className="size-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#00A3E0] block">
+                  <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                    <span className="h-3 w-1 rounded-full bg-brand-green" />
                     Role Summary
                   </span>
                   <h2 className="text-xl font-bold text-slate-955">
@@ -250,7 +251,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   <Briefcase className="size-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#00A3E0] block">
+                  <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                    <span className="h-3 w-1 rounded-full bg-brand-green" />
                     Daily Impact &amp; Scope
                   </span>
                   <h2 className="text-xl font-bold text-slate-950">
@@ -281,7 +283,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   <GraduationCap className="size-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#00A3E0] block">
+                  <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                    <span className="h-3 w-1 rounded-full bg-brand-green" />
                     Ideal Candidate Profile
                   </span>
                   <h2 className="text-xl font-bold text-slate-950">
@@ -311,7 +314,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                     <Coins className="size-5" />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#00A3E0] block">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                      <span className="h-3 w-1 rounded-full bg-brand-green" />
                       Financial Package
                     </span>
                     <h2 className="text-xl font-bold text-slate-950">
@@ -390,15 +394,15 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 </h4>
                 <ul className="space-y-2 text-xs text-slate-600">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
                     <span>Updated Curriculum Vitae / Resume (PDF format, max 5MB)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
                     <span>Brief Statement of Motivation / Cover Note</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
                     <span>Valid Malawian Phone & WhatsApp number</span>
                   </li>
                 </ul>
@@ -454,7 +458,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
 
             <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div className="space-y-1">
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#38bdf8]">
+                <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-wider text-[#38bdf8]">
+                  <span className="h-3 w-1 rounded-full bg-brand-green-light" />
                   Why Join Our Team
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold">Employee Benefits &amp; Growth</h2>
@@ -484,7 +489,7 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                  <span className="size-2 rounded-full bg-[#00A3E0]" />
+                  <span className="size-2 rounded-full bg-brand-green" />
                   <span>Explore More Careers</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">

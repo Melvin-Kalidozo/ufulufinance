@@ -194,8 +194,8 @@ export default function EventDetailPage({ params }: PageProps) {
             {/* About this event */}
             <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 sm:p-7 space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="size-7 rounded-lg bg-[#00A3E0] flex items-center justify-center shrink-0">
-                  <Sparkles className="size-3.5 text-slate-950" />
+                <div className="size-7 rounded-lg bg-brand-green flex items-center justify-center shrink-0">
+                  <Sparkles className="size-3.5 text-white" />
                 </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#01214A]">About This Event</span>
               </div>
@@ -229,7 +229,7 @@ export default function EventDetailPage({ params }: PageProps) {
               <ul className="space-y-3">
                 {event.details.map((d, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
-                    <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-4 text-brand-green shrink-0 mt-0.5" />
                     <span>{d}</span>
                   </li>
                 ))}

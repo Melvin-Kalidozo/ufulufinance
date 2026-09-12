@@ -190,7 +190,7 @@ export default function LoansPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div className="space-y-2.5 max-w-xl">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-                <span className="size-2 rounded-full bg-[#009FE0]" />
+                <span className="size-2 rounded-full bg-brand-green" />
                 <span>Product Categories</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -462,7 +462,7 @@ export default function LoansPage() {
                 </div>
                 <div className="flex justify-between py-1 items-center">
                   <span className="text-slate-500">Disbursement Turnaround:</span>
-                  <span className="inline-flex items-center gap-1 text-[#034DA2] bg-blue-50 px-2.5 py-1 rounded-full font-bold text-[11px]">
+                  <span className="inline-flex items-center gap-1 text-brand-green bg-brand-green-soft px-2.5 py-1 rounded-full font-bold text-[11px]">
                     Within 24 Hours
                   </span>
                 </div>
@@ -496,7 +496,7 @@ export default function LoansPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Simple, Fast &amp; Dignified</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
@@ -575,7 +575,7 @@ export default function LoansPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Eligibility &amp; Requirements</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">

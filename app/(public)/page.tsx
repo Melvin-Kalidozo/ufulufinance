@@ -126,6 +126,10 @@ export default async function HomePage() {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
           <div className="max-w-2xl space-y-6">
+            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#38bdf8]">
+              <span className="h-3 w-1 rounded-full bg-brand-green-light" />
+              Financial Freedom in Reach
+            </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
               Your Trusted Partner in Microfinance &amp; Growth
             </h1>
@@ -169,7 +173,8 @@ export default async function HomePage() {
                   <h3 className="text-base font-bold text-slate-800 mt-1">{stat.label}</h3>
                   <p className="text-xs text-slate-500 mt-2 leading-relaxed">{stat.description}</p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-xs font-semibold text-[#034DA2]">
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
+                  <CheckCircle2 className="size-3.5" />
                   <span>Verified institutional data</span>
                 </div>
               </div>
@@ -184,7 +189,8 @@ export default async function HomePage() {
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              <span className="h-3 w-1 rounded-full bg-brand-green" />
               About Ufulu Finance
             </p>
 
@@ -199,28 +205,28 @@ export default async function HomePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Transparent Terms</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Zero hidden fees or surprise penalties</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">National Reach</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Branches in Lilongwe, Blantyre &amp; Mzuzu</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Client Protection Code</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Strict anti-predatory lending policies</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Fast Mobile Payouts</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Airtel Money, TNM Mpamba, or Bank</p>
@@ -271,7 +277,8 @@ export default async function HomePage() {
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              <span className="h-3 w-1 rounded-full bg-brand-green" />
               Who We Empower
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -296,7 +303,7 @@ export default async function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-base font-bold text-slate-900">{pillar.title}</h3>
-                      <p className="text-[11px] font-semibold text-[#009FE0] mt-0.5">{pillar.subtitle}</p>
+                      <p className="text-[11px] font-semibold text-brand-green mt-0.5">{pillar.subtitle}</p>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed">{pillar.description}</p>
                   </div>
@@ -321,7 +328,8 @@ export default async function HomePage() {
       ───────────────────────────────────────────────────────────────── */}
       <div id="facilities" className="scroll-mt-20">
         <div className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center space-y-3">
-          <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+          <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            <span className="h-3 w-1 rounded-full bg-brand-green" />
             Official Credit Facilities
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
@@ -470,7 +478,8 @@ export default async function HomePage() {
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              <span className="h-3 w-1 rounded-full bg-brand-green" />
               Institutional Strengths
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -507,7 +516,8 @@ export default async function HomePage() {
       ───────────────────────────────────────────────────────────────── */}
       <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-          <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+          <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+            <span className="h-3 w-1 rounded-full bg-brand-green" />
             Social &amp; Economic Impact
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -524,7 +534,7 @@ export default async function HomePage() {
               key={i}
               className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm text-center space-y-2"
             >
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#034DA2]">{metric.value}</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-brand-green">{metric.value}</div>
               <h4 className="text-sm font-bold text-slate-900">{metric.label}</h4>
               <p className="text-xs text-slate-500 leading-relaxed">{metric.sub}</p>
             </div>
@@ -542,7 +552,8 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
-              <p className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+              <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+                <span className="h-3 w-1 rounded-full bg-brand-green" />
                 Knowledge &amp; Market Insights
               </p>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">

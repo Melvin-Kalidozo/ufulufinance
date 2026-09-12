@@ -189,7 +189,7 @@ export default function ServicesPage() {
           {/* Section header */}
           <div className="mb-12 space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Our Credit Facilities</span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -447,7 +447,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Who We Serve</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -478,9 +478,9 @@ export default function ServicesPage() {
                       {group.desc}
                     </p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-[#034DA2]">
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
                     <span>Eligible for Credit</span>
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                    <CheckCircle2 className="size-3.5 text-brand-green" />
                   </div>
                 </div>
               );
@@ -493,7 +493,7 @@ export default function ServicesPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-            <span className="size-2 rounded-full bg-[#009FE0]" />
+            <span className="size-2 rounded-full bg-brand-green" />
             <span>Borrower Advantages</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -521,9 +521,9 @@ export default function ServicesPage() {
                     {adv.desc}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-[#034DA2]">
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-brand-green">
                   <span>Guaranteed Feature</span>
-                  <CheckCircle2 className="size-3 text-[#00A3E0]" />
+                  <CheckCircle2 className="size-3 text-brand-green" />
                 </div>
               </div>
             );
