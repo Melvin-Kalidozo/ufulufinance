@@ -81,8 +81,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   const article: Article | undefined = detail?.data
     ? toArticle(detail.data)
@@ -445,42 +443,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 View Full Directory
                 <ArrowRight className="size-3" />
               </Link>
-            </div>
-
-            {/* Newsletter */}
-            <div className="bg-slate-900 text-white rounded-2xl p-5 space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#38bdf8]">Stay Informed</span>
-              <h4 className="text-sm font-bold leading-snug">Malawi Market & Financing Insights</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Monthly updates on agri cycles, MSME cashflow strategies, and regulatory news.
-              </p>
-              {subscribed ? (
-                <div className="rounded-xl bg-sky-950/60 border border-sky-800/40 py-3 text-center">
-                  <p className="text-xs font-bold text-[#38bdf8]">You're subscribed!</p>
-                  <p className="text-[11px] text-sky-300/70 mt-0.5">We'll be in touch soon.</p>
-                </div>
-              ) : (
-                <form
-                  onSubmit={(e) => { e.preventDefault(); setSubscribed(true); }}
-                  className="space-y-2"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-white/8 border border-white/15 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#00A3E0]"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold text-xs py-2.5 transition-colors cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    <Mail className="size-3.5" />
-                    Subscribe
-                  </button>
-                </form>
-              )}
             </div>
           </aside>
         </div>
