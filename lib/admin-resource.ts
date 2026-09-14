@@ -137,7 +137,9 @@ async function parseForm(def: ResourceDef, req: Request): Promise<{ parsed?: Par
       return { error: `${field.label} is required.` };
     }
     if (value === null || value === "") {
-      values[name] = null;
+      // Leave optional fields unset: DB defaults apply on create and existing
+      // values are retained on update. Writing `null` here breaks NOT NULL
+      // columns that have a default (e.g. Article.category, sortOrder, date).
       continue;
     }
     switch (field.type) {
@@ -223,6 +225,7 @@ export async function handleCreate(def: ResourceDef, req: Request) {
     revalidateTag("cms", { expire: 0 });
     return NextResponse.json({ data: row }, { status: 201 });
   } catch (e: any) {
+    console.error(`create ${String(def.model)} error`, e);
     return NextResponse.json(
       { message: e?.message?.includes("Unique") ? "A record with that identifier already exists." : "Could not create the record." },
       { status: 400 }
@@ -253,6 +256,7 @@ export async function handleUpdate(def: ResourceDef, req: Request, id: number) {
     revalidateTag("cms", { expire: 0 });
     return NextResponse.json({ data: row });
   } catch (e: any) {
+    console.error(`update ${String(def.model)} error`, e);
     return NextResponse.json(
       { message: e?.message?.includes("Unique") ? "A record with that identifier already exists." : "Could not update the record." },
       { status: 400 }
