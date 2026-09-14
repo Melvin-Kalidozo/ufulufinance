@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { StaticHero } from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
+import { resolveEmbed } from "@/lib/embed";
 import {
   Search,
   ChevronRight,
@@ -18,6 +19,7 @@ import {
   CalendarCheck2,
   Share2,
   Users,
+  Play,
 } from "lucide-react";
 
 import type { Article, EventItem } from "@/lib/blogData";
@@ -51,6 +53,7 @@ export default function BlogInsightsPage() {
         readTime: bval(r, "readTime") ? `${bval(r, "readTime")} min read` : "",
         excerpt: bval(r, "excerpt"),
         image: bval(r, "image"),
+        embedUrl: bval(r, "embedUrl") || undefined,
         isFeatured: Boolean(blRow(r).isFeatured),
         content: [],
       })) as Article[])
@@ -241,23 +244,38 @@ export default function BlogInsightsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredArticles.map((art) => (
+              {filteredArticles.map((art) => {
+                const embed = resolveEmbed(art.embedUrl);
+                return (
                 <Link
                   key={art.id}
                   href={`/blog/${art.id}`}
                   className="group relative bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Cover image */}
-                  <div className="relative h-52 w-full overflow-hidden bg-slate-100 shrink-0">
-                    <Image
-                      src={art.image}
-                      alt={art.title}
-                      fill
-                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+                  {/* Cover image / video poster */}
+                  <div className="relative h-52 w-full overflow-hidden bg-slate-900 shrink-0">
+                    {art.image ? (
+                      <Image
+                        src={art.image}
+                        alt={art.title}
+                        fill
+                        className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#01214A] via-[#023168] to-[#011632]" />
+                    )}
                     {/* Gradient scrim */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+
+                    {/* Play overlay for embedded videos */}
+                    {embed ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="flex size-12 items-center justify-center rounded-full bg-black/55 text-white ring-2 ring-white/70 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                          <Play className="size-5 fill-current translate-x-0.5" />
+                        </span>
+                      </div>
+                    ) : null}
 
                     {/* Type pill — top left */}
                     <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
@@ -278,6 +296,14 @@ export default function BlogInsightsPage() {
                     <span className="absolute bottom-3 left-3 text-[10px] font-medium text-white/80">
                       {art.date}
                     </span>
+
+                    {/* Video tag — bottom right */}
+                    {embed ? (
+                      <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-brand-green text-white text-[10px] font-black uppercase tracking-wider">
+                        <Play className="size-2.5 fill-current" />
+                        Video
+                      </span>
+                    ) : null}
                   </div>
 
                   {/* Card body */}
@@ -313,7 +339,8 @@ export default function BlogInsightsPage() {
                   {/* Animated bottom accent bar */}
                   <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[#01214A] to-[#00A3E0] transition-all duration-500 ease-out" />
                 </Link>
-              ))}
+                );
+              })}
             </div>
           )}
         </section>

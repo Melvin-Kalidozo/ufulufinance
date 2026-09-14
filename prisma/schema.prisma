@@ -266,6 +266,8 @@ model Article {
   authorImage   String?
   image         String?
   imageAlt      String?
+  // Video embed: YouTube/Facebook/Vimeo share link or full iframe code
+  embedUrl      String?
   date          DateTime      @default(now())
   readTime      Int?
   isFeatured    Boolean       @default(false)

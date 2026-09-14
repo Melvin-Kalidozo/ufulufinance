@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Article } from "@/lib/blogData";
 import { usePublicData } from "@/lib/content-store";
+import { resolveEmbed } from "@/lib/embed";
 import { StaticHero } from "@/components/public/ContentSkeletons";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
@@ -26,6 +27,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  Play,
 } from "lucide-react";
 
 interface PageProps {
@@ -67,6 +69,7 @@ function toArticle(r: Record<string, unknown>): Article {
       ? { text: String(quoteRaw.text), author: String(quoteRaw.author ?? "") }
       : undefined,
     image: String(r.image ?? ""),
+    embedUrl: r.embedUrl ? String(r.embedUrl) : undefined,
     isFeatured: Boolean(r.isFeatured),
   };
 }
@@ -113,6 +116,8 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
   if (!article) return notFound();
 
+  const embed = resolveEmbed(article.embedUrl);
+
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
@@ -128,14 +133,16 @@ export default function DedicatedArticlePage({ params }: PageProps) {
       <section className="relative w-full bg-[#0b1f14] overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <Image
-            src={article.image}
-            alt={article.title}
-            fill
-            priority
-            className="object-cover object-center opacity-15"
-            sizes="100vw"
-          />
+          {article.image ? (
+            <Image
+              src={article.image}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover object-center opacity-15"
+              sizes="100vw"
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-b from-[#01214A]/90 via-[#011632]/95 to-[#01214A]" />
         </div>
 
@@ -155,6 +162,12 @@ export default function DedicatedArticlePage({ params }: PageProps) {
             <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#00A3E0] text-slate-950 uppercase tracking-wider">
               {article.category}
             </span>
+            {embed ? (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-black bg-brand-green text-white uppercase tracking-wider">
+                <Play className="size-3 fill-current" />
+                Video
+              </span>
+            ) : null}
             <span className="flex items-center gap-1.5 text-[11px] text-sky-300/80 font-medium">
               <Clock className="size-3 text-[#38bdf8]" />
               {article.readTime}
@@ -228,20 +241,35 @@ export default function DedicatedArticlePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* ── COVER IMAGE ─────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
-        <div className="relative h-[180px] sm:h-[300px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-900">
-          <Image
-            src={article.image}
-            alt={article.title}
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 1280px) 100vw, 1024px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+      {/* ── MEDIA: video embed or cover image ──────────────────────── */}
+      {embed ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
+          <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-black">
+            <iframe
+              src={embed.src}
+              title={article.title}
+              className="absolute inset-0 h-full w-full"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
         </div>
-      </div>
+      ) : article.image ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
+          <div className="relative h-[180px] sm:h-[300px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-900">
+            <Image
+              src={article.image}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1280px) 100vw, 1024px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          </div>
+        </div>
+      ) : null}
 
       {/* ── MAIN CONTENT ────────────────────────────────────────────── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-14">

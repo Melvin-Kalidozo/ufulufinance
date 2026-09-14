@@ -114,6 +114,7 @@ export const articlesDef: ResourceDef = {
     { name: "authorImage", label: "Author image", type: "image", folder: "articles", step: "Author" },
     { name: "image", label: "Cover image", type: "image", folder: "articles", step: "Media & meta" },
     { name: "imageAlt", label: "Image alt text", type: "text", step: "Media & meta" },
+    { name: "embedUrl", label: "Video embed (YouTube link, Facebook link, or iframe code)", type: "textarea", rows: 3, step: "Media & meta", help: "Paste a YouTube/Facebook share link or the full <iframe> embed code. When set, the video replaces the cover image." },
     { name: "date", label: "Publish date", type: "datetime", step: "Media & meta" },
     { name: "readTime", label: "Read time (minutes)", type: "number", min: 1, step: "Media & meta" },
     { name: "isFeatured", label: "Featured", type: "boolean", step: "Publishing" },

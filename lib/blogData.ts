@@ -13,6 +13,7 @@ export interface Article {
   keyTakeaways?: string[];
   quote?: { text: string; author: string };
   image: string;
+  embedUrl?: string;
   isFeatured?: boolean;
 }
 
