@@ -50,6 +50,7 @@ async function seedWebsiteSettings() {
       supportEmail: websiteSettings.supportEmail,
       loansEmail: websiteSettings.loansEmail,
       phone: websiteSettings.phone,
+      phones: [websiteSettings.phone],
       addressLine1: websiteSettings.offices[0]?.address ?? "",
       addressLine2: websiteSettings.offices[0]?.city ?? "",
       officeHours: websiteSettings.officeHours,

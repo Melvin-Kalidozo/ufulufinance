@@ -72,6 +72,8 @@ model WebsiteSetting {
   loansEmail    String  @default("loans@ufulufinance.com")
   phone         String  @default("+265 99 123 4567")
   whatsapp      String?
+  // Additional contact phone numbers (string[]); `phone` is kept as the primary/first
+  phones        Json?
   addressLine1  String  @default("City Centre, Area 3")
   addressLine2  String  @default("Lilongwe, Malawi")
   officeHours   String  @default("Mon – Fri, 8:00 AM – 5:00 PM")

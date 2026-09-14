@@ -21,7 +21,7 @@ const TEXT_FIELDS = [
   "notificationEmail",
 ] as const;
 
-const JSON_FIELDS = ["offices", "socialLinks"] as const;
+const JSON_FIELDS = ["offices", "socialLinks", "phones"] as const;
 
 export async function GET() {
   const auth = await requireAdmin();

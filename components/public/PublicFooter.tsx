@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
-import { ArrowRight, Building2, Phone, Mail, Clock, MapPin } from "lucide-react";
+import { usePublicData } from "@/lib/content-store";
+import { ArrowRight, MapPin } from "lucide-react";
 
 const SOCIAL_LINKS = [
   {
@@ -29,6 +30,31 @@ export function PublicFooter() {
 
   // On homepage (where Section 8 is already CTA + Section 9 is Contact) or contact page, don't duplicate banner
   const hideCtaBanner = pathname === "/" || pathname === "/contact";
+
+  const { body: settingsBody } = usePublicData<{
+    data: Record<string, unknown> | null;
+  }>("/api/public/settings");
+  const settings = settingsBody?.data ?? null;
+  const offices = Array.isArray(settings?.offices)
+    ? (settings?.offices as unknown[]).filter(
+        (o): o is Record<string, unknown> => !!o && typeof o === "object",
+      )
+    : [];
+  const str = (o: Record<string, unknown>, k: string) =>
+    o[k] !== undefined && o[k] !== null ? String(o[k]) : "";
+  const officePhones = (o: Record<string, unknown>): string[] => {
+    const raw = o["phones"];
+    if (Array.isArray(raw)) {
+      return raw.map((p) => String(p ?? "")).filter((p) => p.trim());
+    }
+    const single = str(o, "phone");
+    return single ? [single] : [];
+  };
+  const branches = offices.slice(0, 2).map((o, i) => ({
+    name: str(o, "label") || str(o, "city") || `Branch ${i + 1}`,
+    location: str(o, "city") || str(o, "address") || "",
+    phones: officePhones(o),
+  }));
 
   return (
     <footer className="relative w-full bg-gradient-to-b from-[#0a2540] via-[#032d60] to-[#021833] text-slate-100 overflow-hidden border-t border-blue-900/40">
@@ -221,46 +247,49 @@ export function PublicFooter() {
               </ul>
             </div>
 
-            {/* Branch Locations Integrated Column */}
+            {/* Branch Locations (compact — first 2, name + location + phone) */}
             <div className="space-y-3.5">
               <h4 className="text-xs font-bold text-white tracking-wider uppercase flex items-center gap-1.5 text-[#38bdf8]">
                 <MapPin className="size-3.5" />
                 <span>Our Offices</span>
               </h4>
               <div className="space-y-3 text-xs text-slate-300">
-                <div>
-                  <p className="font-bold text-white">Lilongwe Office</p>
-                  <p className="text-[11px] text-slate-400">Cuckoo&apos;s Nest, 1st Floor, Mandala St, Area 3, Lilongwe</p>
-                  <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="tel:+265994485444" className="text-[#38bdf8] hover:underline font-medium">
-                      +265 994 485 444
-                    </a>
-                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
+                {branches.length === 0 && (
+                  <p className="text-[11px] text-slate-400">
+                    Branch details coming soon.
+                  </p>
+                )}
+                {branches.map((branch) => (
+                  <div
+                    key={branch.name}
+                    className="border-l-2 border-[#0D9853]/60 pl-3"
+                  >
+                    <p className="font-bold text-white">{branch.name}</p>
+                    {branch.location ? (
+                      <p className="text-[11px] text-slate-400">
+                        {branch.location}
+                      </p>
+                    ) : null}
+                    {branch.phones.map((num) => (
+                      <a
+                        key={num}
+                        href={`tel:${num.replace(/[^0-9+]/g, "")}`}
+                        className="mt-0.5 block text-[11px] text-[#38bdf8] hover:underline font-medium"
+                      >
+                        {num}
+                      </a>
+                    ))}
                   </div>
-                </div>
-
-                <div>
-                  <p className="font-bold text-white">Blantyre / Limbe Office</p>
-                  <p className="text-[11px] text-slate-400">Zuleka Arcade, 1st Flr Rm 26 (Opp. Illovo), Limbe</p>
-                  <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="tel:+265888885444" className="text-[#38bdf8] hover:underline font-medium">
-                      +265 888 885 444
-                    </a>
-                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-bold text-white">Mzuzu Regional Office</p>
-                  <p className="text-[11px] text-slate-400">Katoto Commercial Area, Mzuzu, Malawi</p>
-                  <div className="flex items-center justify-between text-[11px] mt-0.5">
-                    <a href="mailto:ufulufinance@gmail.com" className="text-[#38bdf8] hover:underline font-medium">
-                      ufulufinance@gmail.com
-                    </a>
-                    <span className="text-[10px] text-slate-400">8:00 AM – 5:00 PM</span>
-                  </div>
-                </div>
+                ))}
               </div>
+              {offices.length > 0 && (
+                <Link
+                  href="/contact#offices"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#38bdf8] hover:text-white transition-colors"
+                >
+                  View all branches <ArrowRight className="size-3" />
+                </Link>
+              )}
             </div>
 
           </div>

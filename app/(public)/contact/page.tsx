@@ -61,6 +61,14 @@ export default function ContactPage() {
     : [];
   const str = (r: ContactRow, k: string) =>
     r[k] !== undefined && r[k] !== null ? String(r[k]) : "";
+  const officePhones = (o: ContactRow): string[] => {
+    const raw = o["phones"];
+    if (Array.isArray(raw)) {
+      return raw.map((p) => String(p ?? "")).filter((p) => p.trim());
+    }
+    const single = str(o, "phone");
+    return single ? [single] : [];
+  };
   const firstOffice = offices[0];
   const addressLine =
     s("addressLine1") ||
@@ -70,6 +78,13 @@ export default function ContactPage() {
   const loansEmail = s("loansEmail") || "";
   const directPhone = s("phone") || "";
   const whatsapp = s("whatsapp") || "";
+  const phoneList: string[] = Array.isArray(settings?.phones)
+    ? (settings?.phones as unknown[])
+        .map((p) => String(p ?? ""))
+        .filter((p) => p.trim())
+    : directPhone
+    ? [directPhone]
+    : [];
   const mapEmbed = s("mapEmbedUrl") || "";
 
   const [form, setForm] = useState<FormData>({
@@ -333,18 +348,18 @@ export default function ContactPage() {
                       </div>
                     )}
 
-                    {(directPhone || whatsapp) && (
+                    {(phoneList.length > 0 || whatsapp) && (
                       <div className="flex items-start gap-4">
                         <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
                           <Phone className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-900">Call Us</p>
-                          {directPhone ? (
-                            <p className="text-xs text-slate-500 mt-1">
-                              Direct: {directPhone}
+                          {phoneList.map((num) => (
+                            <p key={num} className="text-xs text-slate-500 mt-1">
+                              {num}
                             </p>
-                          ) : null}
+                          ))}
                           {whatsapp ? (
                             <p className="text-xs text-slate-500 mt-1">
                               WhatsApp: {whatsapp}
@@ -632,7 +647,10 @@ export default function ContactPage() {
 
       {/* ── OUR OFFICES (from admin settings) ─────────────────────── */}
       {offices.length > 0 && (
-        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
+        <section
+          id="offices"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
+        >
           <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Our offices</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {offices.map((office, i) => (
@@ -649,11 +667,11 @@ export default function ContactPage() {
                   </p>
                 ) : null}
                 <div className="mt-4 space-y-1.5 text-xs text-slate-600">
-                  {str(office, "phone") ? (
-                    <p className="flex items-center gap-1.5">
-                      <Phone className="size-3.5 text-[#00A3E0]" /> {str(office, "phone")}
+                  {officePhones(office).map((num) => (
+                    <p key={num} className="flex items-center gap-1.5">
+                      <Phone className="size-3.5 text-[#00A3E0]" /> {num}
                     </p>
-                  ) : null}
+                  ))}
                   {str(office, "email") ? (
                     <p className="flex items-center gap-1.5">
                       <Mail className="size-3.5 text-[#00A3E0]" /> {str(office, "email")}

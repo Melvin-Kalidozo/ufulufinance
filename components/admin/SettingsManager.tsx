@@ -55,7 +55,6 @@ const CONTACT_FIELDS: {
   { name: "primaryEmail", label: "Primary email", icon: Mail },
   { name: "supportEmail", label: "Support email", icon: Mail },
   { name: "loansEmail", label: "Loans email", icon: Mail },
-  { name: "phone", label: "Phone", icon: Phone },
   { name: "whatsapp", label: "WhatsApp", icon: MessageCircle },
   { name: "addressLine1", label: "Address line 1", icon: MapPin },
   { name: "addressLine2", label: "Address line 2" },
@@ -144,6 +143,7 @@ export function SettingsManager() {
   const [contact, setContact] = useState<Record<string, string>>({});
   const [offices, setOffices] = useState<OfficeRow[]>([]);
   const [socials, setSocials] = useState<SocialRow[]>([]);
+  const [phones, setPhones] = useState<string[]>([]);
   const [notifEmail, setNotifEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -183,6 +183,12 @@ export function SettingsManager() {
             url: strOf(o, "url"),
           })),
         );
+        const rawPhones = Array.isArray(row.phones)
+          ? (row.phones as unknown[]).map((p) => String(p ?? ""))
+          : strOf(row, "phone")
+          ? [strOf(row, "phone")]
+          : [];
+        setPhones(rawPhones);
         setNotifEmail(strOf(row, "notificationEmail"));
         setGeneral(g);
         setContact(c);
@@ -234,8 +240,11 @@ export function SettingsManager() {
         (o) => o.label || o.address || o.city,
       );
       const cleanSocials = socials.filter((s) => s.url.trim());
+      const cleanPhones = phones.map((p) => p.trim()).filter(Boolean);
       fd.append("offices", JSON.stringify(cleanOffices));
       fd.append("socialLinks", JSON.stringify(cleanSocials));
+      fd.append("phones", JSON.stringify(cleanPhones));
+      fd.append("phone", cleanPhones[0] ?? "");
       const res = await fetch("/api/admin/settings", {
         method: "PATCH",
         body: fd,
@@ -384,6 +393,74 @@ export function SettingsManager() {
                     />
                   </FieldShell>
                 ))}
+              </div>
+
+              <div className="mt-6 border-t border-slate-100 pt-5">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800">
+                      Contact numbers
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      Shown on the contact page. Blank numbers are ignored.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl border-slate-200"
+                    onClick={() => {
+                      setPhones((prev) => [...prev, ""]);
+                      touch();
+                    }}
+                  >
+                    <Plus className="size-4" /> Add number
+                  </Button>
+                </div>
+
+                {phones.length === 0 && (
+                  <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-center">
+                    <Phone className="size-5 text-slate-300" />
+                    <p className="text-sm text-slate-400">
+                      No contact numbers yet. Add your first one.
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  {phones.map((num, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Input
+                        value={num}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setPhones((prev) =>
+                            prev.map((p, idx) => (idx === i ? v : p)),
+                          );
+                          touch();
+                        }}
+                        placeholder="+265 99 123 4567"
+                        className="h-10 rounded-xl border-slate-200 bg-white"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        className="rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
+                        onClick={() => {
+                          setPhones((prev) =>
+                            prev.filter((_, idx) => idx !== i),
+                          );
+                          touch();
+                        }}
+                        aria-label="Remove number"
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
 
