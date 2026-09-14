@@ -267,8 +267,9 @@ export function SettingsManager() {
   }
 
   return (
-    <div className="max-w-5xl space-y-5 pb-24">
-      {/* Tab navigation */}
+    <div className="max-w-5xl space-y-5">
+      {/* Tabs + save */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <Tabs
         value={activeTab}
         onValueChange={(v) => setActiveTab(v as TabId)}
@@ -281,7 +282,7 @@ export function SettingsManager() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="gap-2 whitespace-nowrap rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2]"
+                  className="gap-2 whitespace-nowrap rounded-lg px-3 text-xs font-bold text-slate-500 data-active:bg-[#034DA2] data-active:text-white data-active:shadow-sm hover:text-[#034DA2] data-active:hover:bg-[#0B63C9] data-active:hover:text-white"
                 >
                   <Icon className="size-4" />
                   {tab.label}
@@ -301,6 +302,35 @@ export function SettingsManager() {
           </TabsList>
         </div>
       </Tabs>
+
+        <div className="flex items-center gap-3">
+          <span className="hidden items-center gap-1.5 text-xs font-medium text-slate-500 sm:flex">
+            {dirty ? (
+              <>
+                <CircleAlert className="size-3.5 text-amber-500" /> Unsaved
+                changes
+              </>
+            ) : (
+              <>
+                <CircleCheck className="size-3.5 text-brand-green" /> All
+                changes saved
+              </>
+            )}
+          </span>
+          <Button
+            onClick={save}
+            disabled={saving || !dirty}
+            className="rounded-xl bg-[#034DA2] px-5 text-white shadow-md shadow-blue-950/15 hover:bg-[#023877] disabled:opacity-40"
+          >
+            {saving ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Save className="size-4" />
+            )}
+            {saving ? "Saving…" : "Save settings"}
+          </Button>
+        </div>
+      </div>
 
       {/* Tab content */}
       <div>
@@ -588,37 +618,6 @@ export function SettingsManager() {
             </p>
           </section>
         )}
-      </div>
-
-      {/* Sticky save bar */}
-      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-200 bg-white/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-            {dirty ? (
-              <>
-                <CircleAlert className="size-3.5 text-amber-500" /> Unsaved
-                changes
-              </>
-            ) : (
-              <>
-                <CircleCheck className="size-3.5 text-brand-green" /> All
-                changes saved
-              </>
-            )}
-          </span>
-          <Button
-            onClick={save}
-            disabled={saving || !dirty}
-            className="rounded-xl bg-[#034DA2] px-5 text-white shadow-md shadow-blue-950/15 hover:bg-[#023877] disabled:opacity-40"
-          >
-            {saving ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Save className="size-4" />
-            )}
-            {saving ? "Saving…" : "Save settings"}
-          </Button>
-        </div>
       </div>
     </div>
   );
