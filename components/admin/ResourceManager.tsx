@@ -417,8 +417,19 @@ function ResourceDialog({
       const val = editing?.[f.name];
       if (val === null || val === undefined) continue;
       if (f.type === "boolean") next[f.name] = val === true ? "true" : "false";
-      else if (f.type === "json-array") next[f.name] = Array.isArray(val) ? val.join("\n") : "";
-      else if (f.type === "json-object") next[f.name] = JSON.stringify(val ?? null, null, 2);
+      else if (f.type === "json-array") {
+        const arr =
+          f.jsonWrapper && val && typeof val === "object"
+            ? (val as Record<string, unknown>)[f.jsonWrapper]
+            : val;
+        next[f.name] = Array.isArray(arr) ? arr.join("\n") : "";
+      } else if (f.type === "json-object") {
+        const obj =
+          f.jsonWrapper && val && typeof val === "object"
+            ? (val as Record<string, unknown>)[f.jsonWrapper]
+            : val;
+        next[f.name] = JSON.stringify(obj ?? null, null, 2);
+      }
       else if (f.type === "datetime") {
         if (val instanceof Date || typeof val === "string") next[f.name] = toLocalInput(val);
       } else next[f.name] = String(val);
