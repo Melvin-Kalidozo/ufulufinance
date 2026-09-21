@@ -335,14 +335,12 @@ export const regionalHubs = [
   { region: "Northern Region Hub", city: "Mzuzu", location: "Orton Chirwa Avenue", focus: "Coffee & Grain Smallholder Facilities, Agro-dealer Bridging, Women Cooperative Groups", contacts: ["Phone: +265 99 876 5432", "mzuzu@ufulufinance.com"] },
 ];
 
-export const leaders = [
-  { name: "Dr. Matthews Phiri", title: "Board Chairperson", category: "board", credentials: "PhD Development Economics · F.IoD", experience: "25+ Yrs Governance", expertise: ["Development Banking", "SADC Monetary Policies", "Fiduciary Stewardship"], bio: "Over 25 years of development banking and corporate governance leadership across Sub-Saharan Africa and Southern Africa Development Community (SADC).", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" },
-  { name: "Chifundo Banda", title: "Chief Executive Officer / Managing Director", category: "executive", credentials: "MBA Finance · B.Sc Banking", experience: "18+ Yrs Microfinance", expertise: ["Grassroots MSME Credit", "Digital Wallets", "Sustainable Inclusion"], bio: "Pioneered grassroots MSME financing frameworks and digital credit deployment with extensive microfinance institutional management experience.", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80" },
-  { name: "Tamika Gondwe", title: "Head of Credit Risk & Compliance", category: "executive", credentials: "Chartered Risk Analyst (CRA) · MSc", experience: "14+ Yrs Credit Risk", expertise: ["Underwriting Rigor", "Consumer Protection", "RBM Regulatory Compliance"], bio: "Chartered risk specialist overseeing underwriting rigor, customer protection policies, and prudential microfinance regulations.", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" },
-  { name: "Kelvin Mwanza", title: "Head of Operations & Digital Banking", category: "executive", credentials: "MSc FinTech · B.Sc Computer Science", experience: "12+ Yrs Digital Systems", expertise: ["Core Banking Automation", "Mobile Disbursement", "Branch Ops"], bio: "Leads branch operational logistics, core banking automation, and mobile wallet payment integrations across all regional centers.", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" },
-  { name: "Grace Mkandawire", title: "Non-Executive Director (Audit & Risk)", category: "board", credentials: "FCCA · CA (Malawi)", experience: "20+ Yrs Financial Audit", expertise: ["Internal Controls", "Prudential Assurance", "Audit Governance"], bio: "Fellow Chartered Certified Accountant (FCCA) with two decades of financial sector auditing and internal governance experience.", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80" },
-  { name: "Patrick Chimwala", title: "Head of Agricultural Lending", category: "executive", credentials: "MSc Rural Agronomy · B.Sc Ag Econ", experience: "15+ Yrs Agri-Finance", expertise: ["Harvest-Cycle Facilities", "Input Packages", "Cooperative Credit"], bio: "Agronomist and rural finance practitioner championing harvest cycle credit, smallholder input packages, and cooperative lending.", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80" },
-];
+export const leaders: {
+  name: string;
+  title: string;
+  bio?: string;
+  image?: string;
+}[] = [];
 
 // ── Impact / Portfolio page ─────────────────────────────────────────────────
 export const projects = [

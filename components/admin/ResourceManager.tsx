@@ -43,6 +43,7 @@ import { Plus, Pencil, Trash2, Search, Loader2, ImagePlus, X, ArrowLeft, ArrowRi
 type Row = Record<string, any>;
 
 function titleValue(row: Row, def: ResourceDef): string {
+  if (def.model === "governanceMember" && row.name) return String(row.name);
   for (const f of ["title", "name", "question", "label", "value"]) {
     if (row[f] != null && String(row[f]).trim()) return String(row[f]);
   }
@@ -54,6 +55,7 @@ function titleValue(row: Row, def: ResourceDef): string {
 }
 
 function secondaryValue(row: Row, def: ResourceDef): string {
+  if (def.model === "governanceMember" && row.title) return String(row.title);
   const second = def.fields.find((f) => f.type === "text" && f.name !== "slug");
   const fieldName = ["category", "categoryLabel", "department", "enterprise", "role", "city"].find(
     (n) => row[n]

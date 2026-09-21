@@ -18,7 +18,6 @@ import {
   aboutValues,
   aboutTimeline,
   regionalHubs,
-  leaders,
   projects,
   communityInitiatives,
   successStories,
@@ -283,13 +282,6 @@ async function seedAbout() {
       prisma.regionalHub as any,
       { city: h.city },
       { ...h, sortOrder: i, status: "PUBLISHED" }
-    );
-  }
-  for (const [i, l] of leaders.entries()) {
-    await upsertBy(
-      prisma.governanceMember as any,
-      { name: l.name },
-      { ...l, sortOrder: i, status: "PUBLISHED" }
     );
   }
 }

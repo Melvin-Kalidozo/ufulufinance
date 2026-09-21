@@ -8,6 +8,13 @@ import { usePublicData } from "@/lib/content-store";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   ArrowUpRight,
   ShieldCheck,
   Award,
@@ -31,11 +38,17 @@ import {
   HelpCircle,
   Check,
   BadgeCheck,
-  GraduationCap,
 } from "lucide-react";
 
+type Leader = {
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+};
+
 export default function AboutPage() {
-  const [activeLeaderTab, setActiveLeaderTab] = useState<"all" | "board" | "executive">("all");
+  const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>("regulation");
   const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/about");
   const content = body?.data ?? null;
@@ -81,21 +94,12 @@ export default function AboutPage() {
     contacts: aarr(r, "contacts").join(" | "),
   }));
 
-  const LEADERS = (content?.leaders ?? []).map((r) => ({
+  const LEADERS: Leader[] = (content?.leaders ?? []).map((r) => ({
     name: aval(r, "name"),
     role: aval(r, "title"),
-    category: aval(r, "category"),
-    credentials: aval(r, "credentials"),
-    experience: aval(r, "experience"),
-    expertise: aarr(r, "expertise"),
     bio: aval(r, "bio"),
     image: aval(r, "image"),
   }));
-
-  const filteredLeaders =
-    activeLeaderTab === "all"
-      ? LEADERS
-      : LEADERS.filter((l) => l.category === activeLeaderTab);
 
   const ABOUT_FAQS = (content?.aboutFaqs ?? []).map((r) => ({
     id: `${vId(r)}-${aval(r, "question").length}`,
@@ -449,115 +453,67 @@ export default function AboutPage() {
       {/* ── 7. GOVERNANCE & LEADERSHIP (Board & Management) ─────────── */}
       <section className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div className="space-y-2.5 max-w-xl">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-brand-green" />
-                <span>Governance &amp; Leadership</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-                Governed by Proven Banking &amp; Development Leaders
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Our board of directors and senior management team uphold the highest standards of credit compliance and risk oversight.
-              </p>
+          <div className="mb-12 max-w-xl space-y-2.5">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+              <span className="size-2 rounded-full bg-brand-green" />
+              <span>Governance &amp; Leadership</span>
             </div>
-
-            {/* Filter Pills */}
-            <div className="inline-flex p-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-medium self-start md:self-auto overflow-x-auto max-w-full">
-              <button
-                onClick={() => setActiveLeaderTab("all")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "all"
-                    ? "bg-[#034DA2] text-white shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <span>All Leaders</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "all" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
-                  {LEADERS.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveLeaderTab("board")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "board"
-                    ? "bg-[#034DA2] text-white shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <span>Board of Directors</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "board" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
-                  {LEADERS.filter((l) => l.category === "board").length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveLeaderTab("executive")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "executive"
-                    ? "bg-[#034DA2] text-white shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <span>Executive Management</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "executive" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
-                  {LEADERS.filter((l) => l.category === "executive").length}
-                </span>
-              </button>
-            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              Governed by Proven Banking &amp; Development Leaders
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Meet the people steering Ufulu Finance. Select a profile to read their full biography.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredLeaders.map((lead) => (
-              <div
-                key={lead.name}
-                className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-              >
-                <div>
-                  {/* Portrait: Content-aware contain with ambient blurred backdrop */}
+          {LEADERS.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+              <p className="text-sm font-semibold text-slate-700">Leadership profiles coming soon</p>
+              <p className="mt-1 text-xs text-slate-500">Our team details will be published shortly.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {LEADERS.map((lead) => (
+                <button
+                  type="button"
+                  key={lead.name}
+                  onClick={() => setSelectedLeader(lead)}
+                  className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col overflow-hidden text-left cursor-pointer"
+                >
+                  {/* Portrait */}
                   <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100">
-                    {/* Blurred ambient background to smoothly fill card */}
-                    <Image
-                      src={lead.image}
-                      alt=""
-                      fill
-                      aria-hidden
-                      className="object-cover blur-xl scale-125 opacity-40 pointer-events-none"
-                    />
-                    {/* Foreground portrait fully contained without cropping faces */}
-                    <Image
-                      src={lead.image}
-                      alt={lead.name}
-                      fill
-                      className="relative z-10 object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-
-                    {/* Clean floating badges on top */}
-                    <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2">
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-xs backdrop-blur-md inline-flex items-center gap-1.5 ${
-                          lead.category === "board"
-                            ? "bg-white/95 text-[#034DA2] border border-slate-200/60"
-                            : "bg-[#034DA2]/95 text-white border border-blue-700/50"
-                        }`}
-                      >
-                        <span
-                          className={`size-1.5 rounded-full ${
-                            lead.category === "board" ? "bg-amber-500" : "bg-[#009FE0]"
-                          }`}
+                    {lead.image ? (
+                      <>
+                        <Image
+                          src={lead.image}
+                          alt=""
+                          fill
+                          aria-hidden
+                          className="object-cover blur-xl scale-125 opacity-40 pointer-events-none"
                         />
-                        {lead.category === "board" ? "Board Member" : "Executive"}
-                      </span>
-
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/90 backdrop-blur-md text-slate-800 shadow-xs border border-slate-200/60">
-                        {lead.experience}
-                      </span>
-                    </div>
+                        <Image
+                          src={lead.image}
+                          alt={lead.name}
+                          fill
+                          className="relative z-10 object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      </>
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#034DA2]/10 to-[#009FE0]/10 text-4xl font-extrabold text-[#034DA2]">
+                        {lead.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .join("")
+                          .toUpperCase()}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Card Body (Evened out, balanced proportion) */}
-                  <div className="p-5 pb-3">
+                  {/* Card Body */}
+                  <div className="p-5 flex flex-1 flex-col">
                     <h3 className="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors leading-snug tracking-tight">
                       {lead.name}
                     </h3>
@@ -565,32 +521,71 @@ export default function AboutPage() {
                       {lead.role}
                     </p>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-600 mt-2 font-medium">
-                      <GraduationCap className="size-3.5 text-[#034DA2] shrink-0" />
-                      <span className="truncate">{lead.credentials}</span>
+                    {lead.bio && (
+                      <p className="text-xs text-slate-500 mt-2 leading-relaxed line-clamp-3">
+                        {lead.bio}
+                      </p>
+                    )}
+
+                    <span className="mt-auto pt-4 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#034DA2]">
+                      Read full profile
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          <Dialog
+            open={selectedLeader !== null}
+            onOpenChange={(o) => {
+              if (!o) setSelectedLeader(null);
+            }}
+          >
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+              {selectedLeader && (
+                <>
+                  <DialogHeader>
+                    <div className="flex items-center gap-4 text-left">
+                      <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-slate-100">
+                        {selectedLeader.image ? (
+                          <Image
+                            src={selectedLeader.image}
+                            alt={selectedLeader.name}
+                            fill
+                            className="object-cover"
+                            sizes="64px"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-lg font-extrabold text-[#034DA2]">
+                            {selectedLeader.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .filter(Boolean)
+                              .slice(0, 2)
+                              .join("")
+                              .toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <DialogTitle className="text-lg font-extrabold tracking-tight text-slate-900">
+                          {selectedLeader.name}
+                        </DialogTitle>
+                        <DialogDescription className="mt-0.5 text-xs font-bold text-[#034DA2]">
+                          {selectedLeader.role}
+                        </DialogDescription>
+                      </div>
                     </div>
-
-                    <p className="text-xs text-slate-500 mt-2 leading-relaxed line-clamp-2">
-                      {lead.bio}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer: Verified Authority */}
-                <div className="px-5 pb-5 pt-0">
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                    <span className="inline-flex items-center gap-1 text-brand-green font-semibold">
-                      <BadgeCheck className="size-3.5 text-brand-green" />
-                      Verified Credentials
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
-                      Ufulu Finance
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </DialogHeader>
+                  <p className="whitespace-pre-line text-sm leading-relaxed text-slate-600">
+                    {selectedLeader.bio || "Profile details coming soon."}
+                  </p>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
