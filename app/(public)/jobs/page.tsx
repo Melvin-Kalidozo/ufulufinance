@@ -3,7 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  ListRowSkeleton,
+  TextCardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -77,12 +84,23 @@ export default function JobsPage() {
           title="Careers at Ufulu"
           subtitle="Why Work With Us · Open Positions · Growth Opportunities · Apply Online"
         />
-        <div className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="space-y-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-24 animate-pulse rounded-2xl bg-slate-200/70" />
-            ))}
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          <TwoColumnSkeleton />
+
+          {/* Why work with us */}
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-6">
+              <Shimmer className="aspect-[4/3] w-full rounded-3xl" />
+            </div>
+            <div className="lg:col-span-6">
+              <ListRowSkeleton count={4} />
+            </div>
+          </div>
+
+          {/* Available positions */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={6} />
           </div>
         </div>
       </div>

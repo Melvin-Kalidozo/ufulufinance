@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
-import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+// import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import { ClientTestimonialSlider } from "@/components/public/ClientTestimonialSlider";
 import { getHomeContent } from "@/lib/cms-data";
 import { HomePreload } from "@/components/public/HomePreload";
@@ -16,7 +16,7 @@ import {
   Users,
   Wheat,
   Briefcase,
-  ChevronRight,
+  // ChevronRight,
   Star,
   Wallet,
   Phone,
@@ -38,10 +38,19 @@ export const metadata = {
 
 export default async function HomePage() {
   const SECTOR_ICON: Record<string, LucideIcon> = {
-    Landmark, Building2, Users, TrendingUp, Wallet, Briefcase, Wheat, Zap, ShieldCheck, Sparkles,
+    Landmark,
+    Building2,
+    Users,
+    TrendingUp,
+    Wallet,
+    Briefcase,
+    Wheat,
+    Zap,
+    ShieldCheck,
+    Sparkles,
   };
   const iconOf = (key: string) => SECTOR_ICON[key] ?? Sparkles;
-  const fmtDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
+  // const fmtDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
 
   const payload = (await getHomeContent().catch(() => null)) as {
     settings?: Record<string, unknown> | null;
@@ -53,22 +62,24 @@ export default async function HomePage() {
     recentArticles?: Record<string, unknown>[];
   } | null;
 
-
   const STATS = (payload?.stats ?? []).map((x) => ({
-    number: String(x.value ?? ''),
-    label: String(x.label ?? ''),
-    description: String(x.description ?? ''),
+    number: String(x.value ?? ""),
+    label: String(x.label ?? ""),
+    description: String(x.description ?? ""),
   }));
 
   const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => ({
-    id: String(x.slug ?? x.title ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-    title: String(x.title ?? ''),
-    subtitle: String(x.subtitle ?? ''),
-    description: String(x.description ?? ''),
-    icon: iconOf(String(x.iconKey ?? '')),
-    link: String(x.link ?? '#facilities'),
+    id: String(x.slug ?? x.title ?? "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-"),
+    title: String(x.title ?? ""),
+    subtitle: String(x.subtitle ?? ""),
+    description: String(x.description ?? ""),
+    icon: iconOf(String(x.iconKey ?? "")),
+    link: String(x.link ?? "#facilities"),
   }));
 
+  /*
   const LOAN_PRODUCTS = (payload?.products ?? []).map((x) => ({
     id: String(x.slug ?? x.title ?? ''),
     name: String(x.title ?? ''),
@@ -83,18 +94,20 @@ export default async function HomePage() {
     image: String(x.image ?? ''),
     imageAlt: String(x.imageAlt ?? x.title ?? ''),
   }));
+  */
 
   const WHY_CHOOSE_ITEMS = (payload?.whyChoose ?? []).map((x) => ({
-    title: String(x.title ?? ''),
-    description: String(x.description ?? ''),
+    title: String(x.title ?? ""),
+    description: String(x.description ?? ""),
   }));
 
   const IMPACT_METRICS = (payload?.impactMetrics ?? []).map((x) => ({
-    value: String(x.value ?? ''),
-    label: String(x.label ?? ''),
-    sub: String(x.sub ?? ''),
+    value: String(x.value ?? ""),
+    label: String(x.label ?? ""),
+    sub: String(x.sub ?? ""),
   }));
 
+  /*
   const RECENT_INSIGHTS = (payload?.recentArticles ?? []).map((x) => ({
     id: String(x.slug ?? x.id ?? ''),
     title: String(x.title ?? ''),
@@ -103,6 +116,7 @@ export default async function HomePage() {
     excerpt: String(x.excerpt ?? ''),
     image: String(x.image ?? ''),
   }));
+  */
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased overflow-hidden">
@@ -135,7 +149,9 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-200/90 leading-relaxed max-w-xl">
-              Empowering Malawian civil servants, private sector employees, community groups, and entrepreneurs with transparent credit terms, efficient processing, and dedicated financial guidance.
+              Empowering Malawian civil servants, private sector employees,
+              community groups, and entrepreneurs with transparent credit terms,
+              efficient processing, and dedicated financial guidance.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
@@ -171,8 +187,12 @@ export default async function HomePage() {
                     <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
                       <span>{stat.number}</span>
                     </div>
-                    <h3 className="text-base font-bold text-slate-800 mt-1">{stat.label}</h3>
-                    <p className="text-xs text-slate-500 mt-2 leading-relaxed">{stat.description}</p>
+                    <h3 className="text-base font-bold text-slate-800 mt-1">
+                      {stat.label}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      {stat.description}
+                    </p>
                   </div>
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
                     <CheckCircle2 className="size-3.5" />
@@ -188,7 +208,7 @@ export default async function HomePage() {
       {/* ─────────────────────────────────────────────────────────────────
           2. ABOUT SECTION
       ───────────────────────────────────────────────────────────────── */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-6 space-y-6">
             <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
@@ -196,42 +216,65 @@ export default async function HomePage() {
               About Ufulu Finance
             </p>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              Driven by Integrity.<br />
-              <span className="text-[#034DA2]">Built for Financial Inclusion.</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              Driven by Integrity.
+              <br />
+              <span className="text-[#034DA2]">
+                Built for Financial Inclusion.
+              </span>
             </h2>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              Founded in 2016 in Lilongwe, Ufulu Finance Limited is a non-deposit-taking microfinance institution registered and operating in Malawi. We specialize in structured civil service loan facilities, private sector payroll lending, village banking community facilities, and expanding business financing.
+              Founded in 2016 in Lilongwe, Ufulu Finance Limited is a
+              non-deposit-taking microfinance institution registered and
+              operating in Malawi. We specialize in structured civil service
+              loan facilities, private sector payroll lending, village banking
+              community facilities, and expanding business financing.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Transparent Terms</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Zero hidden fees or surprise penalties</p>
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Transparent Terms
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Zero hidden fees or surprise penalties
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">National Reach</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Branches in Lilongwe, Blantyre &amp; Mzuzu</p>
+                  <h4 className="text-sm font-bold text-slate-900">
+                    National Reach
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Branches in Lilongwe, Blantyre &amp; Mzuzu
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Client Protection Code</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Strict anti-predatory lending policies</p>
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Client Protection Code
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Strict anti-predatory lending policies
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="size-5 text-brand-green shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Fast Mobile Payouts</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Airtel Money, TNM Mpamba, or Bank</p>
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Fast Mobile Payouts
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Airtel Money, TNM Mpamba, or Bank
+                  </p>
                 </div>
               </div>
             </div>
@@ -248,7 +291,7 @@ export default async function HomePage() {
           </div>
 
           <div className="lg:col-span-6 relative">
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+            <div className="relative aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
               <Image
                 src="/images/about-section.jpg"
                 alt="Malawian enterprise and commercial trade"
@@ -264,9 +307,13 @@ export default async function HomePage() {
               <div>
                 <div className="text-xs font-bold text-slate-900 flex items-center gap-1">
                   <span>★ 4.9 Rating</span>
-                  <span className="text-slate-400 font-normal">(Serving Malawi Since 2016)</span>
+                  <span className="text-slate-400 font-normal">
+                    (Serving Malawi Since 2016)
+                  </span>
                 </div>
-                <p className="text-[11px] text-slate-500">Accredited Non-Deposit Institution</p>
+                <p className="text-[11px] text-slate-500">
+                  Accredited Non-Deposit Institution
+                </p>
               </div>
             </div>
           </div>
@@ -277,59 +324,65 @@ export default async function HomePage() {
           3. SECTORS WE EMPOWER (Our Lending Pillars)
       ───────────────────────────────────────────────────────────────── */}
       {WHO_WE_EMPOWER.length > 0 && (
-      <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
-              <span className="h-3 w-1 rounded-full bg-brand-green" />
-              Who We Empower
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Financial Solutions Built for Malawi
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Supporting civil servants, private employees, community savings clusters, and growing businesses with transparent, respectful financing.
-            </p>
-          </div>
+        <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
+              <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+                <span className="h-3 w-1 rounded-full bg-brand-green" />
+                Who We Empower
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                Financial Solutions Built for Malawi
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Supporting civil servants, private employees, community savings
+                clusters, and growing businesses with transparent, respectful
+                financing.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHO_WE_EMPOWER.map((pillar) => {
-              const Icon = pillar.icon;
-              return (
-                <div
-                  key={pillar.id}
-                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-                >
-                  <div className="space-y-4">
-                    <div className="size-11 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors">
-                      <Icon className="size-5" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {WHO_WE_EMPOWER.map((pillar) => {
+                const Icon = pillar.icon;
+                return (
+                  <div
+                    key={pillar.id}
+                    className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+                  >
+                    <div className="space-y-4">
+                      <div className="size-11 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors">
+                        <Icon className="size-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-900">
+                          {pillar.title}
+                        </h3>
+                        <p className="text-[11px] font-semibold text-brand-green mt-0.5">
+                          {pillar.subtitle}
+                        </p>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {pillar.description}
+                      </p>
                     </div>
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900">{pillar.title}</h3>
-                      <p className="text-[11px] font-semibold text-brand-green mt-0.5">{pillar.subtitle}</p>
+                    <div className="mt-6 pt-4 border-t border-slate-100">
+                      <a
+                        href={pillar.link}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#034DA2] hover:text-[#023877] transition-colors"
+                      >
+                        <span>Explore loan facilities</span>
+                        <ArrowRight className="size-3.5" />
+                      </a>
                     </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pillar.description}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100">
-                    <a
-                      href={pillar.link}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#034DA2] hover:text-[#023877] transition-colors"
-                    >
-                      <span>Explore loan facilities</span>
-                      <ArrowRight className="size-3.5" />
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────────
-          4. LOANS SECTION (Dedicated Full-Width Alternating Showcases)
-      ───────────────────────────────────────────────────────────────── */}
+      {/* ── 4. LOANS SECTION (Dedicated Full-Width Alternating Showcases) — DISABLED ──
       {LOAN_PRODUCTS.length > 0 && (
       <div id="facilities" className="scroll-mt-20">
         <div className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center space-y-3">
@@ -345,7 +398,7 @@ export default async function HomePage() {
           </p>
         </div>
 
-        {/* Dedicated Full-Width Sections for each Service (Alternating Image Left / Right, Clean Refined Presentation) */}
+        Dedicated Full-Width Sections for each Service (Alternating Image Left / Right, Clean Refined Presentation)
         {LOAN_PRODUCTS.map((prod, idx) => {
           const isFlipped = idx % 2 === 1; // Odd index: Image on Left, Content on Right
 
@@ -358,18 +411,18 @@ export default async function HomePage() {
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                  {/* Content Column */}
+                  Content Column
                   <div
                     className={`space-y-6 lg:col-span-7 ${
                       isFlipped ? "lg:order-2" : "lg:order-1"
                     }`}
                   >
-                    {/* Category Kicker */}
+                    Category Kicker
                     <p className="text-xs font-extrabold uppercase tracking-widest text-[#00A3E0]">
                       {prod.category}
                     </p>
 
-                    {/* Title & Tagline */}
+                    Title & Tagline
                     <div>
                       <h3 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
                         {prod.name}
@@ -379,12 +432,12 @@ export default async function HomePage() {
                       </p>
                     </div>
 
-                    {/* Narrative Description */}
+                    Narrative Description
                     <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
                       {prod.description}
                     </p>
 
-                    {/* Structured Specifications Grid */}
+                    Structured Specifications Grid
                     <div className="pt-6 border-t border-slate-200/80">
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                         <div>
@@ -429,7 +482,7 @@ export default async function HomePage() {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    Action Buttons
                     <div className="pt-4 flex flex-wrap items-center gap-5">
                       <LoanEnquiryDialog
                         defaultFacility={prod.name}
@@ -454,7 +507,7 @@ export default async function HomePage() {
                     </div>
                   </div>
 
-                  {/* Matching Image Column: Clean Photography with No Badges */}
+                  Matching Image Column: Clean Photography with No Badges
                   <div
                     className={`lg:col-span-5 ${
                       isFlipped ? "lg:order-1" : "lg:order-2"
@@ -477,46 +530,50 @@ export default async function HomePage() {
         })}
       </div>
       )}
+      */}
 
       {/* ─────────────────────────────────────────────────────────────────
           5. WHY CHOOSE US SECTION
       ───────────────────────────────────────────────────────────────── */}
       {WHY_CHOOSE_ITEMS.length > 0 && (
-      <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
-              <span className="h-3 w-1 rounded-full bg-brand-green" />
-              Institutional Strengths
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Why Choose Ufulu Finance?
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Our service model is engineered to remove delays, hidden deductions, and unfair terms from microfinance.
-            </p>
-          </div>
+        <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
+              <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+                <span className="h-3 w-1 rounded-full bg-brand-green" />
+                Institutional Strengths
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                Why Choose Ufulu Finance?
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Our service model is engineered to remove delays, hidden
+                deductions, and unfair terms from microfinance.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {WHY_CHOOSE_ITEMS.map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm flex items-start gap-4"
-              >
-                <div className="size-10 rounded-xl bg-gradient-to-br from-[#034DA2] to-[#009FE0] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
-                  {idx + 1}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {WHY_CHOOSE_ITEMS.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm flex items-start gap-4"
+                >
+                  <div className="size-10 rounded-xl bg-gradient-to-br from-[#034DA2] to-[#009FE0] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
+                    {idx + 1}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* ─────────────────────────────────────────────────────────────────
@@ -532,32 +589,37 @@ export default async function HomePage() {
             Transforming Livelihoods Across Malawi
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Inspired by global microfinance standards, we measure our success by the tangible growth and resilience of the communities we finance.
+            Inspired by global microfinance standards, we measure our success by
+            the tangible growth and resilience of the communities we finance.
           </p>
         </div>
 
         {IMPACT_METRICS.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
-          {IMPACT_METRICS.map((metric, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm text-center space-y-2"
-            >
-              <div className="text-3xl sm:text-4xl font-extrabold text-brand-green">{metric.value}</div>
-              <h4 className="text-sm font-bold text-slate-900">{metric.label}</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">{metric.sub}</p>
-            </div>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
+            {IMPACT_METRICS.map((metric, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm text-center space-y-2"
+              >
+                <div className="text-3xl sm:text-4xl font-extrabold text-brand-green">
+                  {metric.value}
+                </div>
+                <h4 className="text-sm font-bold text-slate-900">
+                  {metric.label}
+                </h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  {metric.sub}
+                </p>
+              </div>
+            ))}
+          </div>
         )}
 
         {/* Client Testimonials Slider */}
         <ClientTestimonialSlider />
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────
-          7. INSIGHTS SECTION (Blog & Financial Literacy)
-      ───────────────────────────────────────────────────────────────── */}
+      {/* ── 7. INSIGHTS SECTION (Blog & Financial Literacy) — DISABLED ──
       {RECENT_INSIGHTS.length > 0 && (
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -622,11 +684,13 @@ export default async function HomePage() {
         </div>
       </section>
       )}
+      */}
 
       {/* ─────────────────────────────────────────────────────────────────
-          8. CTA SECTION (High-Impact Landscape Banner)
-      ───────────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[380px] sm:min-h-[440px] flex items-center justify-center overflow-hidden">
+    8. CTA SECTION (Full-Viewport, High-Impact Closer)
+───────────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background image + layered gradient */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/cta-home.jpg"
@@ -636,30 +700,68 @@ export default async function HomePage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#021833]/95 via-[#0a2540]/90 to-[#034DA2]/85 backdrop-brightness-90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#021833]/95 via-[#0a2540]/90 to-[#021833]/95" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#034DA2]/20 via-transparent to-[#034DA2]/20" />
         </div>
 
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 py-16 text-center text-white space-y-4">
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white drop-shadow-sm">
-            Let’s Cultivate Your Financial Future, Together.
+        {/* Glow accents */}
+        <div className="absolute -top-40 -left-40 size-[500px] rounded-full bg-[#00A3E0]/20 blur-[120px] z-0" />
+        <div className="absolute -bottom-40 -right-40 size-[500px] rounded-full bg-brand-green/10 blur-[120px] z-0" />
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center text-white space-y-8">
+          {/* Eyebrow badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#7dd3fc]">
+            <span className="size-1.5 rounded-full bg-brand-green-light animate-pulse" />
+            Start Your Application Today
+          </div>
+
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-sm">
+            Let&rsquo;s Cultivate Your
+            <br className="hidden sm:block" /> Financial Future, Together.
           </h2>
-          <p className="text-xs sm:text-sm text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
-            Ready to access civil service credit, explore payroll facilities, or expand your business? Speak with our accredited loan advisors today.
+
+          <p className="text-sm sm:text-lg text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
+            Ready to access civil service credit, explore payroll facilities, or
+            expand your business? Speak with our accredited loan advisors today
+            and get a decision fast.
           </p>
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
+
+          {/* CTA buttons */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-9 py-4 text-sm sm:text-base font-bold shadow-lg shadow-sky-950/30 transition-all hover:scale-105 cursor-pointer"
             >
               Apply for Financing
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 hover:bg-white/20 text-white px-8 py-4 text-sm sm:text-base font-semibold backdrop-blur-sm transition-colors"
             >
+              <Phone className="size-4" />
               Contact Nearest Branch
             </Link>
+          </div>
+
+          {/* Trust strip */}
+          <div className="pt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 border-t border-white/10 mt-4">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
+              <ShieldCheck className="size-4 text-brand-green-light" />
+              Registered &amp; Regulated
+            </div>
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
+              <Clock className="size-4 text-brand-green-light" />
+              Fast Turnaround
+            </div>
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
+              <MapPin className="size-4 text-brand-green-light" />
+              Lilongwe &middot; Blantyre &middot; Mzuzu
+            </div>
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
+              <Mail className="size-4 text-brand-green-light" />
+              loans@ufulufinance.com
+            </div>
           </div>
         </div>
       </section>

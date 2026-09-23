@@ -6,7 +6,7 @@ import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import { slugify } from "@/lib/content";
 import { usePublicData } from "@/lib/content-store";
-import { Shimmer, StaticHero } from "@/components/public/ContentSkeletons";
+import { Shimmer, StaticHero, SectionHeadingSkeleton, ListRowSkeleton } from "@/components/public/ContentSkeletons";
 import {
   Search,
   ChevronDown,
@@ -73,12 +73,19 @@ export default function FAQPage() {
           title="Frequently Asked Questions"
           subtitle="Clear, Honest Answers Regarding Loans, Eligibility, Rates & Mobile Disbursements"
         />
-        <div className="mx-auto max-w-4xl space-y-4 px-4 py-12">
-          <Shimmer className="h-11 w-full rounded-2xl" />
-          <Shimmer className="h-9 w-2/3 rounded-full" />
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Shimmer key={i} className="h-20 w-full rounded-2xl" />
-          ))}
+        <div className="mx-auto max-w-4xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
+          <SectionHeadingSkeleton />
+
+          <div className="space-y-6">
+            <Shimmer className="h-12 w-full rounded-2xl" />
+            <div className="flex flex-wrap justify-center gap-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Shimmer key={i} className="h-9 w-28 rounded-full" />
+              ))}
+            </div>
+          </div>
+
+          <ListRowSkeleton count={6} />
         </div>
       </div>
     );

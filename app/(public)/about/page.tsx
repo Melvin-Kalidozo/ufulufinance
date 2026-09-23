@@ -1,9 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import { useSearchParams } from "next/navigation";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  TextCardGridSkeleton,
+  CardGridSkeleton,
+  ListRowSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import Image from "next/image";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
@@ -47,7 +56,9 @@ type Leader = {
   image: string;
 };
 
-export default function AboutPage() {
+function AboutPageContent() {
+  const searchParams = useSearchParams();
+  const section = searchParams.get("section");
   const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>("regulation");
   const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/about");
@@ -111,6 +122,18 @@ export default function AboutPage() {
     .map((r) => aval(r, "title"))
     .filter(Boolean);
 
+  // Deep-link support: /about?section=<id> scrolls to that section (re-runs on
+  // same-page query changes, like the products page).
+  useEffect(() => {
+    if (!content || !section) return;
+    const el = document.getElementById(section);
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [content, section]);
+
   if (!content) {
     return (
       <div className="min-h-screen bg-[#fcfdfd]">
@@ -118,14 +141,54 @@ export default function AboutPage() {
           title="About Ufulu Finance"
           subtitle="Company Overview · History · Mission & Vision · Governance · Impact"
         />
-        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-44 animate-pulse rounded-3xl bg-slate-200/70" />
-            ))}
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          {/* Company overview */}
+          <TwoColumnSkeleton />
+
+          {/* History */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={4} className="lg:grid-cols-4" />
           </div>
-          <div className="h-72 w-full animate-pulse rounded-3xl bg-slate-200/70" />
+
+          {/* Mission & Vision */}
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <Shimmer className="h-72 rounded-[32px]" />
+            <Shimmer className="h-72 rounded-[32px]" />
+          </div>
+
+          {/* Core values */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={6} />
+          </div>
+
+          {/* Regional */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={3} />
+          </div>
+
+          {/* Leadership */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
+          </div>
+
+          {/* FAQ */}
+          <div className="mx-auto max-w-4xl">
+            <SectionHeadingSkeleton />
+            <ListRowSkeleton count={5} />
+          </div>
+
+          {/* Impact */}
+          <div className="rounded-[40px] bg-slate-950 p-8 sm:p-12">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Shimmer key={i} className="h-24 rounded-2xl" />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -166,7 +229,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 2. COMPANY OVERVIEW (Who we are, what we do, who we serve) ─ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section id="company-overview" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 scroll-mt-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -215,7 +278,7 @@ export default function AboutPage() {
 
       {/* ── 3. INSTITUTIONAL HISTORY & DEVELOPMENT TIMELINE ─────────── */}
       {TIMELINE.length > 0 && (
-      <section className="bg-slate-50 py-16 sm:py-20 border-y border-slate-200/80">
+      <section id="our-history" className="bg-slate-50 py-16 sm:py-20 border-y border-slate-200/80 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -314,7 +377,7 @@ export default function AboutPage() {
 
       {/* ── 5. CORE VALUES ──────────────────────────────────────────── */}
       {CORE_VALUES.length > 0 && (
-      <section className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80">
+      <section id="core-values" className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -395,7 +458,7 @@ export default function AboutPage() {
 
       {/* ── 6. REGIONAL REACH & BRANCH PRESENCE (Bespoke non-repetitive) ── */}
       {REGIONAL_HUBS.length > 0 && (
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <section id="regional-footprint" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 scroll-mt-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
             <span className="size-2 rounded-full bg-brand-green" />
@@ -445,7 +508,7 @@ export default function AboutPage() {
       )}
 
       {/* ── 7. GOVERNANCE & LEADERSHIP (Board & Management) ─────────── */}
-      <section className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80">
+      <section id="governance-leadership" className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-xl space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -584,7 +647,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 8. FREQUENTLY ASKED QUESTIONS (FAQ) ───────────────────── */}
-      <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
+      <section id="about-faq" className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80 scroll-mt-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -734,5 +797,13 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function AboutPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fcfdfd]" />}>
+      <AboutPageContent />
+    </Suspense>
   );
 }

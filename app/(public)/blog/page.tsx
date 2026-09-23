@@ -4,7 +4,13 @@ import { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  CardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import { resolveEmbed } from "@/lib/embed";
 import {
@@ -114,12 +120,25 @@ function BlogInsightsPageContent() {
           title="Insights & News"
           subtitle="Our Perspective · Practical Business Coaching · Announcements · Community Events"
         />
-        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-96 animate-pulse rounded-2xl bg-slate-200/70" />
-            ))}
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          <TwoColumnSkeleton />
+
+          {/* Search / tabs bar */}
+          <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm md:flex-row md:items-center md:justify-between">
+            <Shimmer className="h-9 w-72 rounded-xl" />
+            <Shimmer className="h-9 w-64 rounded-xl" />
+          </div>
+
+          {/* Articles */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={6} />
+          </div>
+
+          {/* Events */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
           </div>
         </div>
       </div>

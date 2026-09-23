@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import type { Article } from "@/lib/blogData";
 import { usePublicData } from "@/lib/content-store";
 import { resolveEmbed } from "@/lib/embed";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import { StaticHero, DetailSkeleton } from "@/components/public/ContentSkeletons";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   Calendar,
@@ -99,15 +99,8 @@ export default function DedicatedArticlePage({ params }: PageProps) {
           title="Insights & News"
           subtitle="Our Perspective · Practical Business Coaching · Announcements"
         />
-        <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
-          <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-7 w-3/4 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-3 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="space-y-3 pt-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-4 w-full animate-pulse rounded-full bg-slate-200/70" />
-            ))}
-          </div>
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          <DetailSkeleton />
         </div>
       </div>
     );

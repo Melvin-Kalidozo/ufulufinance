@@ -4,7 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  CardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import {
   ArrowUpRight,
@@ -80,12 +86,36 @@ export default function ImpactPortfolioPage() {
           title="Impact & Portfolio"
           subtitle="Projects, community initiatives and client success stories transforming livelihoods across Malawi."
         />
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mb-10 h-4 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-80 animate-pulse rounded-3xl bg-slate-200/70" />
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          <TwoColumnSkeleton />
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Shimmer key={i} className="h-24 rounded-2xl" />
             ))}
+          </div>
+
+          {/* Projects */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
+          </div>
+
+          {/* Initiatives */}
+          <div className="rounded-[32px] bg-[#034DA2] p-8 sm:p-14">
+            <Shimmer className="mb-10 h-6 w-48" />
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Shimmer key={i} className="h-40 rounded-3xl" />
+              ))}
+            </div>
+          </div>
+
+          {/* Success stories */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
           </div>
         </div>
       </div>

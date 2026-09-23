@@ -6,7 +6,15 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
-import { EmptyState, StaticHero } from "@/components/public/ContentSkeletons";
+import {
+  EmptyState,
+  StaticHero,
+  Shimmer,
+  StatStripSkeleton,
+  SectionHeadingSkeleton,
+  ListRowSkeleton,
+  TextCardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import {
   ShieldCheck,
@@ -119,13 +127,39 @@ function ProductsPageContent() {
           title="Loan Products"
           subtitle="Explore the Ufulu Finance credit facilities designed for civil servants, businesses, groups and communities."
         />
-        <div className="mx-auto max-w-7xl space-y-6 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-64 w-full animate-pulse rounded-3xl bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-32 animate-pulse rounded-2xl bg-slate-200/70" />
-            ))}
+        <StatStripSkeleton />
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          {/* Explorer */}
+          <div>
+            <SectionHeadingSkeleton />
+            <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[380px_1fr]">
+              <ListRowSkeleton count={4} className="hidden lg:block" />
+              <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl">
+                <Shimmer className="h-[190px] w-full rounded-none" />
+                <div className="space-y-4 p-6">
+                  <Shimmer className="h-4 w-3/4" />
+                  <Shimmer className="h-3 w-full" />
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <Shimmer key={i} className="h-16 rounded-xl" />
+                    ))}
+                  </div>
+                  <Shimmer className="h-12 rounded-xl" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Who we serve */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={4} className="lg:grid-cols-4" />
+          </div>
+
+          {/* Advantages */}
+          <div>
+            <SectionHeadingSkeleton />
+            <TextCardGridSkeleton count={4} className="lg:grid-cols-4" />
           </div>
         </div>
       </div>
@@ -185,7 +219,7 @@ function ProductsPageContent() {
               { stat: "8+", label: "Distinct Facility Types", sub: "MSME · Agri · Payroll · Group" },
               { stat: "24h", label: "Disbursement Turnaround", sub: "Direct Airtel & Mpamba payout" },
               { stat: "0%", label: "Hidden Fee Policy", sub: "All charges disclosed upfront" },
-              { stat: "MWK 15M", label: "Max Loan Ceiling", sub: "For asset-backed facilities" },
+              { stat: "MWK 50M", label: "Max Loan Ceiling", sub: "For asset-backed facilities" },
             ].map((item) => (
               <div key={item.stat} className="py-8 px-6 text-center">
                 <p className="text-3xl sm:text-4xl font-extrabold text-[#034DA2]">{item.stat}</p>
