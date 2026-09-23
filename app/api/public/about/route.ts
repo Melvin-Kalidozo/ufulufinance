@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const data = await cachedPublic("public:about", [], async () => {
-    const [settings, values, timeline, hubs, leaders, aboutFaqs] = await Promise.all([
+    const [settings, values, timeline, hubs, leaders, aboutFaqs, products] = await Promise.all([
       prisma.websiteSetting.findFirst(),
       prisma.aboutValue.findMany({
         orderBy: { sortOrder: "asc" },
@@ -25,8 +25,12 @@ export async function GET() {
         where: { status: "PUBLISHED", category: "About Ufulu" },
         orderBy: { sortOrder: "asc" },
       }),
+      prisma.product.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
     ]);
-    return { settings, values, timeline, hubs, leaders, aboutFaqs };
+    return { settings, values, timeline, hubs, leaders, aboutFaqs, products };
   });
   return ok(data);
 }

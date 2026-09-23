@@ -5,22 +5,22 @@ import { cachedPublic } from "@/lib/public-cache";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const data = await cachedPublic("public:services-data", [], async () => {
-    const [services, audiences, advantages] = await Promise.all([
-      prisma.service.findMany({
+  const data = await cachedPublic("public:products-data", [], async () => {
+    const [products, audiences, advantages] = await Promise.all([
+      prisma.product.findMany({
         where: { status: "PUBLISHED" },
         orderBy: { sortOrder: "asc" },
       }),
-      prisma.serviceAudience.findMany({
+      prisma.productAudience.findMany({
         where: { status: "PUBLISHED" },
         orderBy: { sortOrder: "asc" },
       }),
-      prisma.serviceAdvantage.findMany({
+      prisma.productAdvantage.findMany({
         where: { status: "PUBLISHED" },
         orderBy: { sortOrder: "asc" },
       }),
     ]);
-    return { services, audiences, advantages };
+    return { products, audiences, advantages };
   });
   return ok(data);
 }

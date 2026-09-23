@@ -159,8 +159,8 @@ model Testimonial {
   updatedAt   DateTime @updatedAt
 }
 
-// ── Services page ──────────────────────────────────────────────────────────
-model Service {
+// ── Products (drives the Products page, home showcase, enquiry product picker) ─
+model Product {
   id            Int           @id @default(autoincrement())
   title         String
   slug          String        @unique
@@ -179,9 +179,10 @@ model Service {
   sortOrder     Int           @default(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  enquiries     LoanEnquiry[]
 }
 
-model ServiceAudience {
+model ProductAudience {
   id          Int     @id @default(autoincrement())
   title       String
   subtitle    String?
@@ -193,7 +194,7 @@ model ServiceAudience {
   updatedAt   DateTime @updatedAt
 }
 
-model ServiceAdvantage {
+model ProductAdvantage {
   id          Int     @id @default(autoincrement())
   title       String
   description String
@@ -201,43 +202,6 @@ model ServiceAdvantage {
   status      ContentStatus @default(PUBLISHED)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-// ── Loan products (drives home showcase, loans page, enquiry product picker) ─
-model LoanProduct {
-  id                   Int           @id @default(autoincrement())
-  name                 String
-  slug                 String        @unique
-  category             String? // filter key: msme | agri | payroll | group | civil-service | business | other
-  categoryLabel        String? // display group e.g. "Government & Civil Service"
-  badge                String?
-  tagline              String?
-  intro                String?
-  description          String?
-  image                String?
-  imageAlt             String?
-  minAmount            Int?
-  maxAmount            Int?
-  minMonths            Int?
-  maxMonths            Int?
-  interestRateMonthly  Float?
-  processingFeePercent Float?
-  amountText           String? // display "Subject to assessment"
-  tenureText           String? // display "Flexible terms"
-  disbursementText     String?
-  repaymentText        String?
-  collateralText       String?
-  keyDetails           Json? // string[]
-  eligibility          Json? // string[]
-  kycRequirements      Json? // string[]
-  repaymentTerms       Json? // string[]
-  isFeatured           Boolean @default(false)
-  isHomeFeatured       Boolean @default(false)
-  status      ContentStatus @default(PUBLISHED)
-  sortOrder            Int     @default(0)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  enquiries            LoanEnquiry[]
 }
 
 model Faq {
@@ -441,7 +405,7 @@ model LoanEnquiry {
   email             String?
   location          String?
   productId         Int?
-  product           LoanProduct?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+  product           Product?       @relation(fields: [productId], references: [id], onDelete: SetNull)
   productName       String?
   amountRequested   String?
   purpose           String?

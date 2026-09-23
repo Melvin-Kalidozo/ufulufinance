@@ -1,8 +1,7 @@
 // Local brand imagery used by static public pages (heroes etc.).
 export const IMAGES = {
   heroHome: "/images/hero-home.jpg",
-  heroServices: "/images/hero-services.jpg",
-  heroLoans: "/images/hero-loans.jpg",
+  heroProducts: "/images/hero-services.jpg",
   heroAbout: "/images/hero-about.jpg",
   heroFaq: "/images/hero-faq.jpg",
   heroImpact: "/images/hero-impact.jpg",

@@ -57,8 +57,8 @@ export async function POST(req: Request) {
     Boolean(await prisma.loanEnquiry.findUnique({ where: { refNumber: r } }))
   );
 
-  const product = await prisma.loanProduct.findFirst({
-    where: { name: productName, status: "PUBLISHED" },
+  const product = await prisma.product.findFirst({
+    where: { title: productName, status: "PUBLISHED" },
   });
 
   const email = emailRaw || null;

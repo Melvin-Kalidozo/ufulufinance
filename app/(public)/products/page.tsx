@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import { EmptyState, StaticHero } from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import {
-  ArrowUpRight,
   ShieldCheck,
   Award,
   Users,
@@ -21,26 +21,26 @@ import {
   Wallet,
   Car,
   PiggyBank,
-  BookOpen,
   Zap,
   CheckCircle2,
-  HelpCircle,
   Percent,
   ChevronLeft,
   ChevronRight,
   Filter,
 } from "lucide-react";
 
-export default function ServicesPage() {
-  const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
+function ProductsPageContent() {
+  const searchParams = useSearchParams();
+  const facility = searchParams.get("facility");
+  const [selectedProductIndex, setSelectedProductIndex] = useState(0);
   const { body } = usePublicData<{ data: Record<string, unknown[]> }>(
-    "/api/public/services-data"
+    "/api/public/products-data"
   );
-  const svc = body?.data ?? null;
+  const data = body?.data ?? null;
 
-  const svcRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const row = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
   const sval = (r: unknown, k: string, d = "") => {
-    const v = svcRow(r)[k];
+    const v = row(r)[k];
     return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
   };
   const iconOf = (key: string): LucideIcon => {
@@ -49,7 +49,7 @@ export default function ServicesPage() {
     };
     return icons[key] ?? TrendingUp;
   };
-  const serviceIcon = (slug: string): LucideIcon => {
+  const productIcon = (slug: string): LucideIcon => {
     const map: Record<string, LucideIcon> = {
       "civil-service": Wallet,
       "private-sector-payroll": Briefcase,
@@ -66,7 +66,22 @@ export default function ServicesPage() {
     return TrendingUp;
   };
 
-  const SERVICES = (svc?.services ?? []).map((r) => ({
+  // Deep-link support: /products?facility=<slug> preselects a product and
+  // scrolls to the explorer section (re-runs on same-page query changes).
+  useEffect(() => {
+    if (!data || !facility) return;
+    const idx = (data.products ?? []).findIndex((r) => sval(r, "slug") === facility);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (idx >= 0) setSelectedProductIndex(idx);
+    requestAnimationFrame(() => {
+      document
+        .getElementById("facility-explorer")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, facility]);
+
+  const PRODUCTS = (data?.products ?? []).map((r) => ({
     id: sval(r, "slug"),
     title: sval(r, "title"),
     tagline: sval(r, "tagline"),
@@ -77,32 +92,32 @@ export default function ServicesPage() {
     repayment: sval(r, "repayment"),
     collateral: sval(r, "collateral"),
     image: sval(r, "image"),
-    icon: serviceIcon(sval(r, "slug")),
-    isFeatured: Boolean(svcRow(r).isFeatured),
+    icon: productIcon(sval(r, "slug")),
+    isFeatured: Boolean(row(r).isFeatured),
     idealFor: sval(r, "idealFor"),
   }));
 
-  const WHO_WE_SERVE = (svc?.audiences ?? []).map((r) => ({
+  const WHO_WE_SERVE = (data?.audiences ?? []).map((r) => ({
     title: sval(r, "title"),
     subtitle: sval(r, "subtitle"),
     desc: sval(r, "description"),
     icon: iconOf(sval(r, "iconKey")),
   }));
 
-  const SERVICE_ADVANTAGES = (svc?.advantages ?? []).map((r) => ({
+  const PRODUCT_ADVANTAGES = (data?.advantages ?? []).map((r) => ({
     title: sval(r, "title"),
     desc: sval(r, "description"),
     icon: advantageIcon(sval(r, "title")),
   }));
 
-  const activeService = SERVICES[Math.min(selectedServiceIndex, SERVICES.length - 1)];
+  const activeProduct = PRODUCTS[Math.min(selectedProductIndex, PRODUCTS.length - 1)];
 
-  if (!svc) {
+  if (!data) {
     return (
       <div className="min-h-screen bg-[#fcfdfd]">
         <StaticHero
-          title="Credit Facilities & Services"
-          subtitle="Explore the Ufulu Finance facilities designed for civil servants, businesses, groups and communities."
+          title="Loan Products"
+          subtitle="Explore the Ufulu Finance credit facilities designed for civil servants, businesses, groups and communities."
         />
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-16 sm:px-6 lg:px-8">
           <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
@@ -117,11 +132,11 @@ export default function ServicesPage() {
     );
   }
 
-  if (SERVICES.length === 0) {
+  if (PRODUCTS.length === 0) {
     return (
       <div className="min-h-screen bg-[#fcfdfd] px-4 py-20">
         <EmptyState
-          title="No published services yet"
+          title="No published products yet"
           description="Available credit facilities will appear here once they are published from the admin portal."
         />
       </div>
@@ -135,7 +150,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero-services.jpg"
-            alt="Ufulu Finance Credit Services"
+            alt="Ufulu Finance Loan Products"
             fill
             priority
             className="object-cover object-center"
@@ -146,7 +161,7 @@ export default function ServicesPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-            Our Services
+            Our Loan Products
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
             Transparent, Ethical Financial Solutions Tailored for Malawian Enterprises
@@ -157,12 +172,12 @@ export default function ServicesPage() {
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#38bdf8] font-semibold">Services</span>
+            <span className="text-[#38bdf8] font-semibold">Loan Products</span>
           </div>
         </div>
       </section>
 
-      {/* ── 2. SERVICES STATS STRIP ───────────────────────────────────── */}
+      {/* ── 2. PRODUCTS STATS STRIP ───────────────────────────────────── */}
       <section className="border-b border-slate-200/80 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-slate-100">
@@ -182,8 +197,11 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* ── 3 + 4. SERVICES EXPLORER (Two-panel interactive layout) ─── */}
-      <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
+      {/* ── 3 + 4. PRODUCTS EXPLORER (Two-panel interactive layout) ─── */}
+      <section
+        id="facility-explorer"
+        className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80 scroll-mt-24"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header */}
@@ -209,12 +227,12 @@ export default function ServicesPage() {
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Filter className="size-4 text-[#009FE0] shrink-0 ml-1" />
                 <select
-                  value={selectedServiceIndex}
-                  onChange={(e) => setSelectedServiceIndex(Number(e.target.value))}
+                  value={selectedProductIndex}
+                  onChange={(e) => setSelectedProductIndex(Number(e.target.value))}
                   className="w-full bg-transparent text-xs sm:text-sm font-bold text-slate-800 focus:outline-none cursor-pointer truncate"
                   aria-label="Select facility"
                 >
-                  {SERVICES.map((srv, idx) => (
+                  {PRODUCTS.map((srv, idx) => (
                     <option key={srv.id} value={idx}>
                       {idx + 1}. {srv.title}
                     </option>
@@ -226,18 +244,18 @@ export default function ServicesPage() {
               <div className="flex items-center gap-1 shrink-0 border-l border-slate-200 pl-2">
                 <button
                   type="button"
-                  onClick={() => setSelectedServiceIndex((prev) => (prev > 0 ? prev - 1 : SERVICES.length - 1))}
+                  onClick={() => setSelectedProductIndex((prev) => (prev > 0 ? prev - 1 : PRODUCTS.length - 1))}
                   className="size-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                   aria-label="Previous facility"
                 >
                   <ChevronLeft className="size-4" />
                 </button>
                 <span className="text-[11px] font-bold text-slate-500 px-1">
-                  {selectedServiceIndex + 1}/{SERVICES.length}
+                  {selectedProductIndex + 1}/{PRODUCTS.length}
                 </span>
                 <button
                   type="button"
-                  onClick={() => setSelectedServiceIndex((prev) => (prev < SERVICES.length - 1 ? prev + 1 : 0))}
+                  onClick={() => setSelectedProductIndex((prev) => (prev < PRODUCTS.length - 1 ? prev + 1 : 0))}
                   className="size-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                   aria-label="Next facility"
                 >
@@ -248,14 +266,14 @@ export default function ServicesPage() {
 
             {/* Horizontal scrollable facility chips */}
             <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-              {SERVICES.map((srv, idx) => {
+              {PRODUCTS.map((srv, idx) => {
                 const Icon = srv.icon;
-                const isActive = selectedServiceIndex === idx;
+                const isActive = selectedProductIndex === idx;
                 return (
                   <button
                     key={srv.id}
                     type="button"
-                    onClick={() => setSelectedServiceIndex(idx)}
+                    onClick={() => setSelectedProductIndex(idx)}
                     className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
                       isActive
                         ? "bg-[#034DA2] text-white shadow-md shadow-blue-900/20 scale-[1.02]"
@@ -273,16 +291,16 @@ export default function ServicesPage() {
           {/* Two-panel grid */}
           <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-5 items-start">
 
-            {/* ── LEFT: Desktop Service list (Hidden on mobile to eliminate excessive scrolling) ── */}
+            {/* ── LEFT: Desktop product list (Hidden on mobile to eliminate excessive scrolling) ── */}
             <div className="hidden lg:flex flex-col gap-2">
-              {SERVICES.map((srv, idx) => {
+              {PRODUCTS.map((srv, idx) => {
                 const Icon = srv.icon;
-                const isActive = selectedServiceIndex === idx;
+                const isActive = selectedProductIndex === idx;
                 return (
                   <button
                     key={srv.id}
                     type="button"
-                    onClick={() => setSelectedServiceIndex(idx)}
+                    onClick={() => setSelectedProductIndex(idx)}
                     className={`group w-full text-left rounded-2xl px-4 py-3 sm:px-4.5 sm:py-3.5 border transition-all duration-200 cursor-pointer flex items-center gap-3.5 ${
                       isActive
                         ? "bg-[#034DA2] border-[#034DA2] shadow-md"
@@ -330,9 +348,9 @@ export default function ServicesPage() {
                 {/* Cover image (compact height) */}
                 <div className="relative h-[160px] sm:h-[190px] w-full overflow-hidden">
                   <Image
-                    key={activeService.id}
-                    src={activeService.image}
-                    alt={activeService.title}
+                    key={activeProduct.id}
+                    src={activeProduct.image}
+                    alt={activeProduct.title}
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 60vw"
@@ -349,9 +367,9 @@ export default function ServicesPage() {
                   {/* Title overlay on image */}
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
                     <h3 className="text-lg sm:text-xl font-extrabold text-white leading-snug drop-shadow-xs">
-                      {activeService.title}
+                      {activeProduct.title}
                     </h3>
-                    <p className="text-xs text-blue-100/90 mt-0.5 line-clamp-1">{activeService.tagline}</p>
+                    <p className="text-xs text-blue-100/90 mt-0.5 line-clamp-1">{activeProduct.tagline}</p>
                   </div>
                 </div>
 
@@ -360,16 +378,16 @@ export default function ServicesPage() {
 
                   {/* Description */}
                   <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
-                    {activeService.description}
+                    {activeProduct.description}
                   </p>
 
                   {/* 4-stat grid */}
                   <div className="grid grid-cols-2 gap-2.5">
                     {[
-                      { label: "Loan Amount", value: activeService.limit },
-                      { label: "Tenure", value: activeService.tenure },
-                      { label: "Disbursement", value: activeService.turnaround, accent: true },
-                      { label: "Repayment", value: activeService.repayment },
+                      { label: "Loan Amount", value: activeProduct.limit },
+                      { label: "Tenure", value: activeProduct.tenure },
+                      { label: "Disbursement", value: activeProduct.turnaround, accent: true },
+                      { label: "Repayment", value: activeProduct.repayment },
                     ].map((item) => (
                       <div key={item.label} className="bg-slate-50 border border-slate-100 rounded-xl p-3">
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">{item.label}</p>
@@ -385,7 +403,7 @@ export default function ServicesPage() {
                     <ShieldCheck className="size-4 text-[#034DA2] shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[10px] text-[#034DA2] font-bold uppercase tracking-wider mb-0.5">Security / Collateral</p>
-                      <p className="text-xs text-slate-700 font-medium leading-relaxed">{activeService.collateral}</p>
+                      <p className="text-xs text-slate-700 font-medium leading-relaxed">{activeProduct.collateral}</p>
                     </div>
                   </div>
 
@@ -393,41 +411,35 @@ export default function ServicesPage() {
                   <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
                     <div className="flex flex-wrap items-center gap-2.5">
                       <LoanEnquiryDialog
-                        defaultFacility={activeService.title}
+                        defaultFacility={activeProduct.title}
                         triggerButton={
                           <button
                             type="button"
                             className="inline-flex items-center gap-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white px-5 py-2.5 text-xs font-bold transition-all cursor-pointer hover:shadow-md"
                           >
-                            Enquire for This Service
+                            Enquire for This Product
                             <ArrowRight className="size-3.5" />
                           </button>
                         }
                       />
-                      <Link
-                        href="/loans#calculator"
-                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 px-5 py-2.5 text-xs font-semibold transition-colors"
-                      >
-                        Loan Calculator
-                      </Link>
                     </div>
 
                     {/* Mobile Stepper in card footer */}
                     <div className="lg:hidden flex items-center gap-1.5 text-xs font-bold text-slate-500 pt-1">
                       <button
                         type="button"
-                        onClick={() => setSelectedServiceIndex((prev) => (prev > 0 ? prev - 1 : SERVICES.length - 1))}
+                        onClick={() => setSelectedProductIndex((prev) => (prev > 0 ? prev - 1 : PRODUCTS.length - 1))}
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition-colors cursor-pointer"
                       >
                         <ChevronLeft className="size-3.5" />
                         Prev
                       </button>
                       <span className="text-[11px] text-slate-400 px-1">
-                        {selectedServiceIndex + 1} of {SERVICES.length}
+                        {selectedProductIndex + 1} of {PRODUCTS.length}
                       </span>
                       <button
                         type="button"
-                        onClick={() => setSelectedServiceIndex((prev) => (prev < SERVICES.length - 1 ? prev + 1 : 0))}
+                        onClick={() => setSelectedProductIndex((prev) => (prev < PRODUCTS.length - 1 ? prev + 1 : 0))}
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition-colors cursor-pointer"
                       >
                         Next
@@ -443,6 +455,7 @@ export default function ServicesPage() {
       </section>
 
       {/* ── 5. WHO WE SERVE ─────────────────────────────────────────── */}
+      {WHO_WE_SERVE.length > 0 && (
       <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -488,8 +501,10 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* ── 6. DISTINCT SERVICE ADVANTAGES (Non-repetitive, modern cards) ─ */}
+      {/* ── 6. DISTINCT PRODUCT ADVANTAGES (Non-repetitive, modern cards) ─ */}
+      {PRODUCT_ADVANTAGES.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
@@ -505,7 +520,7 @@ export default function ServicesPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SERVICE_ADVANTAGES.map((adv) => {
+          {PRODUCT_ADVANTAGES.map((adv) => {
             const Icon = adv.icon;
             return (
               <div
@@ -530,7 +545,16 @@ export default function ServicesPage() {
           })}
         </div>
       </section>
+      )}
 
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fcfdfd]" />}>
+      <ProductsPageContent />
+    </Suspense>
   );
 }

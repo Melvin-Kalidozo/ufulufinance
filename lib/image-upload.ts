@@ -70,8 +70,7 @@ export async function readDocument(file: File): Promise<Buffer> {
 }
 
 export type UploadFolder =
-  | "loan-products"
-  | "services"
+  | "products"
   | "articles"
   | "events"
   | "jobs"

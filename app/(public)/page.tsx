@@ -49,7 +49,7 @@ export default async function HomePage() {
     sectors?: Record<string, unknown>[];
     whyChoose?: Record<string, unknown>[];
     impactMetrics?: Record<string, unknown>[];
-    loanProducts?: Record<string, unknown>[];
+    products?: Record<string, unknown>[];
     recentArticles?: Record<string, unknown>[];
   } | null;
 
@@ -69,19 +69,19 @@ export default async function HomePage() {
     link: String(x.link ?? '#facilities'),
   }));
 
-  const LOAN_PRODUCTS = (payload?.loanProducts ?? []).map((x) => ({
-    id: String(x.slug ?? x.name ?? ''),
-    name: String(x.name ?? ''),
-    category: String(x.categoryLabel ?? ''),
+  const LOAN_PRODUCTS = (payload?.products ?? []).map((x) => ({
+    id: String(x.slug ?? x.title ?? ''),
+    name: String(x.title ?? ''),
+    category: String(x.idealFor ?? ''),
     tagline: String(x.tagline ?? ''),
-    description: String(x.description ?? x.intro ?? ''),
-    amount: String(x.amountText ?? ''),
-    tenure: String(x.tenureText ?? ''),
-    disbursement: String(x.disbursementText ?? ''),
-    repayment: String(x.repaymentText ?? ''),
-    collateral: String(x.collateralText ?? ''),
+    description: String(x.description ?? ''),
+    amount: String(x.limit ?? ''),
+    tenure: String(x.tenure ?? ''),
+    disbursement: String(x.turnaround ?? ''),
+    repayment: String(x.repayment ?? ''),
+    collateral: String(x.collateral ?? ''),
     image: String(x.image ?? ''),
-    imageAlt: String(x.imageAlt ?? x.name ?? ''),
+    imageAlt: String(x.imageAlt ?? x.title ?? ''),
   }));
 
   const WHY_CHOOSE_ITEMS = (payload?.whyChoose ?? []).map((x) => ({
@@ -131,7 +131,7 @@ export default async function HomePage() {
               Financial Freedom in Reach
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-              Your Trusted Partner in Microfinance &amp; Growth
+              Your Trusted Partner in Financing &amp; Growth
             </h1>
 
             <p className="text-sm sm:text-base text-slate-200/90 leading-relaxed max-w-xl">
@@ -140,14 +140,14 @@ export default async function HomePage() {
 
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
               <Link
-                href="/loans"
+                href="/products"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-7 py-3.5 text-sm font-bold shadow-lg shadow-sky-950/20 transition-all hover:scale-105 cursor-pointer"
               >
                 Apply Now
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                href="/services"
+                href="/products"
                 className="inline-flex items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-colors"
               >
                 Explore Facilities
@@ -158,30 +158,32 @@ export default async function HomePage() {
       </section>
 
       {/* Floating Stats Bar (Overlapping Hero) */}
-      <div className="relative z-20 px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {STATS.map((stat, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-7 sm:p-8 shadow-xl shadow-slate-900/[0.06] border border-slate-200/80 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
-                    <span>{stat.number}</span>
+      {STATS.length > 0 && (
+        <div className="relative z-20 px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {STATS.map((stat, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl p-7 sm:p-8 shadow-xl shadow-slate-900/[0.06] border border-slate-200/80 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                      <span>{stat.number}</span>
+                    </div>
+                    <h3 className="text-base font-bold text-slate-800 mt-1">{stat.label}</h3>
+                    <p className="text-xs text-slate-500 mt-2 leading-relaxed">{stat.description}</p>
                   </div>
-                  <h3 className="text-base font-bold text-slate-800 mt-1">{stat.label}</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">{stat.description}</p>
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
+                    <CheckCircle2 className="size-3.5" />
+                    <span>Verified institutional data</span>
+                  </div>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
-                  <CheckCircle2 className="size-3.5" />
-                  <span>Verified institutional data</span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
           2. ABOUT SECTION
@@ -274,6 +276,7 @@ export default async function HomePage() {
       {/* ─────────────────────────────────────────────────────────────────
           3. SECTORS WE EMPOWER (Our Lending Pillars)
       ───────────────────────────────────────────────────────────────── */}
+      {WHO_WE_EMPOWER.length > 0 && (
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -322,10 +325,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
           4. LOANS SECTION (Dedicated Full-Width Alternating Showcases)
       ───────────────────────────────────────────────────────────────── */}
+      {LOAN_PRODUCTS.length > 0 && (
       <div id="facilities" className="scroll-mt-20">
         <div className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center space-y-3">
           <p className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
@@ -440,7 +445,7 @@ export default async function HomePage() {
                       />
 
                       <Link
-                        href="/services"
+                        href="/products"
                         className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-[#034DA2] transition-colors py-2 group"
                       >
                         <span>View full requirements</span>
@@ -471,10 +476,12 @@ export default async function HomePage() {
           );
         })}
       </div>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
           5. WHY CHOOSE US SECTION
       ───────────────────────────────────────────────────────────────── */}
+      {WHY_CHOOSE_ITEMS.length > 0 && (
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -510,6 +517,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
           6. IMPACT SECTION (FINCA-inspired Social Metrics)
@@ -528,6 +536,7 @@ export default async function HomePage() {
           </p>
         </div>
 
+        {IMPACT_METRICS.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
           {IMPACT_METRICS.map((metric, i) => (
             <div
@@ -540,6 +549,7 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
+        )}
 
         {/* Client Testimonials Slider */}
         <ClientTestimonialSlider />
@@ -548,6 +558,7 @@ export default async function HomePage() {
       {/* ─────────────────────────────────────────────────────────────────
           7. INSIGHTS SECTION (Blog & Financial Literacy)
       ───────────────────────────────────────────────────────────────── */}
+      {RECENT_INSIGHTS.length > 0 && (
       <section className="py-20 bg-[#f8fafc] border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
@@ -610,6 +621,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
           8. CTA SECTION (High-Impact Landscape Banner)
@@ -636,7 +648,7 @@ export default async function HomePage() {
           </p>
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
             <Link
-              href="/loans"
+              href="/products"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
             >
               Apply for Financing

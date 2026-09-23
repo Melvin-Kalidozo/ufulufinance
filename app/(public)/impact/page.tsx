@@ -149,13 +149,9 @@ export default function ImpactPortfolioPage() {
               Since our founding in Lilongwe, Ufulu Finance has deployed credit as a high-leverage instrument for socio-economic mobility. By focusing on productivity-enhancing credit—such as agricultural input financing, transport machinery, and retail inventory—we ensure our borrowers build lasting wealth.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">MWK 4.8B+</span>
-                <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Cumulative Credit</span>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">15,200+</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">14,000+</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Borrowers Financed</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
@@ -172,6 +168,7 @@ export default function ImpactPortfolioPage() {
       </section>
 
       {/* ── 3. FEATURED PROJECTS ─────────────────────────────────────── */}
+      {PROJECTS.length > 0 && (
       <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -233,8 +230,10 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 4. COMMUNITY INITIATIVES ─────────────────────────────────── */}
+      {COMMUNITY_INITIATIVES.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-14 shadow-xl">
           <div className="max-w-2xl mb-12 space-y-2">
@@ -268,8 +267,10 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 5. SUCCESS STORIES ───────────────────────────────────────── */}
+      {SUCCESS_STORIES.length > 0 && (
       <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -328,6 +329,7 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }

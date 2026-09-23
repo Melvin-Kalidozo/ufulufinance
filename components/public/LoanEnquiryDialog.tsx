@@ -32,50 +32,30 @@ import {
   Phone,
   Mail,
   Banknote,
-  Layers,
-  Sparkles,
 } from "lucide-react";
-
-// Structured loan catalogue — names must match loans/page.tsx LOAN_PRODUCTS exactly
-export const LOAN_CATALOGUE: {
-  name: string;
-  minAmount: number;
-  maxAmount: number;
-}[] = [
-  { name: "Civil Service Loans",                     minAmount: 50000,   maxAmount: 5000000  },
-  { name: "Private Sector Payroll Loans",            minAmount: 50000,   maxAmount: 5000000  },
-  { name: "Village Banking Loans",                   minAmount: 50000,   maxAmount: 2000000  },
-  { name: "Business Loans",                          minAmount: 100000,  maxAmount: 10000000 },
-  { name: "MSME QuickGrowth Working Capital",        minAmount: 100000,  maxAmount: 10000000 },
-  { name: "Mlimi Harvest Input Booster",             minAmount: 150000,  maxAmount: 7500000  },
-  { name: "Boma Civil Servant Express",              minAmount: 50000,   maxAmount: 2500000  },
-  { name: "Tikondane Solidarity Cluster Credit",     minAmount: 50000,   maxAmount: 500000   },
-  { name: "Commercial Asset & Equipment Credit",     minAmount: 500000,  maxAmount: 15000000 },
-  // Generic fallback options for enquiries not originating from a card
-  { name: "Family Emergency Relief Credit",          minAmount: 50000,   maxAmount: 1000000  },
-  { name: "Commercial Trade & Invoice Bridge",       minAmount: 200000,  maxAmount: 20000000 },
-];
-
-// Legacy alias kept for any other consumers
-export const LOAN_PRODUCTS = LOAN_CATALOGUE.map((p) => p.name);
+import { usePublicData } from "@/lib/content-store";
 
 interface LoanEnquiryDialogProps {
   triggerButton: React.ReactNode;
   defaultProduct?: string;
   defaultFacility?: string;
-  defaultAmount?: string | number;
-  defaultMinAmount?: number;
-  defaultMaxAmount?: number;
 }
 
 export function LoanEnquiryDialog({
   triggerButton,
   defaultProduct = "",
   defaultFacility = "",
-  defaultAmount = "",
-  defaultMinAmount,
-  defaultMaxAmount,
 }: LoanEnquiryDialogProps) {
+  const { body: productsBody } = usePublicData<{ data: { products?: unknown[] } }>(
+    "/api/public/products-data"
+  );
+  const PRODUCT_NAMES: string[] = ((productsBody?.data?.products ?? []) as unknown[])
+    .map((p) => {
+      const r = (p && typeof p === "object" ? p : {}) as Record<string, unknown>;
+      return r.title !== undefined && r.title !== null ? String(r.title) : "";
+    })
+    .filter(Boolean);
+
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [sending, setSending] = useState(false);
@@ -90,7 +70,7 @@ export function LoanEnquiryDialog({
     phone: "",
     email: "",
     product: initialProduct,
-    amount: defaultAmount ? String(defaultAmount) : "",
+    amount: "",
     message: "",
   });
 
@@ -113,10 +93,7 @@ export function LoanEnquiryDialog({
       setProduct(selected);
       setForm((prev) => ({ ...prev, product: selected }));
     }
-    if (defaultAmount) {
-      setForm((prev) => ({ ...prev, amount: String(defaultAmount) }));
-    }
-  }, [defaultFacility, defaultProduct, defaultAmount]);
+  }, [defaultFacility, defaultProduct]);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -194,13 +171,7 @@ export function LoanEnquiryDialog({
     }
   }
 
-  // Derive the selected product's limits from the catalogue
-  const selectedCatalogueEntry = LOAN_CATALOGUE.find((p) => p.name === form.product);
-  const activeMin = selectedCatalogueEntry?.minAmount ?? defaultMinAmount;
-  const activeMax = selectedCatalogueEntry?.maxAmount ?? defaultMaxAmount;
-
   // Inline Validation checks
-  const amountRaw = Number(form.amount.replace(/[^0-9]/g, ""));
   const errors = {
     name: !form.name.trim()
       ? "Full legal name is required"
@@ -217,14 +188,7 @@ export function LoanEnquiryDialog({
         ? "Please enter a valid email address"
         : "",
     product: !form.product ? "Please select a loan facility" : "",
-    amount:
-      form.amount.trim() && activeMin && activeMax && amountRaw > 0
-        ? amountRaw < activeMin
-          ? `Minimum for this facility is MWK ${activeMin.toLocaleString()}`
-          : amountRaw > activeMax
-          ? `Maximum for this facility is MWK ${activeMax.toLocaleString()}`
-          : ""
-        : "",
+    amount: "",
   };
 
   const isStep1Valid = !errors.name && !errors.phone && !errors.email;
@@ -320,7 +284,7 @@ export function LoanEnquiryDialog({
       phone: "",
       email: "",
       product: initialProduct,
-      amount: defaultAmount ? String(defaultAmount) : "",
+      amount: "",
       message: "",
     });
     setIdFile(null);
@@ -579,7 +543,7 @@ export function LoanEnquiryDialog({
                         <SelectValue placeholder="Select a loan facility" />
                       </SelectTrigger>
                       <SelectContent className="rounded-2xl border-slate-200 shadow-xl bg-white max-h-64">
-                        {LOAN_PRODUCTS.map((prod) => (
+                        {PRODUCT_NAMES.map((prod) => (
                           <SelectItem
                             key={prod}
                             value={prod}
@@ -613,7 +577,7 @@ export function LoanEnquiryDialog({
                           setTouched((prev) => ({ ...prev, amount: true }));
                         }}
                         onBlur={() => handleBlur("amount")}
-                        placeholder={activeMin ? `e.g. ${activeMin.toLocaleString()}` : "e.g. 500,000"}
+                        placeholder="e.g. 500,000"
                         className={`${inputBaseClass} pl-9 ${
                           touched.amount && errors.amount
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
@@ -627,14 +591,9 @@ export function LoanEnquiryDialog({
                         <AlertCircle className="size-3" />
                         {errors.amount}
                       </p>
-                    ) : activeMin && activeMax ? (
-                      <p className="text-[10px] text-slate-500">
-                        Range for <span className="font-semibold text-[#034DA2]">{form.product}</span>:{" "}
-                        MWK {activeMin.toLocaleString()} – MWK {activeMax.toLocaleString()}
-                      </p>
                     ) : (
                       <p className="text-[10px] text-slate-500">
-                        Select a facility above to see eligible amount range.
+                        Enter an approximate amount — final terms are confirmed after assessment.
                       </p>
                     )}
                   </div>

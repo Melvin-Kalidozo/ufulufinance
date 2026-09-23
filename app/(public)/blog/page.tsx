@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { StaticHero } from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import { resolveEmbed } from "@/lib/embed";
@@ -24,9 +25,28 @@ import {
 
 import type { Article, EventItem } from "@/lib/blogData";
 
-export default function BlogInsightsPage() {
+function BlogInsightsPageContent() {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState<"all" | "blog" | "news" | "events">("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Deep-link support: /blog?tab=blog|news|events preselects the tab and scrolls
+  // to the insights section (re-runs on same-page query changes).
+  useEffect(() => {
+    if (tab === "all" || tab === "blog" || tab === "news" || tab === "events") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveTab(tab);
+      requestAnimationFrame(() => {
+        document
+          .getElementById("insights")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    } else if (!tab) {
+      setActiveTab("all");
+    }
+  }, [tab]);
+
   const { body: arts } = usePublicData<Record<string, unknown[]>>("/api/public/articles");
   const { body: evts } = usePublicData<Record<string, unknown[]>>("/api/public/events");
   const live =
@@ -195,7 +215,10 @@ export default function BlogInsightsPage() {
       </section>
 
       {/* ── 3. SEARCH & TABS BAR ─────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <section
+        id="insights"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 scroll-mt-24"
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2 bg-white rounded-2xl border border-slate-200 shadow-sm">
           {/* Tab Navigation */}
           <div className="inline-flex p-1 rounded-xl bg-slate-100 text-xs font-semibold overflow-x-auto max-w-full">
@@ -347,7 +370,7 @@ export default function BlogInsightsPage() {
       )}
 
       {/* ── 5. EVENTS & WORKSHOPS SECTION ───────────────────────────── */}
-      {(activeTab === "all" || activeTab === "events") && (
+      {EVENTS.length > 0 && (activeTab === "all" || activeTab === "events") && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div className="space-y-1">
@@ -432,5 +455,13 @@ export default function BlogInsightsPage() {
       )}
 
     </div>
+  );
+}
+
+export default function BlogInsightsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fcfdfd]" />}>
+      <BlogInsightsPageContent />
+    </Suspense>
   );
 }

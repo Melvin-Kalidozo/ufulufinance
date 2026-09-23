@@ -107,6 +107,10 @@ export default function AboutPage() {
     answer: aval(r, "answer"),
   }));
 
+  const PRODUCTS = (content?.products ?? [])
+    .map((r) => aval(r, "title"))
+    .filter(Boolean);
+
   if (!content) {
     return (
       <div className="min-h-screen bg-[#fcfdfd]">
@@ -190,42 +194,27 @@ export default function AboutPage() {
               Our long-term strategic ambition is to progress into a <strong className="text-slate-900 font-semibold">deposit-taking financial institution</strong> — a journey driven by our commitment to expanding financial inclusion and providing a broader range of services to individuals and businesses.
             </p>
 
+            {PRODUCTS.length > 0 && (
             <div className="pt-2">
               <p className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3.5">
-                Our Current Services
+                Our Loan Products
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Civil Service Loans</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Private Sector Payroll Loans</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Village Banking Loans</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Business Loans (Expanding)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Responsible Lending Practices</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
-                  <span>Non-Deposit Taking Microfinance Institution</span>
-                </div>
+                {PRODUCTS.map((product) => (
+                  <div key={product} className="flex items-center gap-2">
+                    <Check className="size-4 text-[#00A3E0] shrink-0" />
+                    <span>{product}</span>
+                  </div>
+                ))}
               </div>
             </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* ── 3. INSTITUTIONAL HISTORY & DEVELOPMENT TIMELINE ─────────── */}
+      {TIMELINE.length > 0 && (
       <section className="bg-slate-50 py-16 sm:py-20 border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
@@ -270,6 +259,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 4. MISSION & VISION ─────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -323,6 +313,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 5. CORE VALUES ──────────────────────────────────────────── */}
+      {CORE_VALUES.length > 0 && (
       <section className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -400,8 +391,10 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. REGIONAL REACH & BRANCH PRESENCE (Bespoke non-repetitive) ── */}
+      {REGIONAL_HUBS.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -449,6 +442,7 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ── 7. GOVERNANCE & LEADERSHIP (Board & Management) ─────────── */}
       <section className="bg-[#f8fafc] py-16 sm:py-24 border-t border-slate-200/80">
@@ -605,6 +599,7 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {ABOUT_FAQS.length > 0 && (
           <div className="space-y-3.5">
             {ABOUT_FAQS.map((faq) => {
               const isOpen = openFaqId === faq.id;
@@ -639,6 +634,7 @@ export default function AboutPage() {
               );
             })}
           </div>
+          )}
 
           <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
             <div>
@@ -697,22 +693,10 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
                 <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
-                  MWK 4.8B+
-                </p>
-                <h4 className="text-sm font-bold text-white mt-1">
-                  Capital Disbursed
-                </h4>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Fueling inventory, fertilizer inputs, and asset acquisitions across Malawi.
-                </p>
-              </div>
-
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
-                  15,200+
+                  14,000+
                 </p>
                 <h4 className="text-sm font-bold text-white mt-1">
                   Entrepreneurs Financed

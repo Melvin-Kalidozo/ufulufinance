@@ -88,7 +88,7 @@ export function PublicFooter() {
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
               <Link
-                href="/loans"
+                href="/products"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 Apply for Financing
@@ -162,13 +162,8 @@ export function PublicFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="hover:text-[#38bdf8] transition-colors">
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/loans" className="hover:text-[#38bdf8] transition-colors">
-                    Loan Products
+                  <Link href="/products" className="hover:text-[#38bdf8] transition-colors">
+                    Products
                   </Link>
                 </li>
                 <li>
@@ -198,11 +193,6 @@ export function PublicFooter() {
                 <li>
                   <Link href="/faq" className="hover:text-[#38bdf8] transition-colors">
                     FAQs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/loans#calculator" className="hover:text-[#38bdf8] transition-colors">
-                    Loan Calculator
                   </Link>
                 </li>
                 <li>

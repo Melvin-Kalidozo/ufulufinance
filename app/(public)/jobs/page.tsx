@@ -174,6 +174,7 @@ export default function JobsPage() {
       </section>
 
       {/* ── 3. WHY WORK WITH US ──────────────────────────────────────── */}
+      {PERKS.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="bg-white rounded-[32px] p-8 sm:p-12 lg:p-14 border border-slate-200/80 shadow-xl shadow-slate-900/[0.04]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -225,6 +226,7 @@ export default function JobsPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 4. AVAILABLE POSITIONS (4x2 Grid matching Rudra) ─────────── */}
       <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
@@ -242,6 +244,26 @@ export default function JobsPage() {
             </p>
           </div>
 
+          {OPEN_ROLES.length === 0 ? (
+            <div className="max-w-xl mx-auto text-center rounded-3xl bg-white border border-slate-200/90 shadow-sm p-10 space-y-3">
+              <div className="size-12 rounded-2xl bg-blue-50 text-[#034DA2] flex items-center justify-center mx-auto">
+                <Briefcase className="size-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">
+                No open positions available yet
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                New opportunities are posted regularly — check back soon or reach out to our team for upcoming roles.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#034DA2] hover:text-[#023877] transition-colors"
+              >
+                Contact us
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
+          ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {OPEN_ROLES.map((role) => {
               if (role.isFeatured) {
@@ -362,6 +384,7 @@ export default function JobsPage() {
               );
             })}
           </div>
+          )}
         </div>
       </section>
     </div>

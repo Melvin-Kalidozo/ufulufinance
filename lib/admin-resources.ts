@@ -2,73 +2,34 @@ import type { ResourceDef } from "@/lib/admin-resource";
 
 const CONTENT_STATUS = ["DRAFT", "PUBLISHED"];
 
-export const loanProductsDef: ResourceDef = {
-  model: "loanProduct",
-  title: "Loan Products",
-  singular: "loan product",
-  searchFields: ["name", "tagline"],
-  folderPrefix: "loan-products",
-  slugFrom: "name",
-  fields: [
-    { name: "name", label: "Name", type: "text", required: true, step: "Basics" },
-    { name: "category", label: "Category key", type: "select", options: ["msme", "agri", "payroll", "group", "civil-service", "business", "other"], step: "Basics" },
-    { name: "categoryLabel", label: "Category label", type: "text", step: "Basics" },
-    { name: "badge", label: "Badge", type: "text", step: "Basics" },
-    { name: "tagline", label: "Tagline", type: "textarea", step: "Basics" },
-    { name: "image", label: "Image", type: "image", folder: "loan-products", step: "Media & copy" },
-    { name: "imageAlt", label: "Image alt text", type: "text", step: "Media & copy" },
-    { name: "intro", label: "Short intro", type: "textarea", step: "Media & copy" },
-    { name: "description", label: "Description", type: "textarea", step: "Media & copy" },
-    { name: "minAmount", label: "Min amount (MWK)", type: "number", min: 0, step: "Terms & pricing" },
-    { name: "maxAmount", label: "Max amount (MWK)", type: "number", min: 0, step: "Terms & pricing" },
-    { name: "minMonths", label: "Min tenure (months)", type: "number", min: 0, step: "Terms & pricing" },
-    { name: "maxMonths", label: "Max tenure (months)", type: "number", min: 0, step: "Terms & pricing" },
-    { name: "interestRateMonthly", label: "Monthly interest rate (%)", type: "number", step: "Terms & pricing" },
-    { name: "processingFeePercent", label: "Processing fee (%)", type: "number", step: "Terms & pricing" },
-    { name: "amountText", label: "Amount display text", type: "text", step: "Terms & pricing" },
-    { name: "tenureText", label: "Tenure display text", type: "text", step: "Terms & pricing" },
-    { name: "disbursementText", label: "Disbursement text", type: "text", step: "Terms & pricing" },
-    { name: "repaymentText", label: "Repayment text", type: "text", step: "Terms & pricing" },
-    { name: "collateralText", label: "Collateral text", type: "text", step: "Terms & pricing" },
-    { name: "keyDetails", label: "Key details (one per line)", type: "json-array", step: "Requirements" },
-    { name: "eligibility", label: "Eligibility (one per line)", type: "json-array", step: "Requirements" },
-    { name: "kycRequirements", label: "KYC requirements (one per line)", type: "json-array", step: "Requirements" },
-    { name: "repaymentTerms", label: "Repayment terms (one per line)", type: "json-array", step: "Requirements" },
-    { name: "isFeatured", label: "Featured on loans page", type: "boolean", step: "Publishing" },
-    { name: "isHomeFeatured", label: "Featured on home page", type: "boolean", step: "Publishing" },
-    { name: "status", label: "Status", type: "select", options: CONTENT_STATUS, step: "Publishing" },
-    { name: "sortOrder", label: "Sort order", type: "number", step: "Publishing" },
-  ],
-};
-
-export const servicesDef: ResourceDef = {
-  model: "service",
-  title: "Services",
-  singular: "service",
+export const productsDef: ResourceDef = {
+  model: "product",
+  title: "Products",
+  singular: "product",
   searchFields: ["title", "tagline"],
-  folderPrefix: "services",
+  folderPrefix: "products",
   slugFrom: "title",
   fields: [
     { name: "title", label: "Title", type: "text", required: true, step: "Basics" },
     { name: "tagline", label: "Tagline", type: "textarea", step: "Basics" },
     { name: "description", label: "Description", type: "textarea", required: true, step: "Basics" },
-    { name: "image", label: "Image", type: "image", folder: "services", step: "Media" },
+    { name: "image", label: "Image", type: "image", folder: "products", step: "Media" },
     { name: "imageAlt", label: "Image alt text", type: "text", step: "Media" },
-    { name: "idealFor", label: "Ideal for", type: "text", step: "Service details" },
-    { name: "limit", label: "Limit", type: "text", step: "Service details" },
-    { name: "tenure", label: "Tenure", type: "text", step: "Service details" },
-    { name: "turnaround", label: "Turnaround", type: "text", step: "Service details" },
-    { name: "repayment", label: "Repayment", type: "text", step: "Service details" },
-    { name: "collateral", label: "Collateral", type: "text", step: "Service details" },
-    { name: "isFeatured", label: "Featured", type: "boolean", step: "Publishing" },
+    { name: "idealFor", label: "Ideal for", type: "text", step: "Product details" },
+    { name: "limit", label: "Limit", type: "text", step: "Product details" },
+    { name: "tenure", label: "Tenure", type: "text", step: "Product details" },
+    { name: "turnaround", label: "Turnaround", type: "text", step: "Product details" },
+    { name: "repayment", label: "Repayment", type: "text", step: "Product details" },
+    { name: "collateral", label: "Collateral", type: "text", step: "Product details" },
+    { name: "isFeatured", label: "Featured on home page", type: "boolean", step: "Publishing" },
     { name: "status", label: "Status", type: "select", options: CONTENT_STATUS, step: "Publishing" },
     { name: "sortOrder", label: "Sort order", type: "number", step: "Publishing" },
   ],
 };
 
-export const serviceAudiencesDef: ResourceDef = {
-  model: "serviceAudience",
-  title: "Service — Who we serve",
+export const productAudiencesDef: ResourceDef = {
+  model: "productAudience",
+  title: "Products — Who we serve",
   singular: "audience",
   searchFields: ["title"],
   fields: [
@@ -81,9 +42,9 @@ export const serviceAudiencesDef: ResourceDef = {
   ],
 };
 
-export const serviceAdvantagesDef: ResourceDef = {
-  model: "serviceAdvantage",
-  title: "Service — Advantages",
+export const productAdvantagesDef: ResourceDef = {
+  model: "productAdvantage",
+  title: "Products — Advantages",
   singular: "advantage",
   searchFields: ["title"],
   fields: [
@@ -385,10 +346,9 @@ export const storiesDef: ResourceDef = {
 
 
 const DEFS: Record<string, ResourceDef> = {
-  loanProduct: loanProductsDef,
-  service: servicesDef,
-  serviceAudience: serviceAudiencesDef,
-  serviceAdvantage: serviceAdvantagesDef,
+  product: productsDef,
+  productAudience: productAudiencesDef,
+  productAdvantage: productAdvantagesDef,
   article: articlesDef,
   event: eventsDef,
   job: jobsDef,

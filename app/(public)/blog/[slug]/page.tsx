@@ -20,7 +20,6 @@ import {
   Sparkles,
   Building2,
   ChevronRight,
-  Calculator,
   ShieldCheck,
   CheckCircle2,
   ThumbsUp,
@@ -396,27 +395,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
           {/* ── RIGHT: Sticky Sidebar ── */}
           <aside className="space-y-5 lg:sticky lg:top-24">
-
-            {/* Loan Calculator Card */}
-            <div className="bg-[#01214A] text-white rounded-2xl p-5 space-y-3.5 border border-sky-900/40">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A3E0] text-slate-950">
-                  Loan Estimator
-                </span>
-                <Calculator className="size-4 text-[#38bdf8]" />
-              </div>
-              <h4 className="text-sm font-bold leading-snug">Transparent Repayment Calculator</h4>
-              <p className="text-xs text-sky-200/70 leading-relaxed">
-                Borrow from MWK 100,000 to MWK 10,000,000 with flat rates and zero surprise deductions.
-              </p>
-              <Link
-                href="/loans#calculator"
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold text-xs transition-colors"
-              >
-                Open Loan Calculator
-                <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
 
             {/* Regional Offices */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">

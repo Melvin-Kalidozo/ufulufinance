@@ -24,7 +24,7 @@ export default async function AdminDashboardPage() {
 
   const [
     publishedArticles,
-    activeLoanProducts,
+    activeProducts,
     upcomingEvents,
     openJobs,
     pendingLoan,
@@ -33,7 +33,7 @@ export default async function AdminDashboardPage() {
     totalUsers,
   ] = await Promise.all([
     prisma.article.count({ where: { status: ContentStatus.PUBLISHED } }),
-    prisma.loanProduct.count({ where: { status: ContentStatus.PUBLISHED } }),
+    prisma.product.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.event.count({ where: { date: { gte: new Date() }, status: ContentStatus.PUBLISHED } }),
     prisma.job.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.loanEnquiry.count({ where: { status: "PENDING" } }),
@@ -44,7 +44,7 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { label: "Published Articles", value: publishedArticles, icon: Newspaper, href: "/admin/content/editorial" },
-    { label: "Active Loan Products", value: activeLoanProducts, icon: Landmark, href: "/admin/content/loans" },
+    { label: "Active Products", value: activeProducts, icon: Landmark, href: "/admin/content/products" },
     { label: "Upcoming Events", value: upcomingEvents, icon: CalendarDays, href: "/admin/content/editorial" },
     { label: "Open Job Listings", value: openJobs, icon: Briefcase, href: "/admin/content/editorial" },
     { label: "Pending Loan Applicants", value: pendingLoan, icon: Inbox, href: "/admin/enquiries" },

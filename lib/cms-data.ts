@@ -14,7 +14,7 @@ export type HomeContent = {
   whyChoose: unknown[];
   impactMetrics: unknown[];
   testimonials: unknown[];
-  loanProducts: unknown[];
+  products: unknown[];
   recentArticles: unknown[];
 };
 
@@ -27,7 +27,7 @@ export async function getHomeContent(): Promise<HomeContent> {
       whyChoose,
       impactMetrics,
       testimonials,
-      loanProducts,
+      products,
       recentArticles,
     ] = await Promise.all([
       prisma.websiteSetting.findFirst(),
@@ -52,9 +52,9 @@ export async function getHomeContent(): Promise<HomeContent> {
         where: { status: "PUBLISHED" },
         take: 6,
       }),
-      prisma.loanProduct.findMany({
+      prisma.product.findMany({
         orderBy: { sortOrder: "asc" },
-        where: { status: "PUBLISHED", isHomeFeatured: true },
+        where: { status: "PUBLISHED", isFeatured: true },
       }),
       prisma.article.findMany({
         orderBy: { date: "desc" },
@@ -70,7 +70,7 @@ export async function getHomeContent(): Promise<HomeContent> {
       whyChoose,
       impactMetrics,
       testimonials,
-      loanProducts,
+      products,
       recentArticles,
     };
   });

@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   const { page, limit, skip } = getPagination(sp);
   const q = getQuery(sp);
 
-  const data = await cachedPublic("public:services-list", [q, String(page), String(limit)], async () => {
+  const data = await cachedPublic("public:products-list", [q, String(page), String(limit)], async () => {
     const where = {
       status: "PUBLISHED" as const,
       ...(q
@@ -23,8 +23,8 @@ export async function GET(req: Request) {
         : {}),
     };
     const [rows, total] = await Promise.all([
-      prisma.service.findMany({ where, orderBy: { sortOrder: "asc" }, skip, take: limit }),
-      prisma.service.count({ where }),
+      prisma.product.findMany({ where, orderBy: { sortOrder: "asc" }, skip, take: limit }),
+      prisma.product.count({ where }),
     ]);
     return { rows, total };
   });
