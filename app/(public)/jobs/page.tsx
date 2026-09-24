@@ -37,10 +37,13 @@ import type { JobRole } from "@/lib/jobsData";
 import { usePublicData } from "@/lib/content-store";
 
 export default function JobsPage() {
-  const { body } = usePublicData<{ data: unknown[]; perks: unknown[] }>("/api/public/jobs");
+  const { body } = usePublicData<{ data: unknown[]; perks: unknown[] }>(
+    "/api/public/jobs",
+  );
   const live = body;
 
-  const jRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const jRow = (r: unknown) =>
+    (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
   const jval = (r: unknown, k: string, d = "") => {
     const v = jRow(r)[k];
     return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
@@ -128,7 +131,8 @@ export default function JobsPage() {
             Careers at Ufulu
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
-            Why Work With Us &middot; Open Positions &middot; Growth Opportunities &middot; Apply Online
+            Why Work With Us &middot; Open Positions &middot; Growth
+            Opportunities &middot; Apply Online
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
@@ -155,13 +159,19 @@ export default function JobsPage() {
             </h2>
 
             <p className="text-sm font-semibold text-[#034DA2] bg-blue-50 border border-blue-100 p-4 rounded-2xl">
-              We are a team of ethical bankers, agronomists, risk analysts, and technology developers passionate about expanding financial freedom across Malawi.
+              We are a team of ethical bankers, agronomists, risk analysts, and
+              technology developers passionate about expanding financial freedom
+              across Malawi.
             </p>
           </div>
 
           <div className="lg:col-span-7 space-y-6 text-slate-600">
             <p className="text-sm sm:text-base leading-relaxed">
-              At Ufulu Finance, working here means more than processing transactions. Every day, our team helps a market vendor restock their store, a smallholder farmer purchase certified fertilizer, or a teacher finance their child’s university tuition without being exploited by loan sharks.
+              At Ufulu Finance, working here means more than processing
+              transactions. Every day, our team helps a market vendor restock
+              their store, a smallholder farmer purchase certified fertilizer,
+              or a teacher finance their child’s university tuition without
+              being exploited by loan sharks.
             </p>
 
             <div>
@@ -192,7 +202,7 @@ export default function JobsPage() {
       </section>
 
       {/* ── 3. WHY WORK WITH US ──────────────────────────────────────── */}
-      {PERKS.length > 0 && (
+      {/* {PERKS.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="bg-white rounded-[32px] p-8 sm:p-12 lg:p-14 border border-slate-200/80 shadow-xl shadow-slate-900/[0.04]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -244,7 +254,7 @@ export default function JobsPage() {
           </div>
         </div>
       </section>
-      )}
+      )} */}
 
       {/* ── 4. AVAILABLE POSITIONS (4x2 Grid matching Rudra) ─────────── */}
       <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
@@ -258,7 +268,8 @@ export default function JobsPage() {
               Explore Open Roles &amp; Opportunities
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Click any position below to view responsibilities, qualification criteria, and submit your application.
+              Click any position below to view responsibilities, qualification
+              criteria, and submit your application.
             </p>
           </div>
 
@@ -271,7 +282,8 @@ export default function JobsPage() {
                 No open positions available yet
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                New opportunities are posted regularly — check back soon or reach out to our team for upcoming roles.
+                New opportunities are posted regularly — check back soon or
+                reach out to our team for upcoming roles.
               </p>
               <Link
                 href="/contact"
@@ -282,46 +294,114 @@ export default function JobsPage() {
               </Link>
             </div>
           ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {OPEN_ROLES.map((role) => {
-              if (role.isFeatured) {
-                return (
-                  <div
-                    key={role.id}
-                    className="rounded-3xl p-6 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
-                  >
-                    <div>
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
-                          {role.department}
-                        </span>
-                        <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
-                          <ArrowUpRight className="size-4" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {OPEN_ROLES.map((role) => {
+                if (role.isFeatured) {
+                  return (
+                    <div
+                      key={role.id}
+                      className="rounded-3xl p-6 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
+                    >
+                      <div>
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
+                            {role.department}
+                          </span>
+                          <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
+                            <ArrowUpRight className="size-4" />
+                          </div>
+                        </div>
+
+                        <h3 className="text-lg font-extrabold leading-snug mt-3">
+                          <Link
+                            href={`/jobs/${role.id}`}
+                            className="hover:underline"
+                          >
+                            {role.title}
+                          </Link>
+                        </h3>
+                        <p className="text-xs text-blue-100 font-medium mt-2 leading-relaxed">
+                          {role.description}
+                        </p>
+
+                        <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="size-3.5 text-[#00A3E0]" />{" "}
+                            {role.location}
+                          </span>
+                          <span>&bull;</span>
+                          <span>{role.type}</span>
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-extrabold leading-snug mt-3">
-                        <Link href={`/jobs/${role.id}`} className="hover:underline">
+                      <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
+                        <Link
+                          href={`/jobs/${role.id}`}
+                          className="text-xs font-bold text-white underline hover:text-sky-200"
+                        >
+                          View Job Details
+                        </Link>
+                        <JobApplicationDialog
+                          job={role}
+                          triggerButton={
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
+                            >
+                              Apply Now
+                              <ArrowRight className="size-3.5" />
+                            </button>
+                          }
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={role.id}
+                    className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
+                          {role.department}
+                        </span>
+                        <Link
+                          href={`/jobs/${role.id}`}
+                          className="size-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors"
+                        >
+                          <ArrowUpRight className="size-4" />
+                        </Link>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
+                        <Link
+                          href={`/jobs/${role.id}`}
+                          className="hover:text-[#034DA2] hover:underline transition-colors"
+                        >
                           {role.title}
                         </Link>
                       </h3>
-                      <p className="text-xs text-blue-100 font-medium mt-2 leading-relaxed">
+                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                         {role.description}
                       </p>
 
-                      <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
+                      <div className="mt-4 flex items-center gap-3 text-xs text-slate-500 font-medium">
                         <span className="flex items-center gap-1">
-                          <MapPin className="size-3.5 text-[#00A3E0]" /> {role.location}
+                          <MapPin className="size-3.5 text-slate-400" />{" "}
+                          {role.location}
                         </span>
                         <span>&bull;</span>
                         <span>{role.type}</span>
                       </div>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
+                    <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                       <Link
                         href={`/jobs/${role.id}`}
-                        className="text-xs font-bold text-white underline hover:text-sky-200"
+                        className="text-xs font-bold text-[#034DA2] hover:underline"
                       >
                         View Job Details
                       </Link>
@@ -330,7 +410,7 @@ export default function JobsPage() {
                         triggerButton={
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
                           >
                             Apply Now
                             <ArrowRight className="size-3.5" />
@@ -340,68 +420,8 @@ export default function JobsPage() {
                     </div>
                   </div>
                 );
-              }
-
-              return (
-                <div
-                  key={role.id}
-                  className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between hover:-translate-y-1"
-                >
-                  <div>
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
-                        {role.department}
-                      </span>
-                      <Link
-                        href={`/jobs/${role.id}`}
-                        className="size-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors"
-                      >
-                        <ArrowUpRight className="size-4" />
-                      </Link>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
-                      <Link href={`/jobs/${role.id}`} className="hover:text-[#034DA2] hover:underline transition-colors">
-                        {role.title}
-                      </Link>
-                    </h3>
-                    <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                      {role.description}
-                    </p>
-
-                    <div className="mt-4 flex items-center gap-3 text-xs text-slate-500 font-medium">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="size-3.5 text-slate-400" /> {role.location}
-                      </span>
-                      <span>&bull;</span>
-                      <span>{role.type}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <Link
-                      href={`/jobs/${role.id}`}
-                      className="text-xs font-bold text-[#034DA2] hover:underline"
-                    >
-                      View Job Details
-                    </Link>
-                    <JobApplicationDialog
-                      job={role}
-                      triggerButton={
-                        <button
-                          type="button"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
-                        >
-                          Apply Now
-                          <ArrowRight className="size-3.5" />
-                        </button>
-                      }
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+              })}
+            </div>
           )}
         </div>
       </section>
