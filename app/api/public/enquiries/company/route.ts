@@ -59,7 +59,12 @@ export async function POST(req: Request) {
     { label: "Message", value: enquiry.message },
   ];
 
-  void sendAdminEnquiryEmail("company enquiry", enquiry.refNumber, fields).catch((e) => console.error("[mail]", e));
+  void sendAdminEnquiryEmail(
+    "company enquiry",
+    enquiry.refNumber,
+    fields,
+    category === "Complaints" ? "complaints" : "general",
+  ).catch((e) => console.error("[mail]", e));
   if (email) {
     void sendCustomerEnquiryConfirmation(email, "company enquiry", enquiry.refNumber).catch((e) =>
       console.error("[mail]", e)

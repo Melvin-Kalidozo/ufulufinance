@@ -145,6 +145,9 @@ export function SettingsManager() {
   const [socials, setSocials] = useState<SocialRow[]>([]);
   const [phones, setPhones] = useState<string[]>([]);
   const [notifEmail, setNotifEmail] = useState("");
+  const [loanNotifEmail, setLoanNotifEmail] = useState("");
+  const [jobNotifEmail, setJobNotifEmail] = useState("");
+  const [complaintsNotifEmail, setComplaintsNotifEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -190,6 +193,9 @@ export function SettingsManager() {
           : [];
         setPhones(rawPhones);
         setNotifEmail(strOf(row, "notificationEmail"));
+        setLoanNotifEmail(strOf(row, "loanNotificationEmail"));
+        setJobNotifEmail(strOf(row, "jobNotificationEmail"));
+        setComplaintsNotifEmail(strOf(row, "complaintsNotificationEmail"));
         setGeneral(g);
         setContact(c);
       } catch {
@@ -236,6 +242,9 @@ export function SettingsManager() {
       for (const f of GENERAL_FIELDS) fd.append(f.name, general[f.name] ?? "");
       for (const f of CONTACT_FIELDS) fd.append(f.name, contact[f.name] ?? "");
       fd.append("notificationEmail", notifEmail.trim());
+      fd.append("loanNotificationEmail", loanNotifEmail.trim());
+      fd.append("jobNotificationEmail", jobNotifEmail.trim());
+      fd.append("complaintsNotificationEmail", complaintsNotifEmail.trim());
       const cleanOffices = offices.filter(
         (o) => o.label || o.address || o.city,
       );
@@ -675,23 +684,61 @@ export function SettingsManager() {
         {activeTab === "notifications" && (
           <section className="max-w-2xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
             <p className="mb-4 text-sm text-slate-500">
-              Where new job applications, loan enquiries and company enquiries
-              get emailed.
+              Where loan enquiries, job applications, complaints and other
+              enquiries get emailed.
             </p>
-            <FieldShell label="Notification email" icon={Mail}>
-              <Input
-                type="email"
-                value={notifEmail}
-                onChange={(e) => {
-                  setNotifEmail(e.target.value);
-                  touch();
-                }}
-                placeholder="hr@ufulufinance.com"
-                className="h-10 rounded-xl border-slate-200 bg-white pl-9"
-              />
-            </FieldShell>
+            <div className="grid grid-cols-1 gap-4">
+              <FieldShell label="Loan notifications" icon={Mail}>
+                <Input
+                  type="email"
+                  value={loanNotifEmail}
+                  onChange={(e) => {
+                    setLoanNotifEmail(e.target.value);
+                    touch();
+                  }}
+                  placeholder="loans@ufulufinance.com"
+                  className="h-10 rounded-xl border-slate-200 bg-white pl-9"
+                />
+              </FieldShell>
+              <FieldShell label="Job applications" icon={Briefcase}>
+                <Input
+                  type="email"
+                  value={jobNotifEmail}
+                  onChange={(e) => {
+                    setJobNotifEmail(e.target.value);
+                    touch();
+                  }}
+                  placeholder="vacancies@ufulufinance.com"
+                  className="h-10 rounded-xl border-slate-200 bg-white pl-9"
+                />
+              </FieldShell>
+              <FieldShell label="Complaints" icon={CircleAlert}>
+                <Input
+                  type="email"
+                  value={complaintsNotifEmail}
+                  onChange={(e) => {
+                    setComplaintsNotifEmail(e.target.value);
+                    touch();
+                  }}
+                  placeholder="complaints@ufulufinance.com"
+                  className="h-10 rounded-xl border-slate-200 bg-white pl-9"
+                />
+              </FieldShell>
+              <FieldShell label="Other enquiries" icon={Mail}>
+                <Input
+                  type="email"
+                  value={notifEmail}
+                  onChange={(e) => {
+                    setNotifEmail(e.target.value);
+                    touch();
+                  }}
+                  placeholder="info@ufulufinance.com"
+                  className="h-10 rounded-xl border-slate-200 bg-white pl-9"
+                />
+              </FieldShell>
+            </div>
             <p className="mt-2 text-xs text-slate-400">
-              Leave blank to send to the configured SMTP user instead.
+              Leave a field blank to send to the configured SMTP user instead.
             </p>
           </section>
         )}

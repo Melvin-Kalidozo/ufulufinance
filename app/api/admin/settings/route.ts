@@ -19,6 +19,9 @@ const TEXT_FIELDS = [
   "officeHours",
   "mapEmbedUrl",
   "notificationEmail",
+  "loanNotificationEmail",
+  "jobNotificationEmail",
+  "complaintsNotificationEmail",
 ] as const;
 
 const JSON_FIELDS = ["offices", "socialLinks", "phones"] as const;

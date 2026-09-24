@@ -1,5 +1,5 @@
 import { brandShell, escapeHtml, sendMail } from "@/lib/mailer";
-import { getNotificationRecipient } from "@/lib/notify";
+import { getNotificationRecipient, type NotificationKind } from "@/lib/notify";
 
 type Field = { label: string; value: string | number | null | undefined };
 
@@ -17,13 +17,18 @@ function tableHtml(fields: Field[]): string {
   return `<table role="presentation" style="width:100%;border-collapse:collapse;">${rows(fields)}</table>`;
 }
 
-export async function sendAdminEnquiryEmail(kind: string, ref: string, fields: Field[]) {
+export async function sendAdminEnquiryEmail(
+  kind: string,
+  ref: string,
+  fields: Field[],
+  recipientKind: NotificationKind = "general",
+) {
   const html = brandShell(`
     <p style="margin:0 0 16px;color:#0f172a;font-size:16px;font-weight:700;">New ${kind} — ${escapeHtml(ref)}</p>
     ${tableHtml(fields)}
     <p style="margin:18px 0 0;color:#94a3b8;font-size:12px;">Open the Ufulu Finance admin portal to review and respond.</p>
   `);
-  const to = await getNotificationRecipient();
+  const to = await getNotificationRecipient(recipientKind);
   return sendMail(to, `New ${kind} ${ref}`, html);
 }
 

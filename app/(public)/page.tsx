@@ -595,7 +595,17 @@ export default async function HomePage() {
         </div>
 
         {IMPACT_METRICS.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-6 mb-14 ${
+              IMPACT_METRICS.length >= 4
+                ? "lg:grid-cols-4"
+                : IMPACT_METRICS.length === 3
+                  ? "lg:grid-cols-3"
+                  : IMPACT_METRICS.length === 2
+                    ? "lg:grid-cols-2 lg:max-w-3xl lg:mx-auto"
+                    : "lg:max-w-sm lg:mx-auto"
+            }`}
+          >
             {IMPACT_METRICS.map((metric, i) => (
               <div
                 key={i}

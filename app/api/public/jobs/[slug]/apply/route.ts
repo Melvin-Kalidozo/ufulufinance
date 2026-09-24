@@ -78,7 +78,7 @@ export async function POST(
     </table>
     <p style="margin:16px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
   `);
-  const adminTo = await getNotificationRecipient();
+  const adminTo = await getNotificationRecipient("job");
   void sendMail(
     adminTo,
     `New job application — ${job.title}`,

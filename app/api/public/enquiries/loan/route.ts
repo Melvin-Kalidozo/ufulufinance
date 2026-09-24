@@ -99,7 +99,7 @@ export async function POST(req: Request) {
   ];
 
   // Admin alert always; applicant confirmation only when they provided an email.
-  void sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields).catch((e) =>
+  void sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields, "loan").catch((e) =>
     console.error("[mail]", e)
   );
   if (email) {

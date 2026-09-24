@@ -78,7 +78,10 @@ model WebsiteSetting {
   addressLine2  String  @default("Lilongwe, Malawi")
   officeHours   String  @default("Mon – Fri, 8:00 AM – 5:00 PM")
   mapEmbedUrl   String  @default("")
-  notificationEmail String? // admin alerts for enquiries & job applications
+  notificationEmail String? // general admin alerts (fallback)
+  loanNotificationEmail String? // loan enquiry notifications
+  jobNotificationEmail String? // job application notifications
+  complaintsNotificationEmail String? // complaints notifications
 
   // Offices/branches: [{ region, city, address, phones, hours }]
   offices       Json?
