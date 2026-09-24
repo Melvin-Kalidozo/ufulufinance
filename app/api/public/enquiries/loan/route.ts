@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/api-helpers";
 import { generateRef, isValidEmail, isValidPhone } from "@/lib/validators";
@@ -99,12 +100,16 @@ export async function POST(req: Request) {
   ];
 
   // Admin alert always; applicant confirmation only when they provided an email.
-  void sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields, "loan").catch((e) =>
-    console.error("[mail]", e)
+  after(() =>
+    sendAdminEnquiryEmail("loan enquiry", enquiry.refNumber, fields, "loan").catch((e) =>
+      console.error("[mail]", e)
+    )
   );
   if (email) {
-    void sendCustomerEnquiryConfirmation(email, "loan enquiry", enquiry.refNumber).catch((e) =>
-      console.error("[mail]", e)
+    after(() =>
+      sendCustomerEnquiryConfirmation(email, "loan enquiry", enquiry.refNumber).catch((e) =>
+        console.error("[mail]", e)
+      )
     );
   }
 

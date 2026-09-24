@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/api-helpers";
 import { readDocument } from "@/lib/image-upload";
@@ -79,17 +80,21 @@ export async function POST(
     <p style="margin:16px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
   `);
   const adminTo = await getNotificationRecipient("job");
-  void sendMail(
-    adminTo,
-    `New job application — ${job.title}`,
-    html
-  ).catch((e) => console.error("[mail]", e));
+  after(() =>
+    sendMail(
+      adminTo,
+      `New job application — ${job.title}`,
+      html
+    ).catch((e) => console.error("[mail]", e))
+  );
 
   const confirmHtml = brandShell(`
     <p style="margin:0 0 12px;color:#0f172a;font-weight:700;">Application received</p>
     <p style="margin:0;color:#475569;">Thank you for applying for <strong>${escapeHtml(job.title)}</strong> at Ufulu Finance. Our team will review your application and contact you directly if you are shortlisted.</p>
   `);
-  void sendMail(email, `Application received — ${job.title}`, confirmHtml).catch((e) => console.error("[mail]", e));
+  after(() =>
+    sendMail(email, `Application received — ${job.title}`, confirmHtml).catch((e) => console.error("[mail]", e))
+  );
 
   return ok({ id: application.id });
 }
