@@ -310,30 +310,6 @@ export function ResourceManager({
                       </TableCell>
                       <TableCell className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          {def.statusQuickToggle && statusField && status && (
-                            <Select
-                              value={status}
-                              onValueChange={(v) => handleStatusChange(row, v)}
-                              disabled={statusBusy === row.id}
-                            >
-                              <SelectTrigger
-                                className={cn(
-                                  "mr-1 h-7 w-auto gap-1 rounded-lg border px-2.5 text-[10px] font-bold uppercase tracking-wide shadow-none focus-visible:ring-0",
-                                  statusColor[status] ?? "border-slate-200 text-slate-500"
-                                )}
-                              >
-                                <SelectValue />
-                                {statusBusy === row.id && <Loader2 className="size-3 animate-spin" />}
-                              </SelectTrigger>
-                              <SelectContent>
-                                {statusField.options?.map((opt) => (
-                                  <SelectItem key={opt} value={opt} className="text-xs font-semibold">
-                                    {opt.charAt(0) + opt.slice(1).toLowerCase()}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
                           <Button
                             variant="ghost"
                             size="icon-sm"

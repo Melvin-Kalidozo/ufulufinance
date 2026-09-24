@@ -112,7 +112,6 @@ export const jobsDef: ResourceDef = {
   searchFields: ["title", "department", "location"],
   folderPrefix: "jobs",
   slugFrom: "title",
-  statusQuickToggle: true,
   fields: [
     { name: "title", label: "Title", type: "text", required: true, step: "Basics" },
     { name: "department", label: "Department", type: "text", step: "Basics" },
