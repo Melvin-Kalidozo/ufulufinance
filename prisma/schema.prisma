@@ -42,6 +42,12 @@ enum JobApplicationStatus {
   HIRED
 }
 
+enum JobStatus {
+  OPEN
+  CLOSED
+  UNPUBLISHED
+}
+
 model User {
   id                      Int       @id @default(autoincrement())
   name                    String
@@ -287,7 +293,7 @@ model Job {
   requirements    Json? // string[]
   benefits        Json? // string[]
   isFeatured      Boolean        @default(false)
-  status          ContentStatus  @default(PUBLISHED)
+  status          JobStatus      @default(OPEN)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   applications    JobApplication[]

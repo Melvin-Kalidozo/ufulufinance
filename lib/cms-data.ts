@@ -78,14 +78,14 @@ export async function getHomeContent(): Promise<HomeContent> {
 
 export async function getJobBySlug(slug: string) {
   return cachedPublic(`public:job:${slug}`, [], async () =>
-    prisma.job.findFirst({ where: { slug, status: "PUBLISHED" } })
+    prisma.job.findFirst({ where: { slug, status: { in: ["OPEN", "CLOSED"] } } })
   );
 }
 
 export async function getOpenJobs(limit = 20) {
   return cachedPublic("cms:open-jobs", [String(limit)], async () =>
     prisma.job.findMany({
-      where: { status: "PUBLISHED" },
+      where: { status: "OPEN" },
       orderBy: { createdAt: "asc" },
       take: limit,
     })

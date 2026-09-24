@@ -2,6 +2,8 @@ import type { ResourceDef } from "@/lib/admin-resource";
 
 const CONTENT_STATUS = ["DRAFT", "PUBLISHED"];
 
+const JOB_STATUS = ["OPEN", "CLOSED", "UNPUBLISHED"];
+
 export const productsDef: ResourceDef = {
   model: "product",
   title: "Products",
@@ -110,6 +112,7 @@ export const jobsDef: ResourceDef = {
   searchFields: ["title", "department", "location"],
   folderPrefix: "jobs",
   slugFrom: "title",
+  statusQuickToggle: true,
   fields: [
     { name: "title", label: "Title", type: "text", required: true, step: "Basics" },
     { name: "department", label: "Department", type: "text", step: "Basics" },
@@ -125,7 +128,7 @@ export const jobsDef: ResourceDef = {
     { name: "benefits", label: "Benefits (one per line)", type: "json-array", step: "Requirements" },
     { name: "image", label: "Image", type: "image", folder: "jobs", step: "Media & publishing" },
     { name: "isFeatured", label: "Featured", type: "boolean", step: "Media & publishing" },
-    { name: "status", label: "Status", type: "select", options: CONTENT_STATUS, step: "Media & publishing" },
+    { name: "status", label: "Status", type: "select", options: JOB_STATUS, step: "Media & publishing" },
   ],
 };
 

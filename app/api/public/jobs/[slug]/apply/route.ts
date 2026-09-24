@@ -19,8 +19,8 @@ export async function POST(
   const rl = rateLimit(`job-app-${ip}`, 5, 10 * 60 * 1000);
   if (!rl.allowed) return fail("Too many submissions. Please try again later.", 429);
 
-  const job = await prisma.job.findFirst({ where: { slug, status: "PUBLISHED" } });
-  if (!job) return fail("Job listing not found.", 404);
+  const job = await prisma.job.findFirst({ where: { slug, status: "OPEN" } });
+  if (!job) return fail("This position is not accepting applications.", 404);
 
   let form: FormData;
   try {

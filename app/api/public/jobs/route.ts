@@ -16,9 +16,9 @@ export async function GET(req: Request) {
     [q, String(page), String(limit)],
     async () => {
       const where: {
-        status: "PUBLISHED";
+        status: { in: ["OPEN", "CLOSED"] };
         OR?: { title: { contains: string; mode: "insensitive" } }[];
-      } = { status: "PUBLISHED" };
+      } = { status: { in: ["OPEN", "CLOSED"] } };
       if (q) where.OR = [{ title: { contains: q, mode: "insensitive" } }];
 
       const [jobs, total, perks] = await Promise.all([

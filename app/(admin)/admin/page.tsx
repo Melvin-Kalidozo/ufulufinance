@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/api-auth";
 import { redirect } from "next/navigation";
-import { UserRole, ContentStatus } from "@prisma/client";
+import { UserRole, ContentStatus, JobStatus } from "@prisma/client";
 import {
   Landmark,
   Newspaper,
@@ -35,7 +35,7 @@ export default async function AdminDashboardPage() {
     prisma.article.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.product.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.event.count({ where: { date: { gte: new Date() }, status: ContentStatus.PUBLISHED } }),
-    prisma.job.count({ where: { status: ContentStatus.PUBLISHED } }),
+    prisma.job.count({ where: { status: JobStatus.OPEN } }),
     prisma.loanEnquiry.count({ where: { status: "PENDING" } }),
     prisma.companyEnquiry.count({ where: { status: "PENDING" } }),
     prisma.jobApplication.count(),

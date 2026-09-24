@@ -14,6 +14,7 @@ export interface JobRole {
   benefits?: string[];
   image: string;
   isFeatured?: boolean;
+  status?: string;
 }
 
 export const OPEN_ROLES: JobRole[] = [

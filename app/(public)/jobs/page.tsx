@@ -31,6 +31,7 @@ import {
   Upload,
   Send,
   Check,
+  Lock,
 } from "lucide-react";
 
 import type { JobRole } from "@/lib/jobsData";
@@ -70,6 +71,7 @@ export default function JobsPage() {
         benefits: jarr(r, "benefits"),
         image: jval(r, "image"),
         isFeatured: Boolean(jRow(r).isFeatured),
+        status: jval(r, "status"),
       })) as JobRole[])
     : [];
 
@@ -296,6 +298,7 @@ export default function JobsPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {OPEN_ROLES.map((role) => {
+                const closed = role.status === "CLOSED";
                 if (role.isFeatured) {
                   return (
                     <div
@@ -304,9 +307,16 @@ export default function JobsPage() {
                     >
                       <div>
                         <div className="flex items-start justify-between gap-2">
-                          <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
-                            {role.department}
-                          </span>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
+                              {role.department}
+                            </span>
+                            {closed && (
+                              <span className="px-3 py-1 rounded-full bg-white/25 text-white text-[10px] font-extrabold uppercase tracking-wide">
+                                Closed
+                              </span>
+                            )}
+                          </div>
                           <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
                             <ArrowUpRight className="size-4" />
                           </div>
@@ -341,18 +351,29 @@ export default function JobsPage() {
                         >
                           View Job Details
                         </Link>
-                        <JobApplicationDialog
-                          job={role}
-                          triggerButton={
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
-                            >
-                              Apply Now
-                              <ArrowRight className="size-3.5" />
-                            </button>
-                          }
-                        />
+                        {closed ? (
+                          <button
+                            type="button"
+                            disabled
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/20 text-white/60 text-xs font-bold cursor-not-allowed"
+                          >
+                            <Lock className="size-3.5" />
+                            Applications Closed
+                          </button>
+                        ) : (
+                          <JobApplicationDialog
+                            job={role}
+                            triggerButton={
+                              <button
+                                type="button"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
+                              >
+                                Apply Now
+                                <ArrowRight className="size-3.5" />
+                              </button>
+                            }
+                          />
+                        )}
                       </div>
                     </div>
                   );
@@ -365,9 +386,16 @@ export default function JobsPage() {
                   >
                     <div>
                       <div className="flex items-start justify-between gap-2">
-                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
-                          {role.department}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
+                            {role.department}
+                          </span>
+                          {closed && (
+                            <span className="px-3 py-1 rounded-full bg-slate-200 text-slate-500 text-[10px] font-bold uppercase tracking-wide">
+                              Closed
+                            </span>
+                          )}
+                        </div>
                         <Link
                           href={`/jobs/${role.id}`}
                           className="size-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors"
@@ -405,18 +433,29 @@ export default function JobsPage() {
                       >
                         View Job Details
                       </Link>
-                      <JobApplicationDialog
-                        job={role}
-                        triggerButton={
-                          <button
-                            type="button"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
-                          >
-                            Apply Now
-                            <ArrowRight className="size-3.5" />
-                          </button>
-                        }
-                      />
+                      {closed ? (
+                        <button
+                          type="button"
+                          disabled
+                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed"
+                        >
+                          <Lock className="size-3.5" />
+                          Applications Closed
+                        </button>
+                      ) : (
+                        <JobApplicationDialog
+                          job={role}
+                          triggerButton={
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
+                            >
+                              Apply Now
+                              <ArrowRight className="size-3.5" />
+                            </button>
+                          }
+                        />
+                      )}
                     </div>
                   </div>
                 );

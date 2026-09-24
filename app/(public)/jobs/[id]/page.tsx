@@ -22,6 +22,7 @@ import {
   Coins,
   ArrowUpRight,
   HeartHandshake,
+  Lock,
 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -64,6 +65,7 @@ function mapJob(r: Record<string, unknown>): JobRole {
     benefits: arr("benefits"),
     image: v("image"),
     isFeatured: Boolean(r.isFeatured),
+    status: v("status"),
   };
 }
 
@@ -93,6 +95,8 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
   if (!job) {
     notFound();
   }
+
+  const closed = job.status === "CLOSED";
 
   const otherJobs: JobRole[] = (all ?? [])
     .map((r: unknown) => mapJob(r as unknown as Record<string, unknown>))
@@ -158,6 +162,12 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                     Priority Vacancy
                   </span>
                 )}
+                {closed && (
+                  <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-slate-500/40 text-slate-100 flex items-center gap-1 backdrop-blur-xs border border-white/10">
+                    <Lock className="size-3" />
+                    Closed
+                  </span>
+                )}
               </div>
 
               {/* Job Title */}
@@ -184,24 +194,35 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
 
             {/* Top CTA Actions */}
             <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
-              <JobApplicationDialog
-                job={{
-                  id: job.id,
-                  title: job.title,
-                  department: job.department,
-                  location: job.location,
-                  type: job.type,
-                }}
-                triggerButton={
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284c7] text-white font-extrabold px-7 py-3.5 text-sm transition-all hover:scale-105 shadow-lg shadow-sky-950/30 cursor-pointer whitespace-nowrap"
-                  >
-                    <span>Apply for this Role</span>
-                    <Send className="size-4" />
-                  </button>
-                }
-              />
+              {closed ? (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-500/30 text-slate-200 font-extrabold px-7 py-3.5 text-sm cursor-not-allowed whitespace-nowrap"
+                >
+                  <Lock className="size-4" />
+                  <span>Applications Closed</span>
+                </button>
+              ) : (
+                <JobApplicationDialog
+                  job={{
+                    id: job.id,
+                    title: job.title,
+                    department: job.department,
+                    location: job.location,
+                    type: job.type,
+                  }}
+                  triggerButton={
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#0284c7] text-white font-extrabold px-7 py-3.5 text-sm transition-all hover:scale-105 shadow-lg shadow-sky-950/30 cursor-pointer whitespace-nowrap"
+                    >
+                      <span>Apply for this Role</span>
+                      <Send className="size-4" />
+                    </button>
+                  }
+                />
+              )}
 
               <ShareJobButton jobTitle={job.title} />
             </div>
@@ -410,24 +431,35 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
 
               {/* Main Dialog Trigger Button */}
               <div>
-                <JobApplicationDialog
-                  job={{
-                    id: job.id,
-                    title: job.title,
-                    department: job.department,
-                    location: job.location,
-                    type: job.type,
-                  }}
-                  triggerButton={
-                    <button
-                      type="button"
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#034DA2] hover:bg-[#023877] text-white font-extrabold py-3.5 text-xs sm:text-sm uppercase tracking-wide transition-all shadow-md hover:scale-[1.02] cursor-pointer"
-                    >
-                      <span>Open Application Form</span>
-                      <Send className="size-4 text-[#38bdf8]" />
-                    </button>
-                  }
-                />
+                {closed ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-200 text-slate-400 font-extrabold py-3.5 text-xs sm:text-sm uppercase tracking-wide cursor-not-allowed"
+                  >
+                    <Lock className="size-4" />
+                    <span>Applications Closed</span>
+                  </button>
+                ) : (
+                  <JobApplicationDialog
+                    job={{
+                      id: job.id,
+                      title: job.title,
+                      department: job.department,
+                      location: job.location,
+                      type: job.type,
+                    }}
+                    triggerButton={
+                      <button
+                        type="button"
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#034DA2] hover:bg-[#023877] text-white font-extrabold py-3.5 text-xs sm:text-sm uppercase tracking-wide transition-all shadow-md hover:scale-[1.02] cursor-pointer"
+                      >
+                        <span>Open Application Form</span>
+                        <Send className="size-4 text-[#38bdf8]" />
+                      </button>
+                    }
+                  />
+                )}
               </div>
 
               {/* Ethical Standards Guarantee */}

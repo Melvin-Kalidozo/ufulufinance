@@ -45,6 +45,8 @@ export type ResourceDef = {
   defaultOrderBy?: Record<string, "asc" | "desc">;
   /** when set, a unique slug is generated from this field's value on create */
   slugFrom?: string;
+  /** when true, a quick status segmented toggle is shown in the list actions (jobs: OPEN/CLOSED/UNPUBLISHED) */
+  statusQuickToggle?: boolean;
 };
 
 /** Converts a title/name into a URL-safe slug. */

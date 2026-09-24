@@ -78,6 +78,8 @@ const statusColor: Record<string, string> = {
   DRAFT: "bg-slate-100 text-slate-500 border-slate-200",
   UNPUBLISHED: "bg-amber-50 text-amber-600 border-amber-200",
   ARCHIVED: "bg-slate-100 text-slate-400 border-slate-200",
+  OPEN: "bg-brand-green-soft text-brand-green border-brand-green/20",
+  CLOSED: "bg-slate-100 text-slate-500 border-slate-200",
 };
 
 export function ResourceManager({
@@ -307,7 +309,31 @@ export function ResourceManager({
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-right">
-                        <div className="flex justify-end gap-1">
+                        <div className="flex items-center justify-end gap-1">
+                          {def.statusQuickToggle && statusField && status && (
+                            <div className="mr-1 flex items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-50 p-0.5">
+                              {statusField.options?.map((opt) => {
+                                const active = status === opt;
+                                return (
+                                  <button
+                                    key={opt}
+                                    type="button"
+                                    disabled={statusBusy === row.id}
+                                    onClick={() => handleStatusChange(row, opt)}
+                                    title={opt}
+                                    className={cn(
+                                      "rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wide transition-colors disabled:opacity-50",
+                                      active
+                                        ? "bg-[#034DA2] text-white shadow-sm"
+                                        : "text-slate-500 hover:text-slate-800"
+                                    )}
+                                  >
+                                    {opt.charAt(0) + opt.slice(1).toLowerCase()}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
                           <Button
                             variant="ghost"
                             size="icon-sm"
