@@ -21,21 +21,16 @@ export async function GET(req: Request) {
       } = { status: { in: ["OPEN", "CLOSED"] } };
       if (q) where.OR = [{ title: { contains: q, mode: "insensitive" } }];
 
-      const [jobs, total, perks] = await Promise.all([
+      const [jobs, total] = await Promise.all([
         prisma.job.findMany({ where, orderBy: { createdAt: "asc" }, skip, take: limit }),
         prisma.job.count({ where }),
-        prisma.perk.findMany({
-          where: { status: "PUBLISHED" },
-          orderBy: { sortOrder: "asc" },
-        }),
       ]);
-      return { jobs, total, perks };
+      return { jobs, total };
     }
   );
 
   return NextResponse.json({
     data: data.jobs,
     pagination: { total: data.total, page, limit, totalPages: Math.ceil(data.total / limit) },
-    perks: data.perks,
   });
 }

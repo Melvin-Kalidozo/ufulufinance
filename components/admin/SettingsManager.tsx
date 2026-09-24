@@ -29,7 +29,6 @@ import {
   Link2,
   Share2,
   Bell,
-  Settings as SettingsIcon,
   CircleAlert,
   CircleCheck,
   Globe,
@@ -39,20 +38,12 @@ import {
   Play,
 } from "lucide-react";
 
-const GENERAL_FIELDS = [
-  { name: "siteName", label: "Site name" },
-  { name: "tagline", label: "Tagline" },
-  { name: "aboutLine", label: "About line (home)" },
-  { name: "footerAbout", label: "Footer about" },
-];
-
 const CONTACT_FIELDS: {
   name: string;
   label: string;
   icon?: LucideIcon;
   wide?: boolean;
 }[] = [
-  { name: "primaryEmail", label: "Primary email", icon: Mail },
   { name: "supportEmail", label: "Support email", icon: Mail },
   { name: "loansEmail", label: "Loans email", icon: Mail },
   { name: "whatsapp", label: "WhatsApp", icon: MessageCircle },
@@ -99,7 +90,6 @@ const PLATFORM_ICON: Record<string, LucideIcon> = {
 };
 
 const TABS = [
-  { id: "general", label: "General", icon: SettingsIcon },
   { id: "contact", label: "Contact & offices", icon: Phone },
   { id: "social", label: "Social links", icon: Share2 },
   { id: "notifications", label: "Notifications", icon: Bell },
@@ -139,7 +129,6 @@ function FieldShell({
 }
 
 export function SettingsManager() {
-  const [general, setGeneral] = useState<Record<string, string>>({});
   const [contact, setContact] = useState<Record<string, string>>({});
   const [offices, setOffices] = useState<OfficeRow[]>([]);
   const [socials, setSocials] = useState<SocialRow[]>([]);
@@ -151,7 +140,7 @@ export function SettingsManager() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabId>("general");
+  const [activeTab, setActiveTab] = useState<TabId>("contact");
 
   useEffect(() => {
     (async () => {
@@ -160,8 +149,6 @@ export function SettingsManager() {
         const json = await res.json();
         if (!res.ok) throw new Error(json.message);
         const row = json.data ?? {};
-        const g: Record<string, string> = {};
-        for (const f of GENERAL_FIELDS) g[f.name] = strOf(row, f.name);
         const c: Record<string, string> = {};
         for (const f of CONTACT_FIELDS) c[f.name] = strOf(row, f.name);
         const rawOffices = Array.isArray(row.offices) ? row.offices : [];
@@ -196,7 +183,6 @@ export function SettingsManager() {
         setLoanNotifEmail(strOf(row, "loanNotificationEmail"));
         setJobNotifEmail(strOf(row, "jobNotificationEmail"));
         setComplaintsNotifEmail(strOf(row, "complaintsNotificationEmail"));
-        setGeneral(g);
         setContact(c);
       } catch {
         toast.error("Couldn't load settings");
@@ -208,13 +194,8 @@ export function SettingsManager() {
 
   const touch = () => setDirty(true);
 
-  const setField = (
-    group: "general" | "contact",
-    name: string,
-    value: string,
-  ) => {
-    const setter = group === "general" ? setGeneral : setContact;
-    setter((prev) => ({ ...prev, [name]: value }));
+  const setField = (name: string, value: string) => {
+    setContact((prev) => ({ ...prev, [name]: value }));
     touch();
   };
 
@@ -239,7 +220,6 @@ export function SettingsManager() {
     setSaving(true);
     try {
       const fd = new FormData();
-      for (const f of GENERAL_FIELDS) fd.append(f.name, general[f.name] ?? "");
       for (const f of CONTACT_FIELDS) fd.append(f.name, contact[f.name] ?? "");
       fd.append("notificationEmail", notifEmail.trim());
       fd.append("loanNotificationEmail", loanNotifEmail.trim());
@@ -352,33 +332,6 @@ export function SettingsManager() {
 
       {/* Tab content */}
       <div>
-        {activeTab === "general" && (
-          <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-            <p className="mb-4 text-sm text-slate-500">
-              The name and language visitors see across the site and footer.
-            </p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {GENERAL_FIELDS.map((f) => (
-                <div
-                  key={f.name}
-                  className={f.name !== "siteName" ? "sm:col-span-2" : ""}
-                >
-                  <Label className="text-xs font-semibold text-slate-700">
-                    {f.label}
-                  </Label>
-                  <Input
-                    value={general[f.name] ?? ""}
-                    onChange={(e) =>
-                      setField("general", f.name, e.target.value)
-                    }
-                    className="mt-1.5 h-10 rounded-xl border-slate-200 bg-white"
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {activeTab === "contact" && (
           <div className="space-y-5">
             <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
@@ -396,7 +349,7 @@ export function SettingsManager() {
                     <Input
                       value={contact[f.name] ?? ""}
                       onChange={(e) =>
-                        setField("contact", f.name, e.target.value)
+                        setField(f.name, e.target.value)
                       }
                       className={`h-10 rounded-xl border-slate-200 bg-white ${f.icon ? "pl-9" : ""}`}
                     />

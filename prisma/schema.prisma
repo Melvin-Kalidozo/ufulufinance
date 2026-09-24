@@ -68,12 +68,7 @@ model User {
 // ── Website settings (singleton row id = 1) ────────────────────────────────
 model WebsiteSetting {
   id            Int     @id @default(1)
-  siteName      String  @default("Ufulu Finance")
-  tagline       String  @default("Loans, savings and financial freedom for every community.")
-  aboutLine     String  @default("")
-  footerAbout   String  @default("")
 
-  primaryEmail  String  @default("info@ufulufinance.com")
   supportEmail  String  @default("support@ufulufinance.com")
   loansEmail    String  @default("loans@ufulufinance.com")
   phone         String  @default("+265 99 123 4567")
@@ -93,8 +88,6 @@ model WebsiteSetting {
   offices       Json?
   // Social media links: [{ platform, name, url }]
   socialLinks   Json?
-  // Legal pages body: { privacy: blocks[], terms: blocks[] }
-  legal         Json?
 
   updatedAt     DateTime @updatedAt
 }
@@ -265,17 +258,6 @@ model Event {
 }
 
 // ── Careers ────────────────────────────────────────────────────────────────
-model Perk {
-  id          Int     @id @default(autoincrement())
-  title       String
-  description String?
-  iconKey     String  @default("Sparkles")
-  sortOrder   Int     @default(0)
-  status      ContentStatus @default(PUBLISHED)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model Job {
   id              Int            @id @default(autoincrement())
   title           String

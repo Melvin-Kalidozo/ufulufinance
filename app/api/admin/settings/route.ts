@@ -5,11 +5,6 @@ import { requireAdmin } from "@/lib/api-auth";
 export const dynamic = "force-dynamic";
 
 const TEXT_FIELDS = [
-  "siteName",
-  "tagline",
-  "aboutLine",
-  "footerAbout",
-  "primaryEmail",
   "supportEmail",
   "loansEmail",
   "phone",

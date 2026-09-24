@@ -131,20 +131,6 @@ export const jobsDef: ResourceDef = {
   ],
 };
 
-export const perksDef: ResourceDef = {
-  model: "perk",
-  title: "Careers Perks",
-  singular: "perk",
-  searchFields: ["title"],
-  fields: [
-    { name: "title", label: "Title", type: "text", required: true },
-    { name: "description", label: "Description", type: "textarea" },
-    { name: "iconKey", label: "Icon", type: "text" },
-    { name: "status", label: "Status", type: "select", options: CONTENT_STATUS },
-    { name: "sortOrder", label: "Sort order", type: "number" },
-  ],
-};
-
 export const faqsDef: ResourceDef = {
   model: "faq",
   title: "FAQs",
@@ -354,7 +340,6 @@ const DEFS: Record<string, ResourceDef> = {
   article: articlesDef,
   event: eventsDef,
   job: jobsDef,
-  perk: perksDef,
   faq: faqsDef,
   stat: statsDef,
   sectorCard: sectorCardsDef,

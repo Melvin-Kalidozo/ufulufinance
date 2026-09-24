@@ -13,23 +13,9 @@ import {
 } from "@/components/public/ContentSkeletons";
 import {
   ArrowUpRight,
-  ShieldCheck,
-  Award,
-  Users,
-  Sliders,
-  HeartHandshake,
   ArrowRight,
   Briefcase,
   MapPin,
-  Clock,
-  Laptop,
-  GraduationCap,
-  Scale,
-  Sparkles,
-  CheckCircle2,
-  X,
-  Upload,
-  Send,
   Check,
   Lock,
 } from "lucide-react";
@@ -38,7 +24,7 @@ import type { JobRole } from "@/lib/jobsData";
 import { usePublicData } from "@/lib/content-store";
 
 export default function JobsPage() {
-  const { body } = usePublicData<{ data: unknown[]; perks: unknown[] }>(
+  const { body } = usePublicData<{ data: unknown[] }>(
     "/api/public/jobs",
   );
   const live = body;
@@ -73,13 +59,6 @@ export default function JobsPage() {
         isFeatured: Boolean(jRow(r).isFeatured),
         status: jval(r, "status"),
       })) as JobRole[])
-    : [];
-
-  const PERKS = live?.perks?.length
-    ? live.perks.map((r) => ({
-        title: jval(r, "title"),
-        desc: jval(r, "description"),
-      }))
     : [];
 
   if (!live) {
@@ -203,62 +182,7 @@ export default function JobsPage() {
         </div>
       </section>
 
-      {/* ── 3. WHY WORK WITH US ──────────────────────────────────────── */}
-      {/* {PERKS.length > 0 && (
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="bg-white rounded-[32px] p-8 sm:p-12 lg:p-14 border border-slate-200/80 shadow-xl shadow-slate-900/[0.04]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-brand-green" />
-                <span>Why Work With Us</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                Empowering People, Rewarding Excellence
-              </h2>
-
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
-                <Image
-                  src="/images/jobs-section.jpg"
-                  alt="Ufulu Finance Team"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-black/10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#00A3E0] shadow-lg">
-                    <HeartHandshake className="size-7" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 space-y-4">
-              {PERKS.map((p) => (
-                <div
-                  key={p.title}
-                  className="bg-[#fafbfc] hover:bg-white hover:shadow-md transition-all rounded-2xl p-5 border border-slate-200/60 flex items-start gap-4"
-                >
-                  <div className="size-11 rounded-full bg-[#009FE0] flex items-center justify-center shrink-0 text-white shadow-sm">
-                    <Award className="size-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">{p.title}</h4>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      {p.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-      )} */}
-
-      {/* ── 4. AVAILABLE POSITIONS (4x2 Grid matching Rudra) ─────────── */}
+      {/* ── 3. AVAILABLE POSITIONS (4x2 Grid matching Rudra) ─────────── */}
       <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
