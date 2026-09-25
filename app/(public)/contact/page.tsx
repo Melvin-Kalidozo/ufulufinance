@@ -443,7 +443,7 @@ export default function ContactPage() {
                           ))}
                           {whatsapp ? (
                             <p className="text-xs text-slate-500 mt-1">
-                              WhatsApp: {whatsapp}
+                              {whatsapp}
                             </p>
                           ) : null}
                         </div>
