@@ -14,6 +14,12 @@ import {
   Clock,
 } from "lucide-react";
 import { usePublicData } from "@/lib/content-store";
+import {
+  StaticHero,
+  Shimmer,
+  SectionHeadingSkeleton,
+  TextCardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 
 interface FormData {
   name: string;
@@ -258,6 +264,59 @@ export default function ContactPage() {
       errorMsg,
       borderClasses,
     };
+  }
+
+  if (!settings) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Contact Us"
+          subtitle="Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu."
+        />
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          {/* Floating card skeleton — two columns */}
+          <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+              {/* Left: Get in touch */}
+              <div className="space-y-6 p-8 sm:p-10 lg:col-span-5 lg:p-12">
+                <Shimmer className="h-1 w-8" />
+                <Shimmer className="h-7 w-2/3" />
+                <Shimmer className="h-3 w-full" />
+                <Shimmer className="h-3 w-5/6" />
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <Shimmer className="size-11 shrink-0 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Shimmer className="h-4 w-1/3" />
+                      <Shimmer className="h-3 w-2/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Right: Send us a message form */}
+              <div className="space-y-4 p-8 sm:p-10 lg:col-span-7 lg:p-12">
+                <Shimmer className="h-1 w-8" />
+                <Shimmer className="h-7 w-1/2" />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                </div>
+                <Shimmer className="h-11 rounded-lg" />
+                <Shimmer className="h-28 rounded-lg" />
+                <Shimmer className="h-12 rounded-full" />
+              </div>
+            </div>
+          </div>
+          {/* Our offices */}
+          <div className="mt-16">
+            <SectionHeadingSkeleton align="left" />
+            <TextCardGridSkeleton count={3} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
