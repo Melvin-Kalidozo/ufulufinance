@@ -42,7 +42,7 @@ const BRAND_PATHS: Record<string, string> = {
 
 export default function ContactPage() {
   const { body: settingsBody } = usePublicData<{ data: ContactRow | null }>(
-    "/api/public/settings"
+    "/api/public/settings",
   );
   const settings: ContactRow | null = settingsBody?.data ?? null;
   const s = (key: string, fallback = "") =>
@@ -51,12 +51,12 @@ export default function ContactPage() {
       : fallback;
   const offices: ContactRow[] = Array.isArray(settings?.offices)
     ? (settings?.offices as unknown[]).map((o) =>
-        o && typeof o === "object" ? (o as ContactRow) : {}
+        o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
   const socials: ContactRow[] = Array.isArray(settings?.socialLinks)
     ? (settings?.socialLinks as unknown[]).map((o) =>
-        o && typeof o === "object" ? (o as ContactRow) : {}
+        o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
   const str = (r: ContactRow, k: string) =>
@@ -83,8 +83,8 @@ export default function ContactPage() {
         .map((p) => String(p ?? ""))
         .filter((p) => p.trim())
     : directPhone
-    ? [directPhone]
-    : [];
+      ? [directPhone]
+      : [];
   const mapEmbed = s("mapEmbedUrl") || "";
 
   const [form, setForm] = useState<FormData>({
@@ -146,7 +146,7 @@ export default function ContactPage() {
   }, [form]);
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -197,12 +197,16 @@ export default function ContactPage() {
       });
       const json = await res.json();
       if (!res.ok) {
-        throw new Error(json.error || json.message || "We could not send your message.");
+        throw new Error(
+          json.error || json.message || "We could not send your message.",
+        );
       }
       setSent(true);
       toast.success("Message sent! We will get back to you shortly.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Network error. Please try again.");
+      toast.error(
+        err instanceof Error ? err.message : "Network error. Please try again.",
+      );
     } finally {
       setSending(false);
     }
@@ -258,7 +262,6 @@ export default function ContactPage() {
 
   return (
     <div className="flex flex-col bg-white antialiased text-slate-900">
-
       {/* ── FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-28 sm:pb-36 text-center">
         <div className="absolute inset-0 z-0">
@@ -278,7 +281,8 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-lg mx-auto font-normal leading-relaxed">
-            Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu.
+            Our accredited loan advisors are ready to assist you in Lilongwe,
+            Blantyre, and Mzuzu.
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
@@ -292,11 +296,10 @@ export default function ContactPage() {
       </section>
 
       {/* ── FLOATING CARD (Faithful to reference design) ─────────────── */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 -mt-20 sm:-mt-28">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative z-10  px-4 sm:px-6 lg:px-8 -mt-20 sm:-mt-28">
+        <div className="mx-auto max-w-6xl">
           <div className="bg-white rounded-3xl shadow-2xl shadow-slate-900/10 border border-slate-100 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12">
-
               {/* ── LEFT COLUMN: GET IN TOUCH ──────────────────────── */}
               <div className="lg:col-span-5 p-8 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between">
                 <div>
@@ -305,7 +308,9 @@ export default function ContactPage() {
                     Get in touch
                   </h2>
                   <p className="mt-3 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs">
-                    Our accredited loan officers and client relationship managers are available across Lilongwe, Blantyre, and Mzuzu to provide rapid, judgment-free financial advisory.
+                    Our accredited loan officers and client relationship
+                    managers are available across Lilongwe, Blantyre, and Mzuzu
+                    to provide rapid, judgment-free financial advisory.
                   </p>
 
                   <div className="mt-8 space-y-6">
@@ -315,10 +320,17 @@ export default function ContactPage() {
                           <MapPin className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Head Office</p>
+                          <p className="text-sm font-bold text-slate-900">
+                            Head Office
+                          </p>
                           <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                             {addressLine}
-                            {addressLine2 ? <><br />{addressLine2}</> : null}
+                            {addressLine2 ? (
+                              <>
+                                <br />
+                                {addressLine2}
+                              </>
+                            ) : null}
                             {s("officeHours") ? (
                               <>
                                 <br />
@@ -336,11 +348,16 @@ export default function ContactPage() {
                           <Mail className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Email Us</p>
+                          <p className="text-sm font-bold text-slate-900">
+                            Email Us
+                          </p>
                           {[supportEmail, loansEmail]
                             .filter(Boolean)
                             .map((email) => (
-                              <p key={email} className="text-xs text-slate-500 mt-1">
+                              <p
+                                key={email}
+                                className="text-xs text-slate-500 mt-1"
+                              >
                                 {email}
                               </p>
                             ))}
@@ -354,9 +371,14 @@ export default function ContactPage() {
                           <Phone className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Call Us</p>
+                          <p className="text-sm font-bold text-slate-900">
+                            Call Us
+                          </p>
                           {phoneList.map((num) => (
-                            <p key={num} className="text-xs text-slate-500 mt-1">
+                            <p
+                              key={num}
+                              className="text-xs text-slate-500 mt-1"
+                            >
                               {num}
                             </p>
                           ))}
@@ -378,8 +400,11 @@ export default function ContactPage() {
                     </p>
                     <div className="flex items-center gap-2.5">
                       {socials.map((social, i) => {
-                        const platform = String(social.platform ?? social.name ?? "").toLowerCase();
-                        const label = String(social.name ?? platform) || "Social";
+                        const platform = String(
+                          social.platform ?? social.name ?? "",
+                        ).toLowerCase();
+                        const label =
+                          String(social.name ?? platform) || "Social";
                         const url = String(social.url ?? "");
                         if (!url) return null;
                         const path = BRAND_PATHS[platform];
@@ -393,7 +418,10 @@ export default function ContactPage() {
                             className="flex size-8 items-center justify-center rounded-full bg-[#034DA2] hover:bg-[#023877] text-white transition-transform hover:scale-110 shadow-xs"
                           >
                             {path ? (
-                              <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
+                              <svg
+                                className="size-3.5 fill-current"
+                                viewBox="0 0 24 24"
+                              >
                                 <path d={path} />
                               </svg>
                             ) : (
@@ -419,9 +447,12 @@ export default function ContactPage() {
                     <div className="flex size-16 items-center justify-center rounded-full bg-brand-green-soft text-brand-green">
                       <CheckCircle2 className="size-8" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>
+                    <h3 className="text-xl font-bold text-slate-900">
+                      Message Sent!
+                    </h3>
                     <p className="text-sm text-slate-500 max-w-sm leading-relaxed">
-                      Thank you for contacting Ufulu Finance. Our team will get back to you shortly.
+                      Thank you for contacting Ufulu Finance. Our team will get
+                      back to you shortly.
                     </p>
                     <button
                       type="button"
@@ -432,8 +463,11 @@ export default function ContactPage() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
-
+                  <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="mt-6 space-y-4"
+                  >
                     {/* Row 1: Name & Company */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
@@ -530,7 +564,8 @@ export default function ContactPage() {
                           htmlFor="contact-email"
                           className="block text-xs text-slate-500 mb-1"
                         >
-                          Email <span className="text-slate-400">(optional)</span>
+                          Email{" "}
+                          <span className="text-slate-400">(optional)</span>
                         </label>
                         <div className="relative">
                           <input
@@ -635,11 +670,9 @@ export default function ContactPage() {
                         )}
                       </button>
                     </div>
-
                   </form>
                 )}
               </div>
-
             </div>
           </div>
         </div>
@@ -651,7 +684,9 @@ export default function ContactPage() {
           id="offices"
           className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
         >
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Our offices</h2>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+            Our offices
+          </h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {offices.map((office, i) => (
               <div
@@ -674,12 +709,14 @@ export default function ContactPage() {
                   ))}
                   {str(office, "email") ? (
                     <p className="flex items-center gap-1.5">
-                      <Mail className="size-3.5 text-[#00A3E0]" /> {str(office, "email")}
+                      <Mail className="size-3.5 text-[#00A3E0]" />{" "}
+                      {str(office, "email")}
                     </p>
                   ) : null}
                   {str(office, "hours") ? (
                     <p className="flex items-center gap-1.5">
-                      <Clock className="size-3.5 text-[#00A3E0]" /> {str(office, "hours")}
+                      <Clock className="size-3.5 text-[#00A3E0]" />{" "}
+                      {str(office, "hours")}
                     </p>
                   ) : null}
                 </div>
@@ -704,7 +741,6 @@ export default function ContactPage() {
           />
         </section>
       )}
-
     </div>
   );
 }
