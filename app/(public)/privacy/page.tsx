@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { LegalDocument } from "@/components/public/LegalDocument";
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "How Ufulu Finance collects, uses, and protects your personal data in line with the Malawi Data Protection Act 2023.",
+  path: "/privacy",
+  keywords: ["Ufulu Finance privacy policy", "data protection Malawi"],
+});
 
 export default function PrivacyPage() {
   return (

@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { LegalDocument } from "@/components/public/LegalDocument";
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata({
+  title: "Terms & Conditions",
+  description:
+    "The terms and conditions governing the use of Ufulu Finance products, services, and website in Malawi.",
+  path: "/terms",
+  keywords: ["Ufulu Finance terms", "loan terms and conditions Malawi"],
+});
 
 export default function TermsPage() {
   return (
