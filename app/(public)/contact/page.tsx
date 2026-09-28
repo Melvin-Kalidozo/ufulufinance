@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
@@ -14,6 +14,12 @@ import {
   Clock,
 } from "lucide-react";
 import { usePublicData } from "@/lib/content-store";
+import {
+  StaticHero,
+  Shimmer,
+  SectionHeadingSkeleton,
+  TextCardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 
 interface FormData {
   name: string;
@@ -42,7 +48,7 @@ const BRAND_PATHS: Record<string, string> = {
 
 export default function ContactPage() {
   const { body: settingsBody } = usePublicData<{ data: ContactRow | null }>(
-    "/api/public/settings"
+    "/api/public/settings",
   );
   const settings: ContactRow | null = settingsBody?.data ?? null;
   const s = (key: string, fallback = "") =>
@@ -51,16 +57,24 @@ export default function ContactPage() {
       : fallback;
   const offices: ContactRow[] = Array.isArray(settings?.offices)
     ? (settings?.offices as unknown[]).map((o) =>
-        o && typeof o === "object" ? (o as ContactRow) : {}
+        o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
   const socials: ContactRow[] = Array.isArray(settings?.socialLinks)
     ? (settings?.socialLinks as unknown[]).map((o) =>
-        o && typeof o === "object" ? (o as ContactRow) : {}
+        o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
   const str = (r: ContactRow, k: string) =>
     r[k] !== undefined && r[k] !== null ? String(r[k]) : "";
+  const officePhones = (o: ContactRow): string[] => {
+    const raw = o["phones"];
+    if (Array.isArray(raw)) {
+      return raw.map((p) => String(p ?? "")).filter((p) => p.trim());
+    }
+    const single = str(o, "phone");
+    return single ? [single] : [];
+  };
   const firstOffice = offices[0];
   const addressLine =
     s("addressLine1") ||
@@ -70,6 +84,13 @@ export default function ContactPage() {
   const loansEmail = s("loansEmail") || "";
   const directPhone = s("phone") || "";
   const whatsapp = s("whatsapp") || "";
+  const phoneList: string[] = Array.isArray(settings?.phones)
+    ? (settings?.phones as unknown[])
+        .map((p) => String(p ?? ""))
+        .filter((p) => p.trim())
+    : directPhone
+      ? [directPhone]
+      : [];
   const mapEmbed = s("mapEmbedUrl") || "";
 
   const [form, setForm] = useState<FormData>({
@@ -111,9 +132,7 @@ export default function ContactPage() {
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!form.email.trim()) {
-      errs.email = "Email is required";
-    } else if (!emailRegex.test(form.email.trim())) {
+    if (form.email.trim() && !emailRegex.test(form.email.trim())) {
       errs.email = "Please enter a valid email address";
     }
 
@@ -133,7 +152,7 @@ export default function ContactPage() {
   }, [form]);
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -184,12 +203,16 @@ export default function ContactPage() {
       });
       const json = await res.json();
       if (!res.ok) {
-        throw new Error(json.error || json.message || "We could not send your message.");
+        throw new Error(
+          json.error || json.message || "We could not send your message.",
+        );
       }
       setSent(true);
       toast.success("Message sent! We will get back to you shortly.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Network error. Please try again.");
+      toast.error(
+        err instanceof Error ? err.message : "Network error. Please try again.",
+      );
     } finally {
       setSending(false);
     }
@@ -232,7 +255,7 @@ export default function ContactPage() {
         "bg-red-50/30 border border-red-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-500/20";
     } else if (isValid) {
       borderClasses =
-        "bg-[#F0F4F8] border border-sky-400/80 focus:bg-white focus:border-[#00A651] focus:ring-2 focus:ring-sky-500/20";
+        "bg-[#F0F4F8] border border-sky-400/80 focus:bg-white focus:border-[#00A3E0] focus:ring-2 focus:ring-sky-500/20";
     }
 
     return {
@@ -243,9 +266,61 @@ export default function ContactPage() {
     };
   }
 
+  if (!settings) {
+    return (
+      <div className="min-h-screen bg-[#fcfdfd]">
+        <StaticHero
+          title="Contact Us"
+          subtitle="Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu."
+        />
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          {/* Floating card skeleton — two columns */}
+          <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+              {/* Left: Get in touch */}
+              <div className="space-y-6 p-8 sm:p-10 lg:col-span-5 lg:p-12">
+                <Shimmer className="h-1 w-8" />
+                <Shimmer className="h-7 w-2/3" />
+                <Shimmer className="h-3 w-full" />
+                <Shimmer className="h-3 w-5/6" />
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <Shimmer className="size-11 shrink-0 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Shimmer className="h-4 w-1/3" />
+                      <Shimmer className="h-3 w-2/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Right: Send us a message form */}
+              <div className="space-y-4 p-8 sm:p-10 lg:col-span-7 lg:p-12">
+                <Shimmer className="h-1 w-8" />
+                <Shimmer className="h-7 w-1/2" />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                  <Shimmer className="h-11 rounded-lg" />
+                </div>
+                <Shimmer className="h-11 rounded-lg" />
+                <Shimmer className="h-28 rounded-lg" />
+                <Shimmer className="h-12 rounded-full" />
+              </div>
+            </div>
+          </div>
+          {/* Our offices */}
+          <div className="mt-16">
+            <SectionHeadingSkeleton align="left" />
+            <TextCardGridSkeleton count={3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col bg-white antialiased text-slate-900">
-
       {/* ── FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-28 sm:pb-36 text-center">
         <div className="absolute inset-0 z-0">
@@ -265,7 +340,8 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-lg mx-auto font-normal leading-relaxed">
-            Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu.
+            Our accredited loan advisors are ready to assist you in Lilongwe,
+            Blantyre, and Mzuzu.
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
@@ -279,19 +355,21 @@ export default function ContactPage() {
       </section>
 
       {/* ── FLOATING CARD (Faithful to reference design) ─────────────── */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 -mt-20 sm:-mt-28">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative z-10  px-4 sm:px-6 lg:px-8 -mt-20 sm:-mt-28">
+        <div className="mx-auto max-w-6xl">
           <div className="bg-white rounded-3xl shadow-2xl shadow-slate-900/10 border border-slate-100 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12">
-
               {/* ── LEFT COLUMN: GET IN TOUCH ──────────────────────── */}
               <div className="lg:col-span-5 p-8 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between">
                 <div>
+                  <span className="mb-3 block h-1 w-8 rounded-full bg-brand-green" />
                   <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                     Get in touch
                   </h2>
                   <p className="mt-3 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs">
-                    Our accredited loan officers and client relationship managers are available across Lilongwe, Blantyre, and Mzuzu to provide rapid, judgment-free financial advisory.
+                    Our accredited loan officers and client relationship
+                    managers are available across Lilongwe, Blantyre, and Mzuzu
+                    to provide rapid, judgment-free financial advisory.
                   </p>
 
                   <div className="mt-8 space-y-6">
@@ -301,10 +379,17 @@ export default function ContactPage() {
                           <MapPin className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Head Office</p>
+                          <p className="text-sm font-bold text-slate-900">
+                            Head Office
+                          </p>
                           <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                             {addressLine}
-                            {addressLine2 ? <><br />{addressLine2}</> : null}
+                            {addressLine2 ? (
+                              <>
+                                <br />
+                                {addressLine2}
+                              </>
+                            ) : null}
                             {s("officeHours") ? (
                               <>
                                 <br />
@@ -322,11 +407,16 @@ export default function ContactPage() {
                           <Mail className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Email Us</p>
+                          <p className="text-sm font-bold text-slate-900">
+                            Email Us
+                          </p>
                           {[supportEmail, loansEmail]
                             .filter(Boolean)
                             .map((email) => (
-                              <p key={email} className="text-xs text-slate-500 mt-1">
+                              <p
+                                key={email}
+                                className="text-xs text-slate-500 mt-1"
+                              >
                                 {email}
                               </p>
                             ))}
@@ -334,21 +424,26 @@ export default function ContactPage() {
                       </div>
                     )}
 
-                    {(directPhone || whatsapp) && (
+                    {(phoneList.length > 0 || whatsapp) && (
                       <div className="flex items-start gap-4">
                         <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#034DA2] text-white shadow-md shadow-blue-900/20">
                           <Phone className="size-5 text-[#009FE0]" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">Call Us</p>
-                          {directPhone ? (
-                            <p className="text-xs text-slate-500 mt-1">
-                              Direct: {directPhone}
+                          <p className="text-sm font-bold text-slate-900">
+                            Call Us
+                          </p>
+                          {phoneList.map((num) => (
+                            <p
+                              key={num}
+                              className="text-xs text-slate-500 mt-1"
+                            >
+                              {num}
                             </p>
-                          ) : null}
+                          ))}
                           {whatsapp ? (
                             <p className="text-xs text-slate-500 mt-1">
-                              WhatsApp: {whatsapp}
+                              {whatsapp}
                             </p>
                           ) : null}
                         </div>
@@ -364,8 +459,11 @@ export default function ContactPage() {
                     </p>
                     <div className="flex items-center gap-2.5">
                       {socials.map((social, i) => {
-                        const platform = String(social.platform ?? social.name ?? "").toLowerCase();
-                        const label = String(social.name ?? platform) || "Social";
+                        const platform = String(
+                          social.platform ?? social.name ?? "",
+                        ).toLowerCase();
+                        const label =
+                          String(social.name ?? platform) || "Social";
                         const url = String(social.url ?? "");
                         if (!url) return null;
                         const path = BRAND_PATHS[platform];
@@ -379,7 +477,10 @@ export default function ContactPage() {
                             className="flex size-8 items-center justify-center rounded-full bg-[#034DA2] hover:bg-[#023877] text-white transition-transform hover:scale-110 shadow-xs"
                           >
                             {path ? (
-                              <svg className="size-3.5 fill-current" viewBox="0 0 24 24">
+                              <svg
+                                className="size-3.5 fill-current"
+                                viewBox="0 0 24 24"
+                              >
                                 <path d={path} />
                               </svg>
                             ) : (
@@ -395,18 +496,22 @@ export default function ContactPage() {
 
               {/* ── RIGHT COLUMN: SEND US A MESSAGE ────────────────── */}
               <div className="lg:col-span-7 p-8 sm:p-10 lg:p-12">
+                <span className="mb-3 block h-1 w-8 rounded-full bg-brand-green" />
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                   Send us a message
                 </h2>
 
                 {sent ? (
                   <div className="mt-10 flex flex-col items-center gap-4 py-16 text-center">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-blue-50 text-[#034DA2]">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-brand-green-soft text-brand-green">
                       <CheckCircle2 className="size-8" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>
+                    <h3 className="text-xl font-bold text-slate-900">
+                      Message Sent!
+                    </h3>
                     <p className="text-sm text-slate-500 max-w-sm leading-relaxed">
-                      Thank you for contacting Ufulu Finance. Our team will get back to you shortly.
+                      Thank you for contacting Ufulu Finance. Our team will get
+                      back to you shortly.
                     </p>
                     <button
                       type="button"
@@ -417,8 +522,11 @@ export default function ContactPage() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
-
+                  <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="mt-6 space-y-4"
+                  >
                     {/* Row 1: Name & Company */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
@@ -441,7 +549,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("name").borderClasses}`}
                           />
                           {getFieldState("name").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("name").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -496,7 +604,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("phone").borderClasses}`}
                           />
                           {getFieldState("phone").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("phone").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -515,7 +623,8 @@ export default function ContactPage() {
                           htmlFor="contact-email"
                           className="block text-xs text-slate-500 mb-1"
                         >
-                          Email
+                          Email{" "}
+                          <span className="text-slate-400">(optional)</span>
                         </label>
                         <div className="relative">
                           <input
@@ -529,7 +638,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("email").borderClasses}`}
                           />
                           {getFieldState("email").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("email").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -563,7 +672,7 @@ export default function ContactPage() {
                           className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("subject").borderClasses}`}
                         />
                         {getFieldState("subject").isValid && (
-                          <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                          <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         )}
                         {getFieldState("subject").isInvalid && (
                           <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -620,11 +729,9 @@ export default function ContactPage() {
                         )}
                       </button>
                     </div>
-
                   </form>
                 )}
               </div>
-
             </div>
           </div>
         </div>
@@ -632,8 +739,13 @@ export default function ContactPage() {
 
       {/* ── OUR OFFICES (from admin settings) ─────────────────────── */}
       {offices.length > 0 && (
-        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Our offices</h2>
+        <section
+          id="offices"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
+        >
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+            Our offices
+          </h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {offices.map((office, i) => (
               <div
@@ -649,19 +761,21 @@ export default function ContactPage() {
                   </p>
                 ) : null}
                 <div className="mt-4 space-y-1.5 text-xs text-slate-600">
-                  {str(office, "phone") ? (
-                    <p className="flex items-center gap-1.5">
-                      <Phone className="size-3.5 text-[#00A651]" /> {str(office, "phone")}
+                  {officePhones(office).map((num) => (
+                    <p key={num} className="flex items-center gap-1.5">
+                      <Phone className="size-3.5 text-[#00A3E0]" /> {num}
                     </p>
-                  ) : null}
+                  ))}
                   {str(office, "email") ? (
                     <p className="flex items-center gap-1.5">
-                      <Mail className="size-3.5 text-[#00A651]" /> {str(office, "email")}
+                      <Mail className="size-3.5 text-[#00A3E0]" />{" "}
+                      {str(office, "email")}
                     </p>
                   ) : null}
                   {str(office, "hours") ? (
                     <p className="flex items-center gap-1.5">
-                      <Clock className="size-3.5 text-[#00A651]" /> {str(office, "hours")}
+                      <Clock className="size-3.5 text-[#00A3E0]" />{" "}
+                      {str(office, "hours")}
                     </p>
                   ) : null}
                 </div>
@@ -686,7 +800,6 @@ export default function ContactPage() {
           />
         </section>
       )}
-
     </div>
   );
 }

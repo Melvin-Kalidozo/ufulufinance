@@ -4,14 +4,12 @@ import {
   articlesDef,
   eventsDef,
   jobsDef,
-  perksDef,
 } from "@/lib/admin-resources";
 
 const tabs: ResourceTab[] = [
   { value: "article", label: "Blog & News", def: articlesDef, resource: "article" },
   { value: "event", label: "Events", def: eventsDef, resource: "event" },
   { value: "job", label: "Job listings", def: jobsDef, resource: "job" },
-  { value: "perk", label: "Career perks", def: perksDef, resource: "perk" },
 ];
 
 export default function ContentEditorialPage() {

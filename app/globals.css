@@ -37,7 +37,10 @@
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --success: #00A3E0;
+  --brand-green: #0D9853;
+  --brand-green-soft: #e9f6ef;
+  --brand-green-light: #34d399;
+  --success: var(--brand-green);
   --warning: #f59e0b;
   --info: #009FE0;
 
@@ -72,6 +75,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-soft: var(--brand-green-soft);
+  --color-brand-green-light: var(--brand-green-light);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);

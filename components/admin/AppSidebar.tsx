@@ -9,7 +9,6 @@ import {
   Users,
   ArrowUpRight,
   Landmark,
-  Building2,
   FileText,
   HelpCircle,
   Home,
@@ -33,8 +32,7 @@ const GROUPS: Group[] = [
   {
     label: "Content",
     items: [
-      { href: "/admin/content/loans", label: "Loan Products", icon: Landmark },
-      { href: "/admin/content/services", label: "Services", icon: Building2 },
+      { href: "/admin/content/products", label: "Products", icon: Landmark },
       { href: "/admin/content/editorial", label: "Blog, News & Jobs", icon: Newspaper },
       { href: "/admin/content/home", label: "Home Sections", icon: Home },
       { href: "/admin/content/about", label: "About", icon: BadgeCheck },

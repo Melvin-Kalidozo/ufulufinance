@@ -8,7 +8,6 @@ import {
   FileQuestion,
   HelpCircle,
   Briefcase,
-  Layers,
   PhoneCall,
   Coins,
 } from "lucide-react";
@@ -73,9 +72,9 @@ export function NotFoundContent() {
           Popular Destinations & Fast Links
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <Link
-            href="/loans"
+            href="/products"
             className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
@@ -87,24 +86,7 @@ export function NotFoundContent() {
               </h3>
             </div>
             <p className="text-[11px] text-slate-500 leading-normal mt-2">
-              MSME credit, agri-inputs, civil payroll advances & asset finance.
-            </p>
-          </Link>
-
-          <Link
-            href="/services"
-            className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="size-9 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors mb-3">
-                <Layers className="size-4.5" />
-              </div>
-              <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#034DA2] transition-colors">
-                All Services
-              </h3>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-normal mt-2">
-              Village solidarity groups, digital trade credit & advisory clinics.
+              Civil service, payroll, village banking &amp; business credit facilities.
             </p>
           </Link>
 

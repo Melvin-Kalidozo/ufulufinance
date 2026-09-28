@@ -6,8 +6,7 @@ import { prefetchPublic } from "@/lib/content-store";
 
 const ENDPOINTS = [
   "/api/public/about",
-  "/api/public/services-data",
-  "/api/public/loan-products",
+  "/api/public/products-data",
   "/api/public/faqs",
   "/api/public/impact",
   "/api/public/articles",
@@ -18,8 +17,7 @@ const ENDPOINTS = [
 ];
 
 const ROUTES = [
-  "/services",
-  "/loans",
+  "/products",
   "/about",
   "/blog",
   "/jobs",

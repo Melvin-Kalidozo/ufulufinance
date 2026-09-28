@@ -1,10 +1,18 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import { useSearchParams } from "next/navigation";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  CardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
+import { resolveEmbed } from "@/lib/embed";
 import {
   Search,
   ChevronRight,
@@ -18,13 +26,33 @@ import {
   CalendarCheck2,
   Share2,
   Users,
+  Play,
 } from "lucide-react";
 
 import type { Article, EventItem } from "@/lib/blogData";
 
-export default function BlogInsightsPage() {
+function BlogInsightsPageContent() {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState<"all" | "blog" | "news" | "events">("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Deep-link support: /blog?tab=blog|news|events preselects the tab and scrolls
+  // to the insights section (re-runs on same-page query changes).
+  useEffect(() => {
+    if (tab === "all" || tab === "blog" || tab === "news" || tab === "events") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveTab(tab);
+      requestAnimationFrame(() => {
+        document
+          .getElementById("insights")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    } else if (!tab) {
+      setActiveTab("all");
+    }
+  }, [tab]);
+
   const { body: arts } = usePublicData<Record<string, unknown[]>>("/api/public/articles");
   const { body: evts } = usePublicData<Record<string, unknown[]>>("/api/public/events");
   const live =
@@ -51,6 +79,7 @@ export default function BlogInsightsPage() {
         readTime: bval(r, "readTime") ? `${bval(r, "readTime")} min read` : "",
         excerpt: bval(r, "excerpt"),
         image: bval(r, "image"),
+        embedUrl: bval(r, "embedUrl") || undefined,
         isFeatured: Boolean(blRow(r).isFeatured),
         content: [],
       })) as Article[])
@@ -91,12 +120,25 @@ export default function BlogInsightsPage() {
           title="Insights & News"
           subtitle="Our Perspective · Practical Business Coaching · Announcements · Community Events"
         />
-        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="h-5 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-96 animate-pulse rounded-2xl bg-slate-200/70" />
-            ))}
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          <TwoColumnSkeleton />
+
+          {/* Search / tabs bar */}
+          <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm md:flex-row md:items-center md:justify-between">
+            <Shimmer className="h-9 w-72 rounded-xl" />
+            <Shimmer className="h-9 w-64 rounded-xl" />
+          </div>
+
+          {/* Articles */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={6} />
+          </div>
+
+          {/* Events */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
           </div>
         </div>
       </div>
@@ -128,11 +170,11 @@ export default function BlogInsightsPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#00A651] transition-colors">
+            <Link href="/" className="hover:text-[#38bdf8] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#00A651] font-semibold">Insights</span>
+            <span className="text-[#38bdf8] font-semibold">Insights</span>
           </div>
         </div>
       </section>
@@ -142,7 +184,7 @@ export default function BlogInsightsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A651]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Our Perspective</span>
             </div>
 
@@ -156,7 +198,7 @@ export default function BlogInsightsPage() {
 
             <div className="pt-2">
               <div className="flex items-center gap-3 p-4 rounded-2xl bg-sky-50 border border-sky-100">
-                <Sparkles className="size-5 text-[#00A651] shrink-0" />
+                <Sparkles className="size-5 text-[#00A3E0] shrink-0" />
                 <p className="text-xs font-semibold text-slate-900">
                   Every insight is curated by accredited Malawian financial advisors and agronomists.
                 </p>
@@ -166,7 +208,7 @@ export default function BlogInsightsPage() {
 
           {/* Featured Perspective Card */}
           <div className="lg:col-span-7 bg-gradient-to-br from-[#01214A] to-[#034DA2] text-white rounded-[32px] p-8 sm:p-10 shadow-xl relative overflow-hidden">
-            <span className="px-3 py-1 rounded-full bg-[#00A651] text-slate-950 text-[10px] font-extrabold uppercase tracking-wide">
+            <span className="px-3 py-1 rounded-full bg-[#00A3E0] text-slate-950 text-[10px] font-extrabold uppercase tracking-wide">
               Thought Leadership
             </span>
 
@@ -178,11 +220,11 @@ export default function BlogInsightsPage() {
               In our latest industry whitepaper, we dissect why rigid commercial bank requirements push over 70% of Malawians to informal money lenders—and how digital-first microfinance creates a safe bridge to prosperity.
             </p>
 
-            <div className="mt-6 pt-4 border-t border-[#00A651]/30 flex items-center justify-between text-xs text-sky-200">
+            <div className="mt-6 pt-4 border-t border-[#00A3E0]/30 flex items-center justify-between text-xs text-sky-200">
               <span>By Chifundo Banda, Managing Director</span>
               <Link
                 href="/blog/sme-working-capital-2026"
-                className="font-bold text-[#00A651] hover:underline flex items-center gap-1"
+                className="font-bold text-[#38bdf8] hover:underline flex items-center gap-1"
               >
                 Read Perspective <ArrowRight className="size-3.5" />
               </Link>
@@ -192,7 +234,10 @@ export default function BlogInsightsPage() {
       </section>
 
       {/* ── 3. SEARCH & TABS BAR ─────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <section
+        id="insights"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 scroll-mt-24"
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2 bg-white rounded-2xl border border-slate-200 shadow-sm">
           {/* Tab Navigation */}
           <div className="inline-flex p-1 rounded-xl bg-slate-100 text-xs font-semibold overflow-x-auto max-w-full">
@@ -241,29 +286,44 @@ export default function BlogInsightsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredArticles.map((art) => (
+              {filteredArticles.map((art) => {
+                const embed = resolveEmbed(art.embedUrl);
+                return (
                 <Link
                   key={art.id}
                   href={`/blog/${art.id}`}
                   className="group relative bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Cover image */}
-                  <div className="relative h-52 w-full overflow-hidden bg-slate-100 shrink-0">
-                    <Image
-                      src={art.image}
-                      alt={art.title}
-                      fill
-                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+                  {/* Cover image / video poster */}
+                  <div className="relative h-52 w-full overflow-hidden bg-slate-900 shrink-0">
+                    {art.image ? (
+                      <Image
+                        src={art.image}
+                        alt={art.title}
+                        fill
+                        className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#01214A] via-[#023168] to-[#011632]" />
+                    )}
                     {/* Gradient scrim */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+
+                    {/* Play overlay for embedded videos */}
+                    {embed ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="flex size-12 items-center justify-center rounded-full bg-black/55 text-white ring-2 ring-white/70 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                          <Play className="size-5 fill-current translate-x-0.5" />
+                        </span>
+                      </div>
+                    ) : null}
 
                     {/* Type pill — top left */}
                     <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                       art.type === "news"
-                        ? "bg-[#01214A] text-[#00A651]"
-                        : "bg-[#00A651] text-slate-950"
+                        ? "bg-[#01214A] text-[#38bdf8]"
+                        : "bg-[#00A3E0] text-slate-950"
                     }`}>
                       {art.category}
                     </span>
@@ -278,6 +338,14 @@ export default function BlogInsightsPage() {
                     <span className="absolute bottom-3 left-3 text-[10px] font-medium text-white/80">
                       {art.date}
                     </span>
+
+                    {/* Video tag — bottom right */}
+                    {embed ? (
+                      <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-brand-green text-white text-[10px] font-black uppercase tracking-wider">
+                        <Play className="size-2.5 fill-current" />
+                        Video
+                      </span>
+                    ) : null}
                   </div>
 
                   {/* Card body */}
@@ -293,17 +361,17 @@ export default function BlogInsightsPage() {
                     <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                       <div className="flex items-center gap-2.5 min-w-0">
                         {art.authorImage ? (
-                          <div className="relative size-7 rounded-full overflow-hidden border-2 border-[#00A651] shrink-0">
+                          <div className="relative size-7 rounded-full overflow-hidden border-2 border-[#00A3E0] shrink-0">
                             <Image src={art.authorImage} alt={art.author} fill className="object-cover" sizes="28px" />
                           </div>
                         ) : (
-                          <div className="size-7 rounded-full bg-[#01214A] text-[#00A651] flex items-center justify-center text-[10px] font-black shrink-0">
+                          <div className="size-7 rounded-full bg-[#01214A] text-[#38bdf8] flex items-center justify-center text-[10px] font-black shrink-0">
                             {art.author.charAt(0)}
                           </div>
                         )}
                         <span className="text-[11px] font-semibold text-slate-700 truncate">{art.author}</span>
                       </div>
-                      <span className="flex items-center gap-1 text-[11px] font-bold text-[#01214A] group-hover:text-[#00A651] transition-colors shrink-0">
+                      <span className="flex items-center gap-1 text-[11px] font-bold text-[#01214A] group-hover:text-[#00A3E0] transition-colors shrink-0">
                         Read
                         <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
                       </span>
@@ -311,21 +379,22 @@ export default function BlogInsightsPage() {
                   </div>
 
                   {/* Animated bottom accent bar */}
-                  <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[#01214A] to-[#00A651] transition-all duration-500 ease-out" />
+                  <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[#01214A] to-[#00A3E0] transition-all duration-500 ease-out" />
                 </Link>
-              ))}
+                );
+              })}
             </div>
           )}
         </section>
       )}
 
       {/* ── 5. EVENTS & WORKSHOPS SECTION ───────────────────────────── */}
-      {(activeTab === "all" || activeTab === "events") && (
+      {EVENTS.length > 0 && (activeTab === "all" || activeTab === "events") && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                <span className="size-2 rounded-full bg-[#00A651]" />
+                <span className="size-2 rounded-full bg-brand-green" />
                 <span>Upcoming & Past Events</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
@@ -355,7 +424,7 @@ export default function BlogInsightsPage() {
                   {/* Status pill */}
                   <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                     evt.status === "Upcoming"
-                      ? "bg-[#00A651] text-slate-950"
+                      ? "bg-[#00A3E0] text-slate-950"
                       : "bg-white/20 backdrop-blur-sm text-white"
                   }`}>
                     {evt.status}
@@ -386,10 +455,10 @@ export default function BlogInsightsPage() {
                   {/* Location + CTA row */}
                   <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <MapPin className="size-3 text-[#00A651] shrink-0" />
+                      <MapPin className="size-3 text-[#00A3E0] shrink-0" />
                       <span className="text-[11px] text-slate-500 truncate">{evt.location}</span>
                     </div>
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-[#01214A] group-hover:text-[#00A651] transition-colors shrink-0">
+                    <span className="flex items-center gap-1 text-[11px] font-bold text-[#01214A] group-hover:text-[#00A3E0] transition-colors shrink-0">
                       Details
                       <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
                     </span>
@@ -397,7 +466,7 @@ export default function BlogInsightsPage() {
                 </div>
 
                 {/* Animated bottom accent */}
-                <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[#01214A] to-[#00A651] transition-all duration-500 ease-out" />
+                <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[#01214A] to-[#00A3E0] transition-all duration-500 ease-out" />
               </Link>
             ))}
           </div>
@@ -405,5 +474,13 @@ export default function BlogInsightsPage() {
       )}
 
     </div>
+  );
+}
+
+export default function BlogInsightsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fcfdfd]" />}>
+      <BlogInsightsPageContent />
+    </Suspense>
   );
 }

@@ -42,6 +42,12 @@ enum JobApplicationStatus {
   HIRED
 }
 
+enum JobStatus {
+  OPEN
+  CLOSED
+  UNPUBLISHED
+}
+
 model User {
   id                      Int       @id @default(autoincrement())
   name                    String
@@ -62,28 +68,26 @@ model User {
 // ── Website settings (singleton row id = 1) ────────────────────────────────
 model WebsiteSetting {
   id            Int     @id @default(1)
-  siteName      String  @default("Ufulu Finance")
-  tagline       String  @default("Loans, savings and financial freedom for every community.")
-  aboutLine     String  @default("")
-  footerAbout   String  @default("")
 
-  primaryEmail  String  @default("info@ufulufinance.com")
   supportEmail  String  @default("support@ufulufinance.com")
   loansEmail    String  @default("loans@ufulufinance.com")
   phone         String  @default("+265 99 123 4567")
   whatsapp      String?
+  // Additional contact phone numbers (string[]); `phone` is kept as the primary/first
+  phones        Json?
   addressLine1  String  @default("City Centre, Area 3")
   addressLine2  String  @default("Lilongwe, Malawi")
   officeHours   String  @default("Mon – Fri, 8:00 AM – 5:00 PM")
   mapEmbedUrl   String  @default("")
-  notificationEmail String? // admin alerts for enquiries & job applications
+  notificationEmail String? // general admin alerts (fallback)
+  loanNotificationEmail String? // loan enquiry notifications
+  jobNotificationEmail String? // job application notifications
+  complaintsNotificationEmail String? // complaints notifications
 
   // Offices/branches: [{ region, city, address, phones, hours }]
   offices       Json?
   // Social media links: [{ platform, name, url }]
   socialLinks   Json?
-  // Legal pages body: { privacy: blocks[], terms: blocks[] }
-  legal         Json?
 
   updatedAt     DateTime @updatedAt
 }
@@ -157,8 +161,8 @@ model Testimonial {
   updatedAt   DateTime @updatedAt
 }
 
-// ── Services page ──────────────────────────────────────────────────────────
-model Service {
+// ── Products (drives the Products page, home showcase, enquiry product picker) ─
+model Product {
   id            Int           @id @default(autoincrement())
   title         String
   slug          String        @unique
@@ -177,9 +181,10 @@ model Service {
   sortOrder     Int           @default(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  enquiries     LoanEnquiry[]
 }
 
-model ServiceAudience {
+model ProductAudience {
   id          Int     @id @default(autoincrement())
   title       String
   subtitle    String?
@@ -191,7 +196,7 @@ model ServiceAudience {
   updatedAt   DateTime @updatedAt
 }
 
-model ServiceAdvantage {
+model ProductAdvantage {
   id          Int     @id @default(autoincrement())
   title       String
   description String
@@ -199,43 +204,6 @@ model ServiceAdvantage {
   status      ContentStatus @default(PUBLISHED)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-// ── Loan products (drives home showcase, loans page, enquiry product picker) ─
-model LoanProduct {
-  id                   Int           @id @default(autoincrement())
-  name                 String
-  slug                 String        @unique
-  category             String? // filter key: msme | agri | payroll | group | civil-service | business | other
-  categoryLabel        String? // display group e.g. "Government & Civil Service"
-  badge                String?
-  tagline              String?
-  intro                String?
-  description          String?
-  image                String?
-  imageAlt             String?
-  minAmount            Int?
-  maxAmount            Int?
-  minMonths            Int?
-  maxMonths            Int?
-  interestRateMonthly  Float?
-  processingFeePercent Float?
-  amountText           String? // display "Subject to assessment"
-  tenureText           String? // display "Flexible terms"
-  disbursementText     String?
-  repaymentText        String?
-  collateralText       String?
-  keyDetails           Json? // string[]
-  eligibility          Json? // string[]
-  kycRequirements      Json? // string[]
-  repaymentTerms       Json? // string[]
-  isFeatured           Boolean @default(false)
-  isHomeFeatured       Boolean @default(false)
-  status      ContentStatus @default(PUBLISHED)
-  sortOrder            Int     @default(0)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  enquiries            LoanEnquiry[]
 }
 
 model Faq {
@@ -264,6 +232,8 @@ model Article {
   authorImage   String?
   image         String?
   imageAlt      String?
+  // Video embed: YouTube/Facebook/Vimeo share link or full iframe code
+  embedUrl      String?
   date          DateTime      @default(now())
   readTime      Int?
   isFeatured    Boolean       @default(false)
@@ -288,17 +258,6 @@ model Event {
 }
 
 // ── Careers ────────────────────────────────────────────────────────────────
-model Perk {
-  id          Int     @id @default(autoincrement())
-  title       String
-  description String?
-  iconKey     String  @default("Sparkles")
-  sortOrder   Int     @default(0)
-  status      ContentStatus @default(PUBLISHED)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model Job {
   id              Int            @id @default(autoincrement())
   title           String
@@ -316,7 +275,7 @@ model Job {
   requirements    Json? // string[]
   benefits        Json? // string[]
   isFeatured      Boolean        @default(false)
-  status          ContentStatus  @default(PUBLISHED)
+  status          JobStatus      @default(OPEN)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   applications    JobApplication[]
@@ -339,19 +298,15 @@ model JobApplication {
 
 // ── About / Governance ─────────────────────────────────────────────────────
 model GovernanceMember {
-  id          Int     @id @default(autoincrement())
-  name        String
-  title       String
-  category    String  @default("board") // board | executive
-  credentials String?
-  experience  String?
-  expertise   Json? // string[]
-  bio         String?
-  image       String?
-  status      ContentStatus @default(PUBLISHED)
-  sortOrder   Int     @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int           @id @default(autoincrement())
+  name      String
+  title     String
+  bio       String?
+  image     String?
+  status    ContentStatus @default(PUBLISHED)
+  sortOrder Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 model AboutValue {
@@ -438,10 +393,10 @@ model LoanEnquiry {
   refNumber         String         @unique
   name              String
   phone             String
-  email             String
+  email             String?
   location          String?
   productId         Int?
-  product           LoanProduct?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+  product           Product?       @relation(fields: [productId], references: [id], onDelete: SetNull)
   productName       String?
   amountRequested   String?
   purpose           String?
@@ -449,6 +404,8 @@ model LoanEnquiry {
   preferredContact  String?
   consent           Boolean        @default(false)
   message           String?
+  idImageUrl        String?
+  idImagePublicId   String?
   status            EnquiryStatus  @default(PENDING)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
@@ -458,7 +415,7 @@ model CompanyEnquiry {
   id        Int           @id @default(autoincrement())
   refNumber String        @unique
   name      String
-  email     String
+  email     String?
   phone     String?
   category  String        @default("General Information")
   message   String

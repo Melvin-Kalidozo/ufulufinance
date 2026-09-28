@@ -6,7 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Article } from "@/lib/blogData";
 import { usePublicData } from "@/lib/content-store";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import { resolveEmbed } from "@/lib/embed";
+import { StaticHero, DetailSkeleton } from "@/components/public/ContentSkeletons";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   Calendar,
@@ -19,13 +20,13 @@ import {
   Sparkles,
   Building2,
   ChevronRight,
-  Calculator,
   ShieldCheck,
   CheckCircle2,
   ThumbsUp,
   Mail,
   Phone,
   MapPin,
+  Play,
 } from "lucide-react";
 
 interface PageProps {
@@ -67,6 +68,7 @@ function toArticle(r: Record<string, unknown>): Article {
       ? { text: String(quoteRaw.text), author: String(quoteRaw.author ?? "") }
       : undefined,
     image: String(r.image ?? ""),
+    embedUrl: r.embedUrl ? String(r.embedUrl) : undefined,
     isFeatured: Boolean(r.isFeatured),
   };
 }
@@ -81,8 +83,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   const article: Article | undefined = detail?.data
     ? toArticle(detail.data)
@@ -99,21 +99,16 @@ export default function DedicatedArticlePage({ params }: PageProps) {
           title="Insights & News"
           subtitle="Our Perspective · Practical Business Coaching · Announcements"
         />
-        <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
-          <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-7 w-3/4 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-3 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="space-y-3 pt-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-4 w-full animate-pulse rounded-full bg-slate-200/70" />
-            ))}
-          </div>
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          <DetailSkeleton />
         </div>
       </div>
     );
   }
 
   if (!article) return notFound();
+
+  const embed = resolveEmbed(article.embedUrl);
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -130,14 +125,16 @@ export default function DedicatedArticlePage({ params }: PageProps) {
       <section className="relative w-full bg-[#0b1f14] overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <Image
-            src={article.image}
-            alt={article.title}
-            fill
-            priority
-            className="object-cover object-center opacity-15"
-            sizes="100vw"
-          />
+          {article.image ? (
+            <Image
+              src={article.image}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover object-center opacity-15"
+              sizes="100vw"
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-b from-[#01214A]/90 via-[#011632]/95 to-[#01214A]" />
         </div>
 
@@ -145,25 +142,31 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-[11px] font-medium text-sky-300/70 mb-5 flex-wrap">
-            <Link href="/" className="hover:text-[#00A651] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-[#38bdf8] transition-colors">Home</Link>
             <ChevronRight className="size-3 text-sky-700 shrink-0" />
-            <Link href="/blog" className="hover:text-[#00A651] transition-colors">Blog & Insights</Link>
+            <Link href="/blog" className="hover:text-[#38bdf8] transition-colors">Blog & Insights</Link>
             <ChevronRight className="size-3 text-sky-700 shrink-0" />
             <span className="text-sky-400/80 truncate max-w-[180px] sm:max-w-xs">{article.category}</span>
           </nav>
 
           {/* Category + Meta */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#00A651] text-slate-950 uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#00A3E0] text-slate-950 uppercase tracking-wider">
               {article.category}
             </span>
+            {embed ? (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-black bg-brand-green text-white uppercase tracking-wider">
+                <Play className="size-3 fill-current" />
+                Video
+              </span>
+            ) : null}
             <span className="flex items-center gap-1.5 text-[11px] text-sky-300/80 font-medium">
-              <Clock className="size-3 text-[#00A651]" />
+              <Clock className="size-3 text-[#38bdf8]" />
               {article.readTime}
             </span>
             <span className="text-sky-700">·</span>
             <span className="flex items-center gap-1.5 text-[11px] text-sky-300/80 font-medium">
-              <Calendar className="size-3 text-[#00A651]" />
+              <Calendar className="size-3 text-[#38bdf8]" />
               {article.date}
             </span>
           </div>
@@ -183,7 +186,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
             {/* Author */}
             <div className="flex items-center gap-3">
               {article.authorImage && (
-                <div className="relative size-11 rounded-full overflow-hidden border-2 border-[#00A651] shrink-0">
+                <div className="relative size-11 rounded-full overflow-hidden border-2 border-[#00A3E0] shrink-0">
                   <Image src={article.authorImage} alt={article.author} fill className="object-cover" sizes="44px" />
                 </div>
               )}
@@ -200,7 +203,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 onClick={() => setLiked(!liked)}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-bold transition-all cursor-pointer ${
                   liked
-                    ? "bg-[#00A651] text-slate-950 border-[#00A651]"
+                    ? "bg-[#00A3E0] text-slate-950 border-[#00A3E0]"
                     : "bg-white/8 border-white/15 text-white hover:bg-white/15"
                 }`}
               >
@@ -213,7 +216,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-white text-[11px] font-bold transition-all cursor-pointer hover:bg-white/15"
               >
                 {copied ? (
-                  <><Check className="size-3.5 text-[#00A651]" /><span className="text-[#00A651]">Copied!</span></>
+                  <><Check className="size-3.5 text-[#38bdf8]" /><span className="text-[#38bdf8]">Copied!</span></>
                 ) : (
                   <><Share2 className="size-3.5" /><span>Share</span></>
                 )}
@@ -222,7 +225,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 href="/blog"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-white text-[11px] font-bold transition-all hover:bg-white/15"
               >
-                <ArrowLeft className="size-3.5 text-[#00A651]" />
+                <ArrowLeft className="size-3.5 text-[#38bdf8]" />
                 All Articles
               </Link>
             </div>
@@ -230,20 +233,35 @@ export default function DedicatedArticlePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* ── COVER IMAGE ─────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
-        <div className="relative h-[180px] sm:h-[300px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-900">
-          <Image
-            src={article.image}
-            alt={article.title}
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 1280px) 100vw, 1024px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+      {/* ── MEDIA: video embed or cover image ──────────────────────── */}
+      {embed ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
+          <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-black">
+            <iframe
+              src={embed.src}
+              title={article.title}
+              className="absolute inset-0 h-full w-full"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
         </div>
-      </div>
+      ) : article.image ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
+          <div className="relative h-[180px] sm:h-[300px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-900">
+            <Image
+              src={article.image}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1280px) 100vw, 1024px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          </div>
+        </div>
+      ) : null}
 
       {/* ── MAIN CONTENT ────────────────────────────────────────────── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-14">
@@ -254,17 +272,17 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
             {/* Key Takeaways */}
             {article.keyTakeaways && article.keyTakeaways.length > 0 && (
-              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 space-y-4">
+              <div className="bg-brand-green-soft border border-brand-green/20 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="size-7 rounded-lg bg-[#00A651] flex items-center justify-center shrink-0">
-                    <Sparkles className="size-3.5 text-slate-950" />
+                  <div className="size-7 rounded-lg bg-brand-green flex items-center justify-center shrink-0">
+                    <Sparkles className="size-3.5 text-white" />
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-[#01214A]">Key Takeaways</span>
                 </div>
                 <ul className="space-y-3">
                   {article.keyTakeaways.map((point, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
-                      <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="size-4 text-brand-green shrink-0 mt-0.5" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -284,7 +302,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                   const body = dot > -1 ? rest.substring(dot + 2) : "";
                   return (
                     <div key={i} className="flex gap-4 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm">
-                      <div className="size-10 rounded-xl bg-[#01214A] text-[#00A651] font-black text-sm flex items-center justify-center shrink-0">
+                      <div className="size-10 rounded-xl bg-[#01214A] text-[#38bdf8] font-black text-sm flex items-center justify-center shrink-0">
                         {num.padStart(2, "0")}
                       </div>
                       <div className="space-y-1">
@@ -310,7 +328,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <p className="relative text-lg sm:text-xl font-medium italic leading-relaxed text-sky-100 mb-4">
                   "{article.quote.text}"
                 </p>
-                <cite className="text-xs font-black uppercase tracking-wider text-[#00A651] not-italic">
+                <cite className="text-xs font-black uppercase tracking-wider text-[#38bdf8] not-italic">
                   — {article.quote.author}
                 </cite>
               </blockquote>
@@ -320,7 +338,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
             <div className="rounded-2xl bg-slate-950 border border-sky-900/30 p-7 relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(0,163,224,0.15),_transparent_65%)] pointer-events-none" />
               <div className="relative space-y-3">
-                <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A651] text-slate-950 mb-1">
+                <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A3E0] text-slate-950 mb-1">
                   Accelerate Your Enterprise
                 </span>
                 <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-tight">
@@ -334,7 +352,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                     triggerButton={
                       <button
                         type="button"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#00A651] hover:bg-[#00A651] text-slate-950 font-bold px-6 py-2.5 text-xs tracking-wide uppercase transition-all cursor-pointer shadow-sm"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold px-6 py-2.5 text-xs tracking-wide uppercase transition-all cursor-pointer shadow-sm"
                       >
                         Apply for Financing
                         <ArrowRight className="size-3.5" />
@@ -348,15 +366,15 @@ export default function DedicatedArticlePage({ params }: PageProps) {
             {/* Author Bio */}
             <div className="flex gap-5 items-start bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
               {article.authorImage && (
-                <div className="relative size-16 rounded-xl overflow-hidden border-2 border-[#00A651] shrink-0">
+                <div className="relative size-16 rounded-xl overflow-hidden border-2 border-[#00A3E0] shrink-0">
                   <Image src={article.authorImage} alt={article.author} fill className="object-cover" sizes="64px" />
                 </div>
               )}
               <div className="space-y-1.5">
                 <div className="flex flex-wrap items-center gap-2">
                   <h4 className="text-sm font-bold text-slate-900">{article.author}</h4>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-100 text-[#01214A] text-[10px] font-bold">
-                    <ShieldCheck className="size-2.5 text-[#00A651]" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-green-soft text-brand-green text-[10px] font-bold">
+                    <ShieldCheck className="size-2.5 text-brand-green" />
                     Verified Contributor
                   </span>
                 </div>
@@ -371,27 +389,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
           {/* ── RIGHT: Sticky Sidebar ── */}
           <aside className="space-y-5 lg:sticky lg:top-24">
 
-            {/* Loan Calculator Card */}
-            <div className="bg-[#01214A] text-white rounded-2xl p-5 space-y-3.5 border border-sky-900/40">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A651] text-slate-950">
-                  Loan Estimator
-                </span>
-                <Calculator className="size-4 text-[#00A651]" />
-              </div>
-              <h4 className="text-sm font-bold leading-snug">Transparent Repayment Calculator</h4>
-              <p className="text-xs text-sky-200/70 leading-relaxed">
-                Borrow from MWK 100,000 to MWK 10,000,000 with flat rates and zero surprise deductions.
-              </p>
-              <Link
-                href="/loans"
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#00A651] hover:bg-[#00A651] text-slate-950 font-bold text-xs transition-colors"
-              >
-                Open Loan Calculator
-                <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
-
             {/* Regional Offices */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
               <div className="flex items-center gap-2">
@@ -404,7 +401,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Lilongwe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />
                     Cuckoo&apos;s Nest, 1st Flr, Mandala St, Area 3
                   </p>
                   <a href="tel:+265994485444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
@@ -416,7 +413,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Blantyre / Limbe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />
                     Zuleka Arcade, 1st Flr Rm 26 (Opp. Illovo), Limbe
                   </p>
                   <a href="tel:+265888885444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
@@ -428,7 +425,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Mzuzu Regional Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />
                     Katoto Commercial Area
                   </p>
                   <a href="mailto:ufulufinance@gmail.com" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
@@ -446,42 +443,6 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <ArrowRight className="size-3" />
               </Link>
             </div>
-
-            {/* Newsletter */}
-            <div className="bg-slate-900 text-white rounded-2xl p-5 space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#00A651]">Stay Informed</span>
-              <h4 className="text-sm font-bold leading-snug">Malawi Market & Financing Insights</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Monthly updates on agri cycles, MSME cashflow strategies, and regulatory news.
-              </p>
-              {subscribed ? (
-                <div className="rounded-xl bg-sky-950/60 border border-sky-800/40 py-3 text-center">
-                  <p className="text-xs font-bold text-[#00A651]">You're subscribed!</p>
-                  <p className="text-[11px] text-sky-300/70 mt-0.5">We'll be in touch soon.</p>
-                </div>
-              ) : (
-                <form
-                  onSubmit={(e) => { e.preventDefault(); setSubscribed(true); }}
-                  className="space-y-2"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-white/8 border border-white/15 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#00A651]"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-[#00A651] hover:bg-[#00A651] text-slate-950 font-bold text-xs py-2.5 transition-colors cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    <Mail className="size-3.5" />
-                    Subscribe
-                  </button>
-                </form>
-              )}
-            </div>
           </aside>
         </div>
 
@@ -495,7 +456,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
               </div>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#01214A] hover:text-[#00A651] transition-colors shrink-0"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#01214A] hover:text-[#00A3E0] transition-colors shrink-0"
               >
                 View All Insights
                 <ArrowRight className="size-3.5" />
@@ -531,7 +492,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                     <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 flex-1">
                       {rel.excerpt}
                     </p>
-                    <div className="mt-3 flex items-center justify-between text-[11px] font-bold text-[#01214A] group-hover:text-[#00A651] transition-colors">
+                    <div className="mt-3 flex items-center justify-between text-[11px] font-bold text-[#01214A] group-hover:text-[#00A3E0] transition-colors">
                       <span>Read Article</span>
                       <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
                     </div>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { EventItem } from "@/lib/blogData";
 import { usePublicData } from "@/lib/content-store";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import { StaticHero, DetailSkeleton } from "@/components/public/ContentSkeletons";
 import {
   Calendar,
   Clock,
@@ -70,15 +70,8 @@ export default function EventDetailPage({ params }: PageProps) {
           title="Community Clinics & Events"
           subtitle="Upcoming and past Ufulu Finance workshops, forums and gatherings."
         />
-        <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
-          <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-7 w-3/4 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="h-3 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="space-y-3 pt-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-4 w-full animate-pulse rounded-full bg-slate-200/70" />
-            ))}
-          </div>
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          <DetailSkeleton />
         </div>
       </div>
     );
@@ -109,9 +102,9 @@ export default function EventDetailPage({ params }: PageProps) {
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-[11px] font-medium text-sky-300/70 mb-5 flex-wrap">
-            <Link href="/" className="hover:text-[#00A651] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-[#38bdf8] transition-colors">Home</Link>
             <ChevronRight className="size-3 text-sky-700 shrink-0" />
-            <Link href="/blog" className="hover:text-[#00A651] transition-colors">Blog & Insights</Link>
+            <Link href="/blog" className="hover:text-[#38bdf8] transition-colors">Blog & Insights</Link>
             <ChevronRight className="size-3 text-sky-700 shrink-0" />
             <span className="text-sky-400/80">Events</span>
             <ChevronRight className="size-3 text-sky-700 shrink-0" />
@@ -121,17 +114,17 @@ export default function EventDetailPage({ params }: PageProps) {
           {/* Status + meta pills */}
           <div className="flex flex-wrap items-center gap-2.5 mb-4">
             <span className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider ${
-              isUpcoming ? "bg-[#00A651] text-slate-950" : "bg-white/15 text-white"
+              isUpcoming ? "bg-[#00A3E0] text-slate-950" : "bg-white/15 text-white"
             }`}>
               {event.status}
             </span>
             <span className="flex items-center gap-1.5 text-[11px] text-sky-300/80 font-medium">
-              <Calendar className="size-3 text-[#00A651]" />
+              <Calendar className="size-3 text-[#38bdf8]" />
               {event.date}
             </span>
             <span className="text-sky-700">·</span>
             <span className="flex items-center gap-1.5 text-[11px] text-sky-300/80 font-medium">
-              <Clock className="size-3 text-[#00A651]" />
+              <Clock className="size-3 text-[#38bdf8]" />
               {event.time}
             </span>
           </div>
@@ -143,7 +136,7 @@ export default function EventDetailPage({ params }: PageProps) {
 
           {/* Location */}
           <p className="flex items-center gap-2 text-sm text-sky-200/70 mb-6">
-            <MapPin className="size-4 text-[#00A651] shrink-0" />
+            <MapPin className="size-4 text-[#38bdf8] shrink-0" />
             {event.location}
           </p>
 
@@ -153,13 +146,13 @@ export default function EventDetailPage({ params }: PageProps) {
               href="/blog"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-white text-[11px] font-bold transition-all hover:bg-white/15"
             >
-              <ArrowLeft className="size-3.5 text-[#00A651]" />
+              <ArrowLeft className="size-3.5 text-[#38bdf8]" />
               Back to Insights
             </Link>
             {isUpcoming && (
               <Link
                 href={`/contact?subject=Event%20Registration%20–%20${encodeURIComponent(event.title)}`}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#00A651] text-slate-950 text-[11px] font-black transition-all hover:bg-[#00A651]"
+                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#00A3E0] text-slate-950 text-[11px] font-black transition-all hover:bg-[#38bdf8]"
               >
                 Register Attendance
                 <ArrowRight className="size-3.5" />
@@ -194,8 +187,8 @@ export default function EventDetailPage({ params }: PageProps) {
             {/* About this event */}
             <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 sm:p-7 space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="size-7 rounded-lg bg-[#00A651] flex items-center justify-center shrink-0">
-                  <Sparkles className="size-3.5 text-slate-950" />
+                <div className="size-7 rounded-lg bg-brand-green flex items-center justify-center shrink-0">
+                  <Sparkles className="size-3.5 text-white" />
                 </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#01214A]">About This Event</span>
               </div>
@@ -229,7 +222,7 @@ export default function EventDetailPage({ params }: PageProps) {
               <ul className="space-y-3">
                 {event.details.map((d, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
-                    <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-4 text-brand-green shrink-0 mt-0.5" />
                     <span>{d}</span>
                   </li>
                 ))}
@@ -241,7 +234,7 @@ export default function EventDetailPage({ params }: PageProps) {
               <div className="rounded-2xl bg-slate-950 border border-sky-900/30 p-7 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(0,163,224,0.15),_transparent_65%)] pointer-events-none" />
                 <div className="relative space-y-3">
-                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A651] text-slate-950">
+                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00A3E0] text-slate-950">
                     Upcoming Event
                   </span>
                   <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-tight">
@@ -253,7 +246,7 @@ export default function EventDetailPage({ params }: PageProps) {
                   <div className="flex flex-wrap gap-3 pt-2">
                     <Link
                       href={`/contact?subject=Event%20Registration%20–%20${encodeURIComponent(event.title)}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#00A651] hover:bg-[#00A651] text-slate-950 font-bold px-6 py-2.5 text-xs tracking-wide uppercase transition-all shadow-sm"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold px-6 py-2.5 text-xs tracking-wide uppercase transition-all shadow-sm"
                     >
                       Register for Attendance
                       <ArrowRight className="size-3.5" />
@@ -294,29 +287,29 @@ export default function EventDetailPage({ params }: PageProps) {
             <div className="bg-[#01214A] text-white rounded-2xl p-5 space-y-4 border border-sky-900/40">
               <div className="flex items-center justify-between">
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                  isUpcoming ? "bg-[#00A651] text-slate-950" : "bg-white/15 text-white/80"
+                  isUpcoming ? "bg-[#00A3E0] text-slate-950" : "bg-white/15 text-white/80"
                 }`}>
                   {event.status}
                 </span>
-                <CalendarCheck2 className="size-4 text-[#00A651]" />
+                <CalendarCheck2 className="size-4 text-[#38bdf8]" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-start gap-2.5">
-                  <Calendar className="size-3.5 text-[#00A651] mt-0.5 shrink-0" />
+                  <Calendar className="size-3.5 text-[#38bdf8] mt-0.5 shrink-0" />
                   <div>
                     <p className="text-[10px] text-sky-300/70 font-medium uppercase tracking-wider">Date</p>
                     <p className="text-xs font-bold">{event.date}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <Clock className="size-3.5 text-[#00A651] mt-0.5 shrink-0" />
+                  <Clock className="size-3.5 text-[#38bdf8] mt-0.5 shrink-0" />
                   <div>
                     <p className="text-[10px] text-sky-300/70 font-medium uppercase tracking-wider">Time</p>
                     <p className="text-xs font-bold">{event.time}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <MapPin className="size-3.5 text-[#00A651] mt-0.5 shrink-0" />
+                  <MapPin className="size-3.5 text-[#38bdf8] mt-0.5 shrink-0" />
                   <div>
                     <p className="text-[10px] text-sky-300/70 font-medium uppercase tracking-wider">Venue</p>
                     <p className="text-xs font-bold">{event.location}</p>
@@ -326,7 +319,7 @@ export default function EventDetailPage({ params }: PageProps) {
               {isUpcoming && (
                 <Link
                   href={`/contact?subject=Event%20Registration%20–%20${encodeURIComponent(event.title)}`}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#00A651] hover:bg-[#00A651] text-slate-950 font-bold text-xs transition-colors"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#00A3E0] hover:bg-[#38bdf8] text-slate-950 font-bold text-xs transition-colors"
                 >
                   Reserve My Seat
                   <ArrowRight className="size-3.5" />
@@ -344,7 +337,7 @@ export default function EventDetailPage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Lilongwe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />Cuckoo&apos;s Nest, 1st Flr, Mandala St, Area 3
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Cuckoo&apos;s Nest, 1st Flr, Mandala St, Area 3
                   </p>
                   <a href="tel:+265994485444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
                     <Phone className="size-3 shrink-0" />+265 994 485 444
@@ -353,7 +346,7 @@ export default function EventDetailPage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Blantyre / Limbe Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />Zuleka Arcade, 1st Flr Rm 26 (Opp. Illovo), Limbe
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Zuleka Arcade, 1st Flr Rm 26 (Opp. Illovo), Limbe
                   </p>
                   <a href="tel:+265888885444" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
                     <Phone className="size-3 shrink-0" />+265 888 885 444
@@ -362,7 +355,7 @@ export default function EventDetailPage({ params }: PageProps) {
                 <div className="rounded-xl bg-slate-50 border border-slate-100 p-3.5 space-y-1.5">
                   <p className="text-xs font-bold text-slate-900">Mzuzu Regional Office</p>
                   <p className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                    <MapPin className="size-3 text-[#00A651] shrink-0" />Katoto Commercial Area
+                    <MapPin className="size-3 text-[#00A3E0] shrink-0" />Katoto Commercial Area
                   </p>
                   <a href="mailto:ufulufinance@gmail.com" className="flex items-center gap-1.5 text-[11px] text-[#01214A] font-semibold hover:underline">
                     <Mail className="size-3 shrink-0" />ufulufinance@gmail.com
@@ -406,7 +399,7 @@ export default function EventDetailPage({ params }: PageProps) {
                 </div>
                 <Link
                   href="/blog?tab=events"
-                  className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#01214A] hover:text-[#00A651] transition-colors"
+                  className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#01214A] hover:text-[#00A3E0] transition-colors"
                 >
                   All Events <ArrowRight className="size-3" />
                 </Link>

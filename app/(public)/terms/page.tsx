@@ -8,7 +8,8 @@ export default function TermsPage() {
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-16 sm:pb-24">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-[#01214A]/90 to-slate-950/95" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 text-center text-white sm:px-6 lg:px-8">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-[#00A651] backdrop-blur-md">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-[#00A3E0] backdrop-blur-md">
+            <span className="size-1.5 rounded-full bg-brand-green-light" />
             <FileText className="size-3.5" />
             <span>Terms &amp; Conditions</span>
           </div>
@@ -27,7 +28,7 @@ export default function TermsPage() {
             </span>
           </div>
           <div className="mt-4">
-            <Link href="/privacy" className="text-xs font-semibold text-[#00A651] hover:underline">
+            <Link href="/privacy" className="text-xs font-semibold text-[#38bdf8] hover:underline">
               View Privacy Policy →
             </Link>
           </div>

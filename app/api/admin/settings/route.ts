@@ -5,11 +5,6 @@ import { requireAdmin } from "@/lib/api-auth";
 export const dynamic = "force-dynamic";
 
 const TEXT_FIELDS = [
-  "siteName",
-  "tagline",
-  "aboutLine",
-  "footerAbout",
-  "primaryEmail",
   "supportEmail",
   "loansEmail",
   "phone",
@@ -19,9 +14,12 @@ const TEXT_FIELDS = [
   "officeHours",
   "mapEmbedUrl",
   "notificationEmail",
+  "loanNotificationEmail",
+  "jobNotificationEmail",
+  "complaintsNotificationEmail",
 ] as const;
 
-const JSON_FIELDS = ["offices", "socialLinks", "legal"] as const;
+const JSON_FIELDS = ["offices", "socialLinks", "phones"] as const;
 
 export async function GET() {
   const auth = await requireAdmin();
@@ -58,8 +56,6 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ message: `${field} must be valid JSON.` }, { status: 400 });
     }
   }
-
-  const existing = await prisma.websiteSetting.findFirst();
 
   try {
     const updated = await prisma.websiteSetting.upsert({

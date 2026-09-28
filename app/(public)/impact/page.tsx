@@ -4,7 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
-import { StaticHero } from "@/components/public/ContentSkeletons";
+import {
+  StaticHero,
+  Shimmer,
+  TwoColumnSkeleton,
+  SectionHeadingSkeleton,
+  CardGridSkeleton,
+} from "@/components/public/ContentSkeletons";
 import { usePublicData } from "@/lib/content-store";
 import {
   ArrowUpRight,
@@ -80,12 +86,36 @@ export default function ImpactPortfolioPage() {
           title="Impact & Portfolio"
           subtitle="Projects, community initiatives and client success stories transforming livelihoods across Malawi."
         />
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mb-10 h-4 w-1/2 animate-pulse rounded-full bg-slate-200/70" />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-80 animate-pulse rounded-3xl bg-slate-200/70" />
+        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+          <TwoColumnSkeleton />
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Shimmer key={i} className="h-24 rounded-2xl" />
             ))}
+          </div>
+
+          {/* Projects */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
+          </div>
+
+          {/* Initiatives */}
+          <div className="rounded-[32px] bg-[#034DA2] p-8 sm:p-14">
+            <Shimmer className="mb-10 h-6 w-48" />
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Shimmer key={i} className="h-40 rounded-3xl" />
+              ))}
+            </div>
+          </div>
+
+          {/* Success stories */}
+          <div>
+            <SectionHeadingSkeleton />
+            <CardGridSkeleton count={3} />
           </div>
         </div>
       </div>
@@ -131,7 +161,7 @@ export default function ImpactPortfolioPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Portfolio Introduction</span>
             </div>
 
@@ -149,13 +179,9 @@ export default function ImpactPortfolioPage() {
               Since our founding in Lilongwe, Ufulu Finance has deployed credit as a high-leverage instrument for socio-economic mobility. By focusing on productivity-enhancing credit—such as agricultural input financing, transport machinery, and retail inventory—we ensure our borrowers build lasting wealth.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">MWK 4.8B+</span>
-                <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Cumulative Credit</span>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">15,200+</span>
+                <span className="text-2xl font-extrabold text-[#034DA2] block">14,000+</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Borrowers Financed</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
@@ -163,7 +189,7 @@ export default function ImpactPortfolioPage() {
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">Women Entrepreneurs</span>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-center">
-                <span className="text-2xl font-extrabold text-[#034DA2] block">98.4%</span>
+                <span className="text-2xl font-extrabold text-brand-green block">98.4%</span>
                 <span className="text-[11px] text-slate-500 font-semibold mt-1 block">On-Time Repayment</span>
               </div>
             </div>
@@ -172,11 +198,12 @@ export default function ImpactPortfolioPage() {
       </section>
 
       {/* ── 3. FEATURED PROJECTS ─────────────────────────────────────── */}
+      {PROJECTS.length > 0 && (
       <section className="py-16 sm:py-24 bg-[#f8fafc] border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Featured Initiatives</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -233,8 +260,10 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 4. COMMUNITY INITIATIVES ─────────────────────────────────── */}
+      {COMMUNITY_INITIATIVES.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-14 shadow-xl">
           <div className="max-w-2xl mb-12 space-y-2">
@@ -268,13 +297,15 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 5. SUCCESS STORIES ───────────────────────────────────────── */}
+      {SUCCESS_STORIES.length > 0 && (
       <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#009FE0]" />
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Success Stories</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -328,6 +359,7 @@ export default function ImpactPortfolioPage() {
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }

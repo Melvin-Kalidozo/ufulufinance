@@ -1,7 +1,7 @@
 import nodemailer, { type Transporter } from "nodemailer";
 
-// Shared mailer following the makaztech pattern: a lazily-created SMTP
-// transporter plus HTML-escaping helpers for building templates inline.
+// Shared mailer: a lazily-created SMTP transporter plus HTML-escaping helpers
+// for building branded templates inline.
 let transporter: Transporter | null = null;
 
 const BRAND_PRIMARY = "#034DA2";
@@ -17,7 +17,9 @@ function getTransporter(): Transporter | null {
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT || 465),
       secure: process.env.SMTP_SECURE !== "false",
-      requireTLS: true,
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+      socketTimeout: 20000,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -59,7 +61,7 @@ export async function sendMail(to: string, subject: string, html: string) {
   const t = getTransporter();
   if (!t) {
     console.log(
-      `[mail:dev-fallback] To: ${to} | Subject: ${subject}\n${html.replace(/<[^>]+>/g, " ").trim()}`
+      `[mail] SMTP not configured — skipping send. To: ${to} | Subject: ${subject}\n${html.replace(/<[^>]+>/g, " ").trim()}`
     );
     return { devFallback: true };
   }

@@ -42,7 +42,7 @@ const STATUS_STYLE: Record<string, string> = {
   PENDING: "border-amber-200 bg-amber-50 text-amber-600",
   SHORTLISTED: "border-blue-200 bg-blue-50 text-[#034DA2]",
   REJECTED: "border-slate-200 bg-slate-100 text-slate-500",
-  HIRED: "border-emerald-200 bg-emerald-50 text-emerald-600",
+  HIRED: "border-brand-green/20 bg-brand-green-soft text-brand-green",
 };
 
 export function JobApplicationsManager() {

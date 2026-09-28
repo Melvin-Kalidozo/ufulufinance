@@ -45,7 +45,7 @@ const FILTERS = [
 
 const STATUS_STYLE: Record<string, string> = {
   PENDING: "border-amber-200 bg-amber-50 text-amber-600",
-  RESOLVED: "border-emerald-200 bg-emerald-50 text-emerald-600",
+  RESOLVED: "border-brand-green/20 bg-brand-green-soft text-brand-green",
 };
 
 export function EnquiriesManager({ kind }: { kind: "loan" | "company" }) {
@@ -271,6 +271,27 @@ export function EnquiriesManager({ kind }: { kind: "loan" | "company" }) {
                   ))}
                 </dl>
               </div>
+
+              {kind === "loan" && selected.idImageUrl ? (
+                <div className="rounded-xl border border-slate-200 bg-white p-4">
+                  <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    National ID (front)
+                  </p>
+                  <a
+                    href={String(selected.idImageUrl)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block"
+                  >
+                    <img
+                      src={String(selected.idImageUrl)}
+                      alt="National ID"
+                      className="max-h-56 rounded-lg border border-slate-200 object-contain"
+                    />
+                  </a>
+                </div>
+              ) : null}
+
               <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                 <div className="flex items-center gap-2">
                   <Select

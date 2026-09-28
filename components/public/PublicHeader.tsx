@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,24 +21,80 @@ import {
   UserRound,
   ChevronDown,
   ArrowRight,
+  Wallet,
+  Briefcase,
+  Users,
+  TrendingUp,
+  Building2,
+  Clock,
+  MapPin,
+  Target,
+  HelpCircle,
+  ShieldCheck,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePublicData } from "@/lib/content-store";
 
-const NAV_LINKS = [
+type NavLink = { label: string; href: string; menu?: "products" | "blog" | "about" };
+
+const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Loans", href: "/loans" },
-  { label: "About us", href: "/about" },
-  { label: "Blog", href: "/blog" },
+  { label: "Products", href: "/products", menu: "products" },
+  { label: "About us", href: "/about", menu: "about" },
+  { label: "Blog", href: "/blog", menu: "blog" },
   { label: "Job listings", href: "/jobs" },
   { label: "Contact us", href: "/contact" },
+];
+
+const PRODUCT_ICONS: Record<string, LucideIcon> = {
+  "civil-service": Wallet,
+  "private-sector-payroll": Briefcase,
+  "village-banking": Users,
+  "business-loans": TrendingUp,
+};
+
+const ABOUT_ITEMS: { href: string; label: string; desc: string; icon: LucideIcon }[] = [
+  { href: "/about", label: "About us", desc: "Who we are and what we do.", icon: Building2 },
+  { href: "/about?section=company-overview", label: "Company Overview", desc: "Our story, mission and who we serve.", icon: Users },
+  { href: "/about?section=our-history", label: "Our History", desc: "From 2016 grassroots credit to a national partner.", icon: Clock },
+  { href: "/about?section=core-values", label: "Core values", desc: "Transparency, efficiency and ethical lending.", icon: Target },
+  { href: "/about?section=regional-footprint", label: "Regional footprint", desc: "Branches across Central, Southern & Northern Malawi.", icon: MapPin },
+  { href: "/about?section=governance-leadership", label: "Governance & Leadership", desc: "Meet the leaders steering Ufulu Finance.", icon: ShieldCheck },
+  { href: "/about?section=about-faq", label: "FAQ", desc: "Regulation, eligibility and repayment answers.", icon: HelpCircle },
 ];
 
 export function PublicHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<"products" | "blog" | "about" | null>(null);
   const pathname = usePathname();
   const { data: session } = useSession();
+
+  const { body: productsBody } = usePublicData<{ data: { products?: unknown[] } }>(
+    "/api/public/products-data"
+  );
+  const { body: articlesBody } = usePublicData<{ data: unknown[] }>(
+    "/api/public/articles"
+  );
+
+  const row = (r: unknown) =>
+    (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
+  const str = (r: unknown, k: string, d = "") => {
+    const v = row(r)[k];
+    return v !== undefined && v !== null && String(v) !== "" ? String(v) : d;
+  };
+
+  const PRODUCTS = ((productsBody?.data?.products ?? []) as unknown[]).map((r) => ({
+    slug: str(r, "slug"),
+    title: str(r, "title"),
+    tagline: str(r, "tagline"),
+  }));
+
+  const LATEST_ARTICLES = ((articlesBody?.data ?? []) as unknown[])
+    .map((r) => ({ slug: str(r, "slug"), title: str(r, "title") }))
+    .filter((a) => a.slug && a.title)
+    .slice(0, 3);
 
   useEffect(() => {
     function handleScroll() {
@@ -62,13 +117,18 @@ export function PublicHeader() {
 
   // Close menu on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
+    setOpenMenu(null);
   }, [pathname]);
 
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileOpen(false);
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        setOpenMenu(null);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -81,11 +141,11 @@ export function PublicHeader() {
   // menu below only links into /admin for now.
   const initials = user?.name
     ? user.name
-      .split(" ")
-      .map((n: string) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase()
+        .split(" ")
+        .map((n: string) => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
     : "";
 
   return (
@@ -116,7 +176,7 @@ export function PublicHeader() {
                 width={175}
                 height={55}
                 priority
-                className="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-102"
+                className="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-102"
               />
             </div>
           </Link>
@@ -127,21 +187,275 @@ export function PublicHeader() {
               const active =
                 pathname === link.href ||
                 (link.href !== "/" && pathname.startsWith(link.href));
+              const linkClass = cn(
+                "relative py-2.5 px-3 text-sm font-semibold transition-colors duration-200 group flex flex-col items-center cursor-pointer",
+                isScrolled
+                  ? active
+                    ? "text-[#034DA2]"
+                    : "text-slate-600 hover:text-slate-950"
+                  : active
+                  ? "text-[#38bdf8]"
+                  : "text-white/90 hover:text-white"
+              );
+
+              if (link.menu) {
+                return (
+                  <div
+                    key={link.href}
+                    className="relative"
+                    onMouseEnter={() => setOpenMenu(link.menu ?? null)}
+                    onMouseLeave={() => setOpenMenu(null)}
+                  >
+                    <Link
+                      href={link.href}
+                      aria-haspopup="true"
+                      aria-expanded={openMenu === link.menu}
+                      className={linkClass}
+                    >
+                      <span className="inline-flex items-center gap-1">
+                        {link.label}
+                        <ChevronDown
+                          className={cn(
+                            "size-3.5 opacity-60 transition-transform",
+                            openMenu === link.menu && "rotate-180"
+                          )}
+                        />
+                      </span>
+                      {/* Small animated underline */}
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "absolute bottom-0 h-0.5 rounded-full transition-all duration-300 ease-out",
+                          active || openMenu === link.menu
+                            ? cn(
+                                "w-4/5",
+                                isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
+                              )
+                            : cn(
+                                "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
+                                isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
+                              )
+                        )}
+                      />
+                    </Link>
+
+                    {openMenu === link.menu && link.menu === "products" && (
+                      <div className="absolute left-0 top-full z-50 pt-3 w-[720px]">
+                        <div className="overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-900/20 border border-slate-200/90 grid grid-cols-[1fr_200px]">
+                          {/* Column 1: loan products list */}
+                          <div className="p-4 space-y-0.5">
+                            <p className="px-3 pt-1 pb-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400">
+                              Loan Products
+                            </p>
+                            {PRODUCTS.map((p) => {
+                              const Icon = PRODUCT_ICONS[p.slug] ?? Wallet;
+                              return (
+                                <Link
+                                  key={p.slug}
+                                  href={`/products?facility=${p.slug}`}
+                                  onClick={() => setOpenMenu(null)}
+                                  className="group/item flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-blue-50 transition-colors"
+                                >
+                                  <span className="size-9 rounded-lg bg-slate-100 text-[#034DA2] flex items-center justify-center group-hover/item:bg-[#034DA2] group-hover/item:text-white transition-colors shrink-0">
+                                    <Icon className="size-4" />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-xs font-bold text-slate-900 group-hover/item:text-[#034DA2] transition-colors">
+                                      {p.title}
+                                    </span>
+                                    <span className="block text-[11px] text-slate-500 line-clamp-1">
+                                      {p.tagline}
+                                    </span>
+                                  </span>
+                                </Link>
+                              );
+                            })}
+                            <Link
+                              href="/products"
+                              onClick={() => setOpenMenu(null)}
+                              className="flex items-center gap-1.5 px-3 pt-2.5 text-xs font-bold text-[#034DA2] hover:text-[#023877] transition-colors"
+                            >
+                              Explore all products
+                              <ArrowRight className="size-3.5" />
+                            </Link>
+                          </div>
+
+                          {/* Column 2: full-height image */}
+                          <Link
+                            href="/products"
+                            onClick={() => setOpenMenu(null)}
+                            className="relative block bg-slate-900"
+                          >
+                            <Image
+                              src="/images/cta-home.jpg"
+                              alt="Ufulu Finance Loan Products"
+                              fill
+                              className="object-cover"
+                              sizes="200px"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#021833]/95 via-[#021833]/35 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-[#38bdf8]">
+                                Credit Facilities
+                              </span>
+                              <span className="block text-sm font-bold text-white leading-snug mt-0.5">
+                                Find the right facility for your needs
+                              </span>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    {openMenu === link.menu && link.menu === "blog" && (
+                      <div className="absolute left-0 top-full z-50 pt-3 w-72">
+                        <div className="rounded-2xl bg-white shadow-2xl shadow-slate-900/20 border border-slate-200/90 p-2">
+                          <Link
+                            href="/blog"
+                            onClick={() => setOpenMenu(null)}
+                            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 hover:bg-blue-50 hover:text-[#034DA2] transition-colors"
+                          >
+                            All Insights
+                            <ArrowRight className="size-3.5 text-slate-400" />
+                          </Link>
+                          <Link
+                            href="/blog?tab=blog"
+                            onClick={() => setOpenMenu(null)}
+                            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 hover:bg-blue-50 hover:text-[#034DA2] transition-colors"
+                          >
+                            Blog Articles
+                          </Link>
+                          <Link
+                            href="/blog?tab=news"
+                            onClick={() => setOpenMenu(null)}
+                            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 hover:bg-blue-50 hover:text-[#034DA2] transition-colors"
+                          >
+                            Company News
+                          </Link>
+                          <Link
+                            href="/blog?tab=events"
+                            onClick={() => setOpenMenu(null)}
+                            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 hover:bg-blue-50 hover:text-[#034DA2] transition-colors"
+                          >
+                            Events &amp; Workshops
+                          </Link>
+
+                          {LATEST_ARTICLES.length > 0 && (
+                            <>
+                              <div className="my-1.5 border-t border-slate-100" />
+                              <p className="px-3 pt-1.5 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                                Latest
+                              </p>
+                              {LATEST_ARTICLES.map((a) => (
+                                <Link
+                                  key={a.slug}
+                                  href={`/blog/${a.slug}`}
+                                  onClick={() => setOpenMenu(null)}
+                                  className="block rounded-xl px-3 py-2 text-xs text-slate-600 hover:bg-blue-50 hover:text-[#034DA2] transition-colors line-clamp-2 leading-snug"
+                                >
+                                  {a.title}
+                                </Link>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {openMenu === link.menu && link.menu === "about" && (
+                      <div className="absolute left-0 top-full z-50 pt-3 w-[720px]">
+                        <div className="overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-900/20 border border-slate-200/90 grid grid-cols-[1fr_200px]">
+                          {/* Column 1: about options list */}
+                          <div className="p-4">
+                            <p className="px-3 pt-1 pb-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400">
+                              About Ufulu
+                            </p>
+
+                            {/* Overview item (full-width) */}
+                            {ABOUT_ITEMS.slice(0, 1).map((item) => {
+                              const Icon = item.icon;
+                              return (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  onClick={() => setOpenMenu(null)}
+                                  className="group/item flex items-start gap-3 rounded-xl px-3 py-2 mb-1 hover:bg-blue-50 transition-colors"
+                                >
+                                  <span className="size-9 rounded-lg bg-slate-100 text-[#034DA2] flex items-center justify-center group-hover/item:bg-[#034DA2] group-hover/item:text-white transition-colors shrink-0">
+                                    <Icon className="size-4" />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-xs font-bold text-slate-900 group-hover/item:text-[#034DA2] transition-colors">
+                                      {item.label}
+                                    </span>
+                                    <span className="block text-[11px] text-slate-500 line-clamp-1">
+                                      {item.desc}
+                                    </span>
+                                  </span>
+                                </Link>
+                              );
+                            })}
+
+                            {/* Section links (2 columns) */}
+                            <div className="grid grid-cols-2 gap-1">
+                              {ABOUT_ITEMS.slice(1).map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                  <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    onClick={() => setOpenMenu(null)}
+                                    className="group/item flex items-start gap-2.5 rounded-xl px-2.5 py-2 hover:bg-blue-50 transition-colors"
+                                  >
+                                    <span className="size-8 rounded-lg bg-slate-100 text-[#034DA2] flex items-center justify-center group-hover/item:bg-[#034DA2] group-hover/item:text-white transition-colors shrink-0">
+                                      <Icon className="size-4" />
+                                    </span>
+                                    <span className="min-w-0">
+                                      <span className="block text-xs font-bold text-slate-900 group-hover/item:text-[#034DA2] transition-colors">
+                                        {item.label}
+                                      </span>
+                                      <span className="block text-[11px] text-slate-500 line-clamp-1">
+                                        {item.desc}
+                                      </span>
+                                    </span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Column 2: full-height image */}
+                          <Link
+                            href="/about"
+                            onClick={() => setOpenMenu(null)}
+                            className="relative block bg-slate-900"
+                          >
+                            <Image
+                              src="/images/hero-about.jpg"
+                              alt="About Ufulu Finance"
+                              fill
+                              className="object-cover"
+                              sizes="200px"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#021833]/95 via-[#021833]/35 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-[#38bdf8]">
+                                Our Story
+                              </span>
+                              <span className="block text-sm font-bold text-white leading-snug mt-0.5">
+                                Empowering Malawians since 2016
+                              </span>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "relative py-2.5 px-3 text-sm font-semibold transition-colors duration-200 group flex flex-col items-center",
-                    isScrolled
-                      ? active
-                        ? "text-[#034DA2]"
-                        : "text-slate-600 hover:text-slate-950"
-                      : active
-                        ? "text-[#38bdf8]"
-                        : "text-white/90 hover:text-white"
-                  )}
-                >
+                <Link key={link.href} href={link.href} className={linkClass}>
                   <span>{link.label}</span>
                   {/* Small animated underline */}
                   <span
@@ -150,13 +464,13 @@ export function PublicHeader() {
                       "absolute bottom-0 h-0.5 rounded-full transition-all duration-300 ease-out",
                       active
                         ? cn(
-                          "w-4/5",
-                          isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
-                        )
+                            "w-4/5",
+                            isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
+                          )
                         : cn(
-                          "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
-                          isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
-                        )
+                            "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
+                            isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
+                          )
                     )}
                   />
                 </Link>
@@ -168,7 +482,7 @@ export function PublicHeader() {
           <div className="flex items-center gap-3">
             {/* Apply Now button */}
             <Link
-              href="/loans"
+              href="/products"
               className={cn(
                 "hidden sm:inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all hover:scale-105 cursor-pointer",
                 isScrolled
@@ -313,7 +627,7 @@ export function PublicHeader() {
             {/* Quick sub-links */}
             <div className="pt-4 border-t border-slate-100 space-y-2">
               <Link
-                href="/services"
+                href="/products"
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-between py-2.5 px-4 text-xs font-semibold text-slate-600 hover:text-[#034DA2] rounded-xl hover:bg-slate-50 transition-colors"
               >
@@ -334,7 +648,7 @@ export function PublicHeader() {
           {/* Drawer Footer - Button at Bottom */}
           <div className="border-t border-slate-100 bg-white p-6">
             <Link
-              href="/loans"
+              href="/products"
               onClick={() => setMobileOpen(false)}
               className="flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-2xl bg-[#034DA2] hover:bg-[#023877] active:bg-[#022955] text-white font-bold text-sm tracking-wide shadow-md shadow-blue-900/20 transition-all cursor-pointer"
             >

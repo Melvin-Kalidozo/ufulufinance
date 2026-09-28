@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -32,50 +32,30 @@ import {
   Phone,
   Mail,
   Banknote,
-  Layers,
-  Sparkles,
 } from "lucide-react";
-
-// Structured loan catalogue — names must match loans/page.tsx LOAN_PRODUCTS exactly
-export const LOAN_CATALOGUE: {
-  name: string;
-  minAmount: number;
-  maxAmount: number;
-}[] = [
-    { name: "Civil Service Loans", minAmount: 50000, maxAmount: 5000000 },
-    { name: "Private Sector Payroll Loans", minAmount: 50000, maxAmount: 5000000 },
-    { name: "Village Banking Loans", minAmount: 50000, maxAmount: 2000000 },
-    { name: "Business Loans", minAmount: 100000, maxAmount: 10000000 },
-    { name: "MSME QuickGrowth Working Capital", minAmount: 100000, maxAmount: 10000000 },
-    { name: "Mlimi Harvest Input Booster", minAmount: 150000, maxAmount: 7500000 },
-    { name: "Boma Civil Servant Express", minAmount: 50000, maxAmount: 2500000 },
-    { name: "Tikondane Solidarity Cluster Credit", minAmount: 50000, maxAmount: 500000 },
-    { name: "Commercial Asset & Equipment Credit", minAmount: 500000, maxAmount: 15000000 },
-    // Generic fallback options for enquiries not originating from a card
-    { name: "Family Emergency Relief Credit", minAmount: 50000, maxAmount: 1000000 },
-    { name: "Commercial Trade & Invoice Bridge", minAmount: 200000, maxAmount: 20000000 },
-  ];
-
-// Legacy alias kept for any other consumers
-export const LOAN_PRODUCTS = LOAN_CATALOGUE.map((p) => p.name);
+import { usePublicData } from "@/lib/content-store";
 
 interface LoanEnquiryDialogProps {
   triggerButton?: React.ReactNode;
   defaultProduct?: string;
   defaultFacility?: string;
-  defaultAmount?: string | number;
-  defaultMinAmount?: number;
-  defaultMaxAmount?: number;
 }
 
 export function LoanEnquiryDialog({
   triggerButton,
   defaultProduct = "",
   defaultFacility = "",
-  defaultAmount = "",
-  defaultMinAmount,
-  defaultMaxAmount,
 }: LoanEnquiryDialogProps) {
+  const { body: productsBody } = usePublicData<{ data: { products?: unknown[] } }>(
+    "/api/public/products-data"
+  );
+  const PRODUCT_NAMES: string[] = ((productsBody?.data?.products ?? []) as unknown[])
+    .map((p) => {
+      const r = (p && typeof p === "object" ? p : {}) as Record<string, unknown>;
+      return r.title !== undefined && r.title !== null ? String(r.title) : "";
+    })
+    .filter(Boolean);
+
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [sending, setSending] = useState(false);
@@ -90,7 +70,7 @@ export function LoanEnquiryDialog({
     phone: "",
     email: "",
     product: initialProduct,
-    amount: defaultAmount ? String(defaultAmount) : "",
+    amount: "",
     message: "",
   });
 
@@ -99,6 +79,7 @@ export function LoanEnquiryDialog({
     size: string;
     dataUrl?: string;
   } | null>(null);
+  const [idRaw, setIdRaw] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -112,10 +93,7 @@ export function LoanEnquiryDialog({
       setProduct(selected);
       setForm((prev) => ({ ...prev, product: selected }));
     }
-    if (defaultAmount) {
-      setForm((prev) => ({ ...prev, amount: String(defaultAmount) }));
-    }
-  }, [defaultFacility, defaultProduct, defaultAmount]);
+  }, [defaultFacility, defaultProduct]);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -128,20 +106,20 @@ export function LoanEnquiryDialog({
     setTouched((prev) => ({ ...prev, [field]: true }));
   }
 
-  // File upload processing
+  // File upload processing — images only (front of National ID)
   function processFile(file: File) {
     setFileError("");
 
-    // Validate size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setFileError("File exceeds 5MB limit. Please upload an image or PDF under 5MB.");
+    // Validate size (max 8MB)
+    if (file.size > 8 * 1024 * 1024) {
+      setFileError("Image exceeds 8MB. Please upload a smaller photo.");
       return;
     }
 
-    // Validate type (images or pdf)
-    const validTypes = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    // Validate type (images only — PDFs are not accepted)
+    const validTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!validTypes.includes(file.type)) {
-      setFileError("Please upload a valid document (JPG, PNG, WebP or PDF).");
+      setFileError("Only JPG, PNG or WebP images are accepted — PDFs are not allowed.");
       return;
     }
 
@@ -150,22 +128,16 @@ export function LoanEnquiryDialog({
         ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
         : `${Math.round(file.size / 1024)} KB`;
 
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setIdFile({
-          name: file.name,
-          size: sizeFormatted,
-          dataUrl: reader.result as string,
-        });
-      };
-      reader.readAsDataURL(file);
-    } else {
+    setIdRaw(file);
+    const reader = new FileReader();
+    reader.onload = () => {
       setIdFile({
         name: file.name,
         size: sizeFormatted,
+        dataUrl: reader.result as string,
       });
-    }
+    };
+    reader.readAsDataURL(file);
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -192,43 +164,31 @@ export function LoanEnquiryDialog({
 
   function handleRemoveFile() {
     setIdFile(null);
+    setIdRaw(null);
     setFileError("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }
 
-  // Derive the selected product's limits from the catalogue
-  const selectedCatalogueEntry = LOAN_CATALOGUE.find((p) => p.name === form.product);
-  const activeMin = selectedCatalogueEntry?.minAmount ?? defaultMinAmount;
-  const activeMax = selectedCatalogueEntry?.maxAmount ?? defaultMaxAmount;
-
   // Inline Validation checks
-  const amountRaw = Number(form.amount.replace(/[^0-9]/g, ""));
   const errors = {
     name: !form.name.trim()
       ? "Full legal name is required"
       : form.name.trim().length < 2
-        ? "Name must be at least 2 characters"
-        : "",
+      ? "Name must be at least 2 characters"
+      : "",
     phone: !form.phone.trim()
       ? "Phone number is required"
       : form.phone.replace(/[^0-9]/g, "").length < 7
-        ? "Please enter a valid phone number"
-        : "",
+      ? "Please enter a valid phone number"
+      : "",
     email:
       form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
         ? "Please enter a valid email address"
         : "",
     product: !form.product ? "Please select a loan facility" : "",
-    amount:
-      form.amount.trim() && activeMin && activeMax && amountRaw > 0
-        ? amountRaw < activeMin
-          ? `Minimum for this facility is MWK ${activeMin.toLocaleString()}`
-          : amountRaw > activeMax
-            ? `Maximum for this facility is MWK ${activeMax.toLocaleString()}`
-            : ""
-        : "",
+    amount: "",
   };
 
   const isStep1Valid = !errors.name && !errors.phone && !errors.email;
@@ -277,20 +237,27 @@ export function LoanEnquiryDialog({
       return;
     }
 
+    if (!idRaw) {
+      setFileError("Please upload a clear photo of your National ID (front).");
+      toast.error("A National ID image is required.");
+      return;
+    }
+
     setSending(true);
     try {
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("phone", form.phone);
+      fd.append("email", form.email);
+      fd.append("productName", form.product);
+      fd.append("amountRequested", form.amount);
+      fd.append("message", form.message);
+      fd.append("consent", agreedTerms ? "true" : "false");
+      fd.append("idImage", idRaw);
+
       const res = await fetch("/api/public/enquiries/loan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          productName: form.product,
-          amountRequested: form.amount,
-          message: form.message,
-          consent: agreedTerms,
-        }),
+        body: fd,
       });
       const json = await res.json();
       if (!res.ok) {
@@ -317,10 +284,11 @@ export function LoanEnquiryDialog({
       phone: "",
       email: "",
       product: initialProduct,
-      amount: defaultAmount ? String(defaultAmount) : "",
+      amount: "",
       message: "",
     });
     setIdFile(null);
+    setIdRaw(null);
     setFileError("");
     setTouched({});
     setOpen(false);
@@ -382,30 +350,33 @@ export function LoanEnquiryDialog({
                       className="flex items-center gap-2 group cursor-pointer"
                     >
                       <div
-                        className={`size-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all ${isCompleted
-                            ? "bg-[#034DA2] text-[#00A651]"
+                        className={`size-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all ${
+                          isCompleted
+                            ? "bg-[#034DA2] text-[#38bdf8]"
                             : isActive
-                              ? "bg-[#034DA2] text-white ring-3 ring-[#034DA2]/20 font-extrabold shadow-xs"
-                              : "bg-slate-200 text-slate-600"
-                          }`}
+                            ? "bg-[#034DA2] text-white ring-3 ring-[#034DA2]/20 font-extrabold shadow-xs"
+                            : "bg-slate-200 text-slate-600"
+                        }`}
                       >
                         {isCompleted ? "✓" : s.step}
                       </div>
                       <span
-                        className={`text-xs font-semibold ${isActive
+                        className={`text-xs font-semibold ${
+                          isActive
                             ? "text-[#034DA2] font-bold"
                             : isCompleted
-                              ? "text-slate-800"
-                              : "text-slate-600"
-                          }`}
+                            ? "text-slate-800"
+                            : "text-slate-600"
+                        }`}
                       >
                         {s.label}
                       </span>
                     </button>
                     {idx < 2 && (
                       <div
-                        className={`h-0.5 mx-3 flex-1 transition-colors rounded-full ${currentStep > idx + 1 ? "bg-[#034DA2]" : "bg-slate-200"
-                          }`}
+                        className={`h-0.5 mx-3 flex-1 transition-colors rounded-full ${
+                          currentStep > idx + 1 ? "bg-[#034DA2]" : "bg-slate-200"
+                        }`}
                       />
                     )}
                   </div>
@@ -420,8 +391,8 @@ export function LoanEnquiryDialog({
           {sent ? (
             /* ── Success State ── */
             <div className="py-6 px-2 text-center space-y-5">
-              <div className="size-16 rounded-2xl bg-blue-50 border border-blue-200/80 text-[#034DA2] flex items-center justify-center mx-auto shadow-xs">
-                <CheckCircle2 className="size-9 text-[#00A651]" />
+              <div className="size-16 rounded-2xl bg-brand-green-soft border border-brand-green/20 text-brand-green flex items-center justify-center mx-auto shadow-xs">
+                <CheckCircle2 className="size-9 text-brand-green" />
               </div>
 
               <div className="space-y-2">
@@ -441,7 +412,7 @@ export function LoanEnquiryDialog({
 
               <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-left text-xs space-y-2 text-slate-600">
                 <div className="flex items-center gap-2 text-slate-900 font-bold">
-                  <ShieldCheck className="size-4 text-[#00A651]" />
+                  <ShieldCheck className="size-4 text-brand-green" />
                   <span>What happens next:</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-500 pl-1">
@@ -477,10 +448,11 @@ export function LoanEnquiryDialog({
                         onChange={handleChange}
                         onBlur={() => handleBlur("name")}
                         placeholder="e.g. Kondwani Chirwa"
-                        className={`${inputBaseClass} pl-9 ${touched.name && errors.name
+                        className={`${inputBaseClass} pl-9 ${
+                          touched.name && errors.name
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
                             : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
-                          }`}
+                        }`}
                       />
                       <User className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
                     </div>
@@ -505,10 +477,11 @@ export function LoanEnquiryDialog({
                         onChange={handleChange}
                         onBlur={() => handleBlur("phone")}
                         placeholder="+265 99 123 4567"
-                        className={`${inputBaseClass} pl-9 ${touched.phone && errors.phone
+                        className={`${inputBaseClass} pl-9 ${
+                          touched.phone && errors.phone
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
                             : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
-                          }`}
+                        }`}
                       />
                       <Phone className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
                     </div>
@@ -537,10 +510,11 @@ export function LoanEnquiryDialog({
                         onChange={handleChange}
                         onBlur={() => handleBlur("email")}
                         placeholder="kondwani@example.com"
-                        className={`${inputBaseClass} pl-9 ${touched.email && errors.email
+                        className={`${inputBaseClass} pl-9 ${
+                          touched.email && errors.email
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
                             : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
-                          }`}
+                        }`}
                       />
                       <Mail className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
                     </div>
@@ -570,15 +544,16 @@ export function LoanEnquiryDialog({
                       }}
                     >
                       <SelectTrigger
-                        className={`w-full rounded-xl border bg-slate-50 px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none transition-all ${touched.product && errors.product
+                        className={`w-full rounded-xl border bg-slate-50 px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none transition-all ${
+                          touched.product && errors.product
                             ? "border-red-400 bg-red-50/20"
                             : "border-slate-200 focus:border-[#034DA2]"
-                          }`}
+                        }`}
                       >
                         <SelectValue placeholder="Select a loan facility" />
                       </SelectTrigger>
                       <SelectContent className="rounded-2xl border-slate-200 shadow-xl bg-white max-h-64">
-                        {LOAN_PRODUCTS.map((prod) => (
+                        {PRODUCT_NAMES.map((prod) => (
                           <SelectItem
                             key={prod}
                             value={prod}
@@ -612,11 +587,12 @@ export function LoanEnquiryDialog({
                           setTouched((prev) => ({ ...prev, amount: true }));
                         }}
                         onBlur={() => handleBlur("amount")}
-                        placeholder={activeMin ? `e.g. ${activeMin.toLocaleString()}` : "e.g. 500,000"}
-                        className={`${inputBaseClass} pl-9 ${touched.amount && errors.amount
+                        placeholder="e.g. 500,000"
+                        className={`${inputBaseClass} pl-9 ${
+                          touched.amount && errors.amount
                             ? "border-red-400 bg-red-50/20 focus:ring-1 focus:ring-red-400"
                             : "border-slate-200 focus:border-[#034DA2] focus:ring-1 focus:ring-[#034DA2]"
-                          }`}
+                        }`}
                       />
                       <Banknote className="size-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
                     </div>
@@ -625,14 +601,9 @@ export function LoanEnquiryDialog({
                         <AlertCircle className="size-3" />
                         {errors.amount}
                       </p>
-                    ) : activeMin && activeMax ? (
-                      <p className="text-[10px] text-slate-500">
-                        Range for <span className="font-semibold text-[#034DA2]">{form.product}</span>:{" "}
-                        MWK {activeMin.toLocaleString()} – MWK {activeMax.toLocaleString()}
-                      </p>
                     ) : (
                       <p className="text-[10px] text-slate-500">
-                        Select a facility above to see eligible amount range.
+                        Enter an approximate amount — final terms are confirmed after assessment.
                       </p>
                     )}
                   </div>
@@ -685,10 +656,10 @@ export function LoanEnquiryDialog({
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
                       <label className="block text-xs font-bold text-slate-700">
-                        National ID / Passport Photo{" "}
-                        <span className="text-slate-400 font-normal">(Optional)</span>
+                        National ID Photo (Front){" "}
+                        <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-[10px] text-slate-500 font-medium">Max 5MB (JPG, PNG, PDF)</span>
+                      <span className="text-[10px] text-slate-500 font-medium">Max 8MB (JPG, PNG, WebP)</span>
                     </div>
 
                     {!idFile ? (
@@ -697,10 +668,11 @@ export function LoanEnquiryDialog({
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`border border-dashed rounded-xl py-2.5 px-3.5 text-center cursor-pointer transition-all ${isDragging
+                        className={`border border-dashed rounded-xl py-2.5 px-3.5 text-center cursor-pointer transition-all ${
+                          isDragging
                             ? "border-[#034DA2] bg-blue-50/50"
                             : "border-slate-200 hover:border-[#034DA2] bg-slate-50/60 hover:bg-slate-50"
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center justify-center gap-2.5">
                           <div className="size-7 rounded-lg bg-white border border-slate-200 text-slate-500 flex items-center justify-center shadow-2xs shrink-0">
@@ -708,17 +680,17 @@ export function LoanEnquiryDialog({
                           </div>
                           <div className="text-left">
                             <span className="text-xs font-bold text-slate-800 block leading-tight">
-                              Upload National ID or Passport
+                              Upload National ID (front)
                             </span>
                             <span className="text-[10px] text-slate-500 block leading-tight">
-                              Click or drag front side photo or document
+                              Click or drag a clear photo (JPG, PNG, WebP)
                             </span>
                           </div>
                         </div>
                         <input
                           ref={fileInputRef}
                           type="file"
-                          accept=".jpg,.jpeg,.png,.webp,.pdf"
+                          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                           onChange={handleFileChange}
                           className="hidden"
                         />
@@ -767,12 +739,13 @@ export function LoanEnquiryDialog({
                   {/* Checkbox: User has read loan info */}
                   <div className="pt-0.5">
                     <label
-                      className={`flex items-start gap-2.5 p-2.5 rounded-xl border transition-all cursor-pointer ${termsError && !agreedTerms
+                      className={`flex items-start gap-2.5 p-2.5 rounded-xl border transition-all cursor-pointer ${
+                        termsError && !agreedTerms
                           ? "border-red-400 bg-red-50/40 ring-1 ring-red-400/40"
                           : agreedTerms
-                            ? "border-blue-300 bg-blue-50/50"
-                            : "border-slate-200 bg-slate-50/70 hover:bg-slate-50"
-                        }`}
+                          ? "border-blue-300 bg-blue-50/50"
+                          : "border-slate-200 bg-slate-50/70 hover:bg-slate-50"
+                      }`}
                     >
                       <input
                         type="checkbox"
@@ -820,7 +793,7 @@ export function LoanEnquiryDialog({
                     className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-bold transition-all hover:scale-[1.02] shadow-sm cursor-pointer ml-auto"
                   >
                     <span>Continue</span>
-                    <ArrowRight className="size-3.5 text-[#00A651]" />
+                    <ArrowRight className="size-3.5 text-[#38bdf8]" />
                   </button>
                 ) : (
                   <button
@@ -828,7 +801,7 @@ export function LoanEnquiryDialog({
                     type="button"
                     onClick={handleFinalSubmit}
                     disabled={sending}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#00A651] hover:bg-[#0284C7] text-white text-xs font-extrabold transition-all shadow-md hover:scale-[1.02] cursor-pointer disabled:opacity-50 ml-auto"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white text-xs font-extrabold transition-all shadow-md hover:scale-[1.02] cursor-pointer disabled:opacity-50 ml-auto"
                   >
                     {sending ? (
                       <>

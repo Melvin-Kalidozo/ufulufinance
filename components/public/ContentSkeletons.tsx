@@ -90,6 +90,132 @@ export function CardGridSkeleton({
   );
 }
 
+export function TextCardGridSkeleton({
+  count = 4,
+  className,
+}: {
+  count?: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3",
+        className
+      )}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm"
+        >
+          <div className="space-y-3">
+            <Shimmer className="size-10 rounded-xl" />
+            <Shimmer className="h-4 w-2/3" />
+            <Shimmer className="h-3 w-full" />
+            <Shimmer className="h-3 w-5/6" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function SectionHeadingSkeleton({
+  align = "center",
+}: {
+  align?: "center" | "left";
+}) {
+  const center = align === "center";
+  return (
+    <div
+      className={cn(
+        "mb-12 space-y-3",
+        center ? "mx-auto max-w-2xl text-center" : "max-w-xl"
+      )}
+    >
+      <Shimmer
+        className={cn("h-3 w-28 rounded-full", center && "mx-auto")}
+      />
+      <Shimmer
+        className={cn("h-8 w-2/3 rounded-full", center && "mx-auto")}
+      />
+      <Shimmer
+        className={cn("h-3 w-1/2 rounded-full", center && "mx-auto")}
+      />
+    </div>
+  );
+}
+
+export function StatStripSkeleton() {
+  return (
+    <div className="grid grid-cols-2 divide-x divide-slate-100 border-b border-slate-200/80 bg-white lg:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="space-y-3 px-6 py-8 text-center">
+          <Shimmer className="mx-auto h-8 w-16" />
+          <Shimmer className="mx-auto h-3 w-24" />
+          <Shimmer className="mx-auto h-3 w-28" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function TwoColumnSkeleton({ reverse = false }: { reverse?: boolean }) {
+  return (
+    <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+      <div
+        className={cn(
+          "space-y-4",
+          reverse ? "lg:col-span-5 lg:order-2" : "lg:col-span-6"
+        )}
+      >
+        <Shimmer className="h-3 w-28 rounded-full" />
+        <Shimmer className="h-7 w-3/4 rounded-full" />
+        <Shimmer className="h-3 w-full" />
+        <Shimmer className="h-3 w-5/6" />
+        <Shimmer className="h-3 w-2/3" />
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <Shimmer className="h-10 rounded-xl" />
+          <Shimmer className="h-10 rounded-xl" />
+        </div>
+      </div>
+      <div
+        className={cn(
+          reverse ? "lg:col-span-7 lg:order-1" : "lg:col-span-6"
+        )}
+      >
+        <Shimmer className="aspect-[4/3] w-full rounded-3xl" />
+      </div>
+    </div>
+  );
+}
+
+export function ListRowSkeleton({
+  count = 4,
+  className,
+}: {
+  count?: number;
+  className?: string;
+}) {
+  return (
+    <div className={cn("space-y-2", className)}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 rounded-2xl border border-slate-200/60 bg-white p-3"
+        >
+          <Shimmer className="size-9 shrink-0 rounded-xl" />
+          <div className="flex-1 space-y-2">
+            <Shimmer className="h-3 w-2/3 rounded-full" />
+            <Shimmer className="h-3 w-1/2 rounded-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function DetailSkeleton() {
   return (
     <div className="space-y-6">
