@@ -26,7 +26,7 @@ export function BrandPageBanner({
       <div className="relative z-10 flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-2xl space-y-2">
           {eyebrow ? (
-            <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#38bdf8]">
+            <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#00A651]">
               {eyebrow}
             </p>
           ) : null}

@@ -12,6 +12,7 @@ import {
   Phone,
   Link2,
   Clock,
+  ExternalLink,
 } from "lucide-react";
 import { usePublicData } from "@/lib/content-store";
 import {
@@ -46,20 +47,79 @@ const BRAND_PATHS: Record<string, string> = {
     "M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z",
 };
 
+const DEFAULT_OFFICES: ContactRow[] = [
+  {
+    city: "Lilongwe",
+    label: "Lilongwe Head Office",
+    address: "City Centre, Area 3, Lilongwe, Malawi",
+    phone: "+265 99 123 4567",
+    email: "info@ufulufinance.com",
+    hours: "8:00 AM – 5:00 PM",
+  },
+  {
+    city: "Blantyre",
+    label: "Blantyre Commercial Branch",
+    address: "Victoria Avenue, CBD, Blantyre, Malawi",
+    phone: "+265 88 123 4567",
+    email: "",
+    hours: "8:00 AM – 5:00 PM",
+  },
+  {
+    city: "Mzuzu",
+    label: "Mzuzu Regional Office",
+    address: "Katoto Commercial Area, Mzuzu, Malawi",
+    phone: "+265 99 876 5432",
+    email: "info@ufulufinance.com",
+    hours: "8:00 AM – 5:00 PM",
+  },
+];
+
+const OFFICE_COORDINATES: Record<string, { lat: number; lng: number }> = {
+  lilongwe: { lat: -13.962612, lng: 33.774119 },
+  blantyre: { lat: -15.786111, lng: 35.005833 },
+  mzuzu: { lat: -11.458925, lng: 34.015142 },
+};
+
+function getOfficeCoordinates(office: ContactRow | null): { lat: number; lng: number } {
+  if (!office) return { lat: -13.962612, lng: 33.774119 };
+  const city = String(office.city ?? "").toLowerCase();
+  const label = String(office.label ?? "").toLowerCase();
+  const address = String(office.address ?? "").toLowerCase();
+
+  if (city.includes("blantyre") || label.includes("blantyre") || address.includes("blantyre")) {
+    return OFFICE_COORDINATES.blantyre;
+  }
+  if (city.includes("mzuzu") || label.includes("mzuzu") || address.includes("mzuzu")) {
+    return OFFICE_COORDINATES.mzuzu;
+  }
+  return OFFICE_COORDINATES.lilongwe;
+}
+
 export default function ContactPage() {
   const { body: settingsBody } = usePublicData<{ data: ContactRow | null }>(
     "/api/public/settings",
   );
-  const settings: ContactRow | null = settingsBody?.data ?? null;
+  const DEFAULT_SETTINGS: ContactRow = {
+    addressLine1: "City Centre, Area 3, Lilongwe, Malawi",
+    addressLine2: "Lilongwe",
+    supportEmail: "support@ufulufinance.com",
+    loansEmail: "loans@ufulufinance.com",
+    phone: "+265 99 123 4567",
+    officeHours: "Mon – Fri, 8:00 AM – 5:00 PM",
+    offices: DEFAULT_OFFICES,
+  };
+  const settings: ContactRow = settingsBody?.data ?? DEFAULT_SETTINGS;
   const s = (key: string, fallback = "") =>
-    settings && settings[key] !== undefined && settings[key] !== null
+    settings[key] !== undefined && settings[key] !== null
       ? String(settings[key])
       : fallback;
-  const offices: ContactRow[] = Array.isArray(settings?.offices)
+  const rawOffices: ContactRow[] = Array.isArray(settings?.offices)
     ? (settings?.offices as unknown[]).map((o) =>
         o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
+  const offices: ContactRow[] =
+    rawOffices.length > 0 ? rawOffices : DEFAULT_OFFICES;
   const socials: ContactRow[] = Array.isArray(settings?.socialLinks)
     ? (settings?.socialLinks as unknown[]).map((o) =>
         o && typeof o === "object" ? (o as ContactRow) : {},
@@ -92,6 +152,21 @@ export default function ContactPage() {
       ? [directPhone]
       : [];
   const mapEmbed = s("mapEmbedUrl") || "";
+  const [selectedOfficeIndex, setSelectedOfficeIndex] = useState<number>(0);
+  const activeOffice = offices[selectedOfficeIndex] || offices[0] || null;
+  const activeAddress = activeOffice
+    ? str(activeOffice, "address") || str(activeOffice, "city")
+    : addressLine;
+  const activeLabel = activeOffice
+    ? str(activeOffice, "label") || str(activeOffice, "city") || "Office"
+    : "Head Office";
+  const activeCoords = getOfficeCoordinates(activeOffice);
+  const officeMapEmbedUrl =
+    activeOffice && str(activeOffice, "mapEmbedUrl")
+      ? str(activeOffice, "mapEmbedUrl")
+      : mapEmbed && selectedOfficeIndex === 0
+        ? mapEmbed
+        : `https://maps.google.com/maps?q=${activeCoords.lat},${activeCoords.lng}&hl=en&z=16&output=embed`;
 
   const [form, setForm] = useState<FormData>({
     name: "",
@@ -266,58 +341,7 @@ export default function ContactPage() {
     };
   }
 
-  if (!settings) {
-    return (
-      <div className="min-h-screen bg-[#fcfdfd]">
-        <StaticHero
-          title="Contact Us"
-          subtitle="Our accredited loan advisors are ready to assist you in Lilongwe, Blantyre, and Mzuzu."
-        />
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          {/* Floating card skeleton — two columns */}
-          <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
-            <div className="grid grid-cols-1 lg:grid-cols-12">
-              {/* Left: Get in touch */}
-              <div className="space-y-6 p-8 sm:p-10 lg:col-span-5 lg:p-12">
-                <Shimmer className="h-1 w-8" />
-                <Shimmer className="h-7 w-2/3" />
-                <Shimmer className="h-3 w-full" />
-                <Shimmer className="h-3 w-5/6" />
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="flex items-start gap-4">
-                    <Shimmer className="size-11 shrink-0 rounded-full" />
-                    <div className="flex-1 space-y-2">
-                      <Shimmer className="h-4 w-1/3" />
-                      <Shimmer className="h-3 w-2/3" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Right: Send us a message form */}
-              <div className="space-y-4 p-8 sm:p-10 lg:col-span-7 lg:p-12">
-                <Shimmer className="h-1 w-8" />
-                <Shimmer className="h-7 w-1/2" />
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Shimmer className="h-11 rounded-lg" />
-                  <Shimmer className="h-11 rounded-lg" />
-                  <Shimmer className="h-11 rounded-lg" />
-                  <Shimmer className="h-11 rounded-lg" />
-                </div>
-                <Shimmer className="h-11 rounded-lg" />
-                <Shimmer className="h-28 rounded-lg" />
-                <Shimmer className="h-12 rounded-full" />
-              </div>
-            </div>
-          </div>
-          {/* Our offices */}
-          <div className="mt-16">
-            <SectionHeadingSkeleton align="left" />
-            <TextCardGridSkeleton count={3} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="flex flex-col bg-white antialiased text-slate-900">
@@ -737,69 +761,167 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── OUR OFFICES (from admin settings) ─────────────────────── */}
+      {/* ── OUR OFFICES & INTERACTIVE MAP ─────────────────────── */}
       {offices.length > 0 && (
         <section
           id="offices"
           className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
         >
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-            Our offices
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <p className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-[#034DA2]">
+                <MapPin className="size-3.5 text-[#00A3E0]" />
+                Branch Locations
+              </p>
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl mt-1">
+                Our offices
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Select any branch below to view its location on the map.
+            </p>
+          </div>
+
+          {/* Office Cards Selector */}
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {offices.map((office, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-              >
-                <h3 className="text-sm font-bold text-slate-900">
-                  {str(office, "label") || str(office, "city") || "Office"}
-                </h3>
-                {str(office, "address") ? (
-                  <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                    {str(office, "address")}
-                  </p>
-                ) : null}
-                <div className="mt-4 space-y-1.5 text-xs text-slate-600">
-                  {officePhones(office).map((num) => (
-                    <p key={num} className="flex items-center gap-1.5">
-                      <Phone className="size-3.5 text-[#00A3E0]" /> {num}
-                    </p>
-                  ))}
-                  {str(office, "email") ? (
-                    <p className="flex items-center gap-1.5">
-                      <Mail className="size-3.5 text-[#00A3E0]" />{" "}
-                      {str(office, "email")}
-                    </p>
-                  ) : null}
-                  {str(office, "hours") ? (
-                    <p className="flex items-center gap-1.5">
-                      <Clock className="size-3.5 text-[#00A3E0]" />{" "}
-                      {str(office, "hours")}
-                    </p>
-                  ) : null}
+            {offices.map((office, i) => {
+              const isSelected = selectedOfficeIndex === i;
+              const title = str(office, "label") || str(office, "city") || "Office";
+              const address = str(office, "address");
+              const email = str(office, "email");
+              const hours = str(office, "hours");
+              const phones = officePhones(office);
+
+              return (
+                <div
+                  key={i}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setSelectedOfficeIndex(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedOfficeIndex(i);
+                    }
+                  }}
+                  className={`rounded-2xl border p-6 transition-all text-left cursor-pointer flex flex-col justify-between select-none ${
+                    isSelected
+                      ? "border-[#034DA2] bg-white ring-2 ring-[#034DA2]/25 shadow-lg shadow-blue-950/10 scale-[1.01]"
+                      : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md hover:scale-[1.005]"
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-base font-bold text-slate-900 leading-snug">
+                        {title}
+                      </h3>
+                      {isSelected ? (
+                        <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-[#034DA2] text-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                          <MapPin className="size-3" />
+                          Viewing
+                        </span>
+                      ) : (
+                        <span className="shrink-0 text-[11px] font-medium text-slate-400 group-hover:text-[#034DA2] transition-colors">
+                          Click to view
+                        </span>
+                      )}
+                    </div>
+
+                    {address ? (
+                      <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                        {address}
+                      </p>
+                    ) : null}
+
+                    <div className="mt-4 space-y-1.5 text-xs text-slate-600">
+                      {phones.map((num) => (
+                        <p key={num} className="flex items-center gap-1.5">
+                          <Phone className="size-3.5 text-[#00A3E0] shrink-0" /> {num}
+                        </p>
+                      ))}
+                      {email ? (
+                        <p className="flex items-center gap-1.5">
+                          <Mail className="size-3.5 text-[#00A3E0] shrink-0" /> {email}
+                        </p>
+                      ) : null}
+                      {hours ? (
+                        <p className="flex items-center gap-1.5">
+                          <Clock className="size-3.5 text-[#00A3E0] shrink-0" /> {hours}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+                    <span className={isSelected ? "text-[#034DA2]" : "text-slate-500"}>
+                      {isSelected ? "Currently rendered on map" : "Click to view on map"}
+                    </span>
+                    <MapPin className={`size-4 ${isSelected ? "text-[#034DA2]" : "text-slate-400"}`} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* ── MAP (only when a map embed URL is configured) ─────────────── */}
-      {mapEmbed && (
-        <section className="mt-2 w-full overflow-hidden sm:mt-6">
-          <iframe
-            title="Ufulu Finance location map"
-            src={mapEmbed}
-            width="100%"
-            height="460"
-            style={{ border: 0, display: "block" }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </section>
-      )}
+      {/* ── FULL-WIDTH INTERACTIVE MAP SECTION ───────────────────── */}
+      <section className="relative w-full h-[480px] sm:h-[580px] overflow-hidden border-t border-slate-200 bg-slate-100">
+        <iframe
+          key={`${activeAddress}-${selectedOfficeIndex}`}
+          title={`${activeLabel} location map`}
+          src={officeMapEmbedUrl}
+          width="100%"
+          height="100%"
+          className="w-full h-full block"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+
+        {/* Visual center pin marker with pulse ring */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none z-10 flex flex-col items-center">
+          <div className="relative flex items-center justify-center">
+            {/* Animated radar pulse */}
+            <span className="absolute -bottom-1 size-8 rounded-full bg-[#00A3E0]/30 animate-ping" />
+            <span className="absolute -bottom-0.5 size-4 rounded-full bg-[#034DA2]/40" />
+
+            {/* Custom pin badge */}
+            <div className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#01214A] text-white text-xs font-bold shadow-xl border border-sky-400/50">
+              <span className="size-2 rounded-full bg-[#00A651] animate-pulse" />
+              <span>{activeLabel}</span>
+            </div>
+          </div>
+          {/* Pin pointer stem */}
+          <div className="w-0.5 h-3 bg-[#01214A]" />
+          <div className="size-2 rounded-full bg-[#034DA2] ring-2 ring-white shadow-xs" />
+        </div>
+
+        {/* Floating badge displaying the active location */}
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 flex items-center gap-3 rounded-2xl bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-lg border border-slate-200/80 max-w-[calc(100vw-2rem)] sm:max-w-md pointer-events-auto">
+          <div className="size-8 rounded-xl bg-[#034DA2] text-white flex items-center justify-center shrink-0 shadow-xs">
+            <MapPin className="size-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold text-slate-900 leading-tight truncate">
+              {activeLabel}
+            </p>
+            <p className="text-[11px] text-slate-500 truncate mt-0.5">
+              {activeAddress}
+            </p>
+          </div>
+          <a
+            href={`https://maps.google.com/?q=${activeCoords.lat},${activeCoords.lng}`}
+            target="_blank"
+            rel="noreferrer"
+            className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#034DA2] hover:text-white text-[11px] font-semibold text-slate-700 transition-colors"
+          >
+            <span>Open Maps</span>
+            <ExternalLink className="size-3" />
+          </a>
+        </div>
+      </section>
     </div>
   );
 }

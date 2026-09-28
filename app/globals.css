@@ -108,10 +108,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
     color-scheme: light;
     overflow-x: hidden;
   }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-plus-jakarta), system-ui, -apple-system, sans-serif;
@@ -139,5 +141,22 @@
       linear-gradient(to right, rgba(0, 123, 255, 0.08) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(0, 123, 255, 0.08) 1px, transparent 1px);
     background-size: 32px 32px;
+  }
+
+  /* ── Brand Green Utilities ── */
+  .text-brand-green {
+    color: var(--green);
+  }
+
+  .bg-brand-green {
+    background-color: var(--green);
+  }
+
+  .bg-brand-green-tint {
+    background-color: var(--green-tint);
+  }
+
+  .border-brand-green {
+    border-color: var(--green);
   }
 }

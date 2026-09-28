@@ -20,7 +20,7 @@ function RenderSections({ sections }: { sections: Section[] }) {
             className="scroll-mt-28 py-10 first:pb-10"
           >
             <div className="flex items-baseline gap-3">
-              <span className="rounded-md bg-sky-50 px-2.5 py-1 font-mono text-xs font-bold text-[#00A3E0]">
+              <span className="rounded-md bg-sky-50 px-2.5 py-1 font-mono text-xs font-bold text-[#00A651]">
                 {num}
               </span>
               <h2 className="text-xl font-black tracking-tight text-slate-900 sm:text-2xl">
@@ -156,8 +156,8 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
                     onClick={() => goTo(item.id)}
                     className={`flex w-full items-center justify-between rounded-xl border px-3 py-2.5 text-left text-xs font-semibold transition-all ${
                       isActive
-                        ? "border-[#00A3E0]/20 bg-[#00A3E0]/10 text-[#00A3E0]"
-                        : "border-transparent text-slate-600 hover:bg-sky-50/70 hover:text-[#00A3E0]"
+                        ? "border-[#00A651]/20 bg-[#00A651]/10 text-[#00A651]"
+                        : "border-transparent text-slate-600 hover:bg-sky-50/70 hover:text-[#00A651]"
                     }`}
                   >
                     <span className="flex items-center gap-3 truncate">
@@ -172,16 +172,16 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
             </nav>
 
             <div className="space-y-2 rounded-2xl border border-slate-200/90 bg-white p-5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#00A651]">
                 {slug === "privacy" ? "Privacy Office" : "Legal Secretariat"}
               </p>
               <div className="space-y-2 pt-1 text-xs font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Mail className="size-3.5 shrink-0 text-[#00A3E0]" />
+                  <Mail className="size-3.5 shrink-0 text-[#00A651]" />
                   {slug === "privacy" ? "privacy@ufulufinance.com" : "compliance@ufulufinance.com"}
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="size-3.5 shrink-0 text-[#00A3E0]" />
+                  <Phone className="size-3.5 shrink-0 text-[#00A651]" />
                   +265 (0) 1 772 400
                 </div>
               </div>
@@ -202,7 +202,7 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
                     key={item.id}
                     type="button"
                     onClick={() => goTo(item.id)}
-                    className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-medium text-slate-600 hover:bg-sky-50 hover:text-[#00A3E0]"
+                    className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-medium text-slate-600 hover:bg-sky-50 hover:text-[#00A651]"
                   >
                     <span className="font-mono font-bold text-slate-400">{item.num}</span>
                     {item.title}

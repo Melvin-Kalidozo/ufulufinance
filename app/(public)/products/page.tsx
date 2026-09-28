@@ -105,11 +105,19 @@ function ProductsPageContent() {
     idealFor: sval(r, "idealFor"),
   }));
 
-  const WHO_WE_SERVE = (data?.audiences ?? []).map((r) => ({
+  const AUDIENCE_IMAGES = [
+    "/images/audience-market-vendors.jpg",
+    "/images/audience-smallholder-farmers.jpg",
+    "/images/audience-civil-servants.jpg",
+    "/images/audience-women-entrepreneurs.jpg",
+  ];
+
+  const WHO_WE_SERVE = (data?.audiences ?? []).map((r, i) => ({
     title: sval(r, "title"),
     subtitle: sval(r, "subtitle"),
     desc: sval(r, "description"),
     icon: iconOf(sval(r, "iconKey")),
+    image: sval(r, "image") || AUDIENCE_IMAGES[i % AUDIENCE_IMAGES.length],
   }));
 
   const PRODUCT_ADVANTAGES = (data?.advantages ?? []).map((r) => ({
@@ -488,12 +496,12 @@ function ProductsPageContent() {
         </div>
       </section>
 
-      {/* ── 5. WHO WE SERVE ─────────────────────────────────────────── */}
+      {/* ── 5. WHO WE SERVE (Full-Image Cards with Text Overlay) ─────── */}
       {WHO_WE_SERVE.length > 0 && (
-      <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+      <section className="py-16 sm:py-24 bg-white border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
               <span className="size-2 rounded-full bg-brand-green" />
               <span>Who We Serve</span>
             </div>
@@ -505,43 +513,48 @@ function ProductsPageContent() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHO_WE_SERVE.map((group) => {
-              const Icon = group.icon;
-              return (
-                <div
-                  key={group.title}
-                  className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow"
-                >
-                  <div className="space-y-3">
-                    <div className="size-12 rounded-2xl bg-blue-50 text-[#034DA2] flex items-center justify-center border border-blue-100">
-                      <Icon className="size-6" />
-                    </div>
-                    <h3 className="text-base font-bold text-slate-900">{group.title}</h3>
-                    <span className="text-[11px] font-semibold text-[#009FE0] block">
-                      {group.subtitle}
-                    </span>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {group.desc}
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-brand-green">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {WHO_WE_SERVE.map((group) => (
+              <div
+                key={group.title}
+                className="relative rounded-2xl overflow-hidden group cursor-default aspect-[4/3] sm:aspect-[3/2]"
+              >
+                <Image
+                  src={group.image}
+                  alt={group.title}
+                  fill
+                  className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-white/70 block">
+                    {group.subtitle}
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-white leading-snug">
+                    {group.title}
+                  </h3>
+                  <p className="text-sm text-white leading-relaxed">
+                    {group.desc}
+                  </p>
+                  <div className="pt-3 border-t border-white/20 flex items-center gap-1.5 text-[11px] font-semibold text-white/80 uppercase tracking-wide">
+                    <CheckCircle2 className="size-3.5 text-white" />
                     <span>Eligible for Credit</span>
-                    <CheckCircle2 className="size-3.5 text-brand-green" />
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </section>
       )}
 
-      {/* ── 6. DISTINCT PRODUCT ADVANTAGES (Non-repetitive, modern cards) ─ */}
+      {/* ── 6. DISTINCT PRODUCT ADVANTAGES (Integrated layout, not cards) ─ */}
       {PRODUCT_ADVANTAGES.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
             <span className="size-2 rounded-full bg-brand-green" />
             <span>Borrower Advantages</span>
           </div>
@@ -553,26 +566,26 @@ function ProductsPageContent() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 border-t border-slate-200/80 pt-12">
           {PRODUCT_ADVANTAGES.map((adv) => {
             const Icon = adv.icon;
             return (
               <div
                 key={adv.title}
-                className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className="flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
-                  <div className="size-11 rounded-2xl bg-[#034DA2] text-[#38bdf8] flex items-center justify-center">
+                  <div className="size-10 rounded-xl bg-[#034DA2]/10 text-[#034DA2] flex items-center justify-center">
                     <Icon className="size-5" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900">{adv.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                     {adv.desc}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-brand-green">
+                <div className="pt-4 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-semibold text-brand-green uppercase tracking-wide">
+                  <CheckCircle2 className="size-3.5 text-brand-green" />
                   <span>Guaranteed Feature</span>
-                  <CheckCircle2 className="size-3 text-brand-green" />
                 </div>
               </div>
             );

@@ -36,7 +36,7 @@ export default function AuthLayout({
           </Link>
 
           <div className="mt-auto max-w-md space-y-6">
-            {/* <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#38bdf8]">
+            {/* <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#00A651]">
               Ufulu Finance
             </p> */}
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white xl:text-5xl">
@@ -54,7 +54,7 @@ export default function AuthLayout({
                   key={point}
                   className="flex items-center gap-2.5 text-sm font-medium text-slate-100"
                 >
-                  <CheckCircle2 className="size-4 shrink-0 text-[#38bdf8]" />
+                  <CheckCircle2 className="size-4 shrink-0 text-[#00A651]" />
                   {point}
                 </li>
               ))}
@@ -62,7 +62,7 @@ export default function AuthLayout({
 
             <div className="space-y-2 border-t border-white/15 pt-6 text-xs text-slate-300">
               <p className="flex items-center gap-2">
-                <MapPin className="size-3.5 text-[#38bdf8]" />
+                <MapPin className="size-3.5 text-[#00A651]" />
                 City Centre, Area 3, Lilongwe, Malawi
               </p>
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -70,14 +70,14 @@ export default function AuthLayout({
                   href="tel:+265991234567"
                   className="flex items-center gap-2 transition-colors hover:text-white"
                 >
-                  <Phone className="size-3.5 text-[#38bdf8]" />
+                  <Phone className="size-3.5 text-[#00A651]" />
                   +265 99 123 4567
                 </a>
                 <a
                   href="mailto:info@ufulufinance.com"
                   className="flex items-center gap-2 transition-colors hover:text-white"
                 >
-                  <Mail className="size-3.5 text-[#38bdf8]" />
+                  <Mail className="size-3.5 text-[#00A651]" />
                   info@ufulufinance.com
                 </a>
               </div>

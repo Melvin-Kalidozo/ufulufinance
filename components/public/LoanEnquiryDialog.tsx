@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -36,7 +36,7 @@ import {
 import { usePublicData } from "@/lib/content-store";
 
 interface LoanEnquiryDialogProps {
-  triggerButton: React.ReactNode;
+  triggerButton?: React.ReactNode;
   defaultProduct?: string;
   defaultFacility?: string;
 }
@@ -297,9 +297,19 @@ export function LoanEnquiryDialog({
   const inputBaseClass =
     "w-full rounded-xl border bg-slate-50 px-3.5 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none transition-all";
 
+  const fallbackTrigger = (
+    <button
+      type="button"
+      className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-bold transition-all cursor-pointer shadow-sm"
+    >
+      Enquire Now
+    </button>
+  );
+  const safeTrigger = React.isValidElement(triggerButton) ? triggerButton : fallbackTrigger;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
+      <DialogTrigger asChild>{safeTrigger}</DialogTrigger>
 
       <DialogContent className="sm:max-w-[540px] p-0 overflow-hidden rounded-3xl shadow-2xl bg-white max-h-[92vh] flex flex-col">
         {/* ── Header without badge ── */}

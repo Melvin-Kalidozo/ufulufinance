@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             </span>
           </div>
           <div className="mt-4">
-            <Link href="/terms" className="text-xs font-semibold text-[#38bdf8] hover:underline">
+            <Link href="/terms" className="text-xs font-semibold text-[#00A651] hover:underline">
               View Terms of Service →
             </Link>
           </div>
