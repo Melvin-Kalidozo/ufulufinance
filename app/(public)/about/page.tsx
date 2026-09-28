@@ -60,7 +60,7 @@ function AboutPageContent() {
   const searchParams = useSearchParams();
   const section = searchParams.get("section");
   const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
-  const [openFaqId, setOpenFaqId] = useState<string | null>("regulation");
+  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
   const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/about");
   const content = body?.data ?? null;
 
@@ -112,8 +112,8 @@ function AboutPageContent() {
     image: aval(r, "image"),
   }));
 
-  const ABOUT_FAQS = (content?.aboutFaqs ?? []).map((r) => ({
-    id: `${vId(r)}-${aval(r, "question").length}`,
+  const ABOUT_FAQS = (content?.aboutFaqs ?? []).map((r, i) => ({
+    id: String(aboutRow(r).id ?? `faq-${i}`),
     question: aval(r, "question"),
     answer: aval(r, "answer"),
   }));
@@ -324,53 +324,63 @@ function AboutPageContent() {
       </section>
       )}
 
-      {/* ── 4. MISSION & VISION ─────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Vision Card */}
-          <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-between">
-            <div className="relative z-10 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#009FE0] tracking-wide uppercase">
-                <Eye className="size-3.5" />
-                <span>Vision Statement</span>
+      {/* ── 4. MISSION & VISION (Full Section — White Background, Prominent) ─ */}
+      <section id="vision-mission" className="w-full bg-white py-16 sm:py-24 border-t border-slate-200/80 scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            {/* Vision Statement */}
+            <div className="space-y-6 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="size-12 rounded-2xl bg-blue-50 text-[#034DA2] flex items-center justify-center">
+                  <Compass className="size-6 text-[#034DA2]" />
+                </div>
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2]">
+                  <span className="size-2 rounded-full bg-brand-green" />
+                  <span>Vision Statement</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                  A Leading Industry Player in Improving the Welfare of Malawians
+                </h3>
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+                  To be a leading industry player in improving the welfare of Malawians through provision of affordable and meaningful financial services.
+                </p>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
-                A Leading Industry Player in Improving the Welfare of Malawians
-              </h3>
-              <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed">
-                To be a leading industry player in improving the welfare of Malawians through provision of affordable and meaningful financial services.
-              </p>
-            </div>
 
-            <div className="relative z-10 pt-8 mt-6 border-t border-blue-700/50 flex items-center justify-between text-xs text-blue-200">
-              <span>Our Guiding North Star</span>
-              <span className="text-[#009FE0] font-semibold">Ufulu Vision &rarr;</span>
-            </div>
-
-            <div className="absolute -bottom-16 -right-16 size-48 rounded-full bg-[#009FE0]/15 blur-2xl pointer-events-none" />
-          </div>
-
-          {/* Mission Card */}
-          <div className="bg-white text-slate-900 rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-200/90 flex flex-col justify-between">
-            <div className="relative z-10 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-bold text-slate-800 tracking-wide uppercase">
-                <Target className="size-3.5 text-[#00A3E0]" />
-                <span>Mission Statement</span>
+              <div className="pt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500">
+                <span className="font-semibold text-slate-400 uppercase tracking-wider">Our Guiding North Star</span>
+                <span className="text-[#034DA2] font-bold inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
+                  <span>Ufulu Vision</span>
+                  <ArrowRight className="size-4" />
+                </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
-                A Lender of Choice for the Communities We Serve
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                To stimulate the socio-economic status of our customers for the better, through provision of highly competitive credit and savings facilities and in so doing to become a lender of choice for the communities.
-              </p>
             </div>
 
-            <div className="relative z-10 pt-8 mt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Customer-First Always</span>
-              <span className="text-[#00A3E0] font-semibold">Ufulu Mission &rarr;</span>
-            </div>
+            {/* Mission Statement */}
+            <div className="space-y-6 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="size-12 rounded-2xl bg-emerald-50 text-brand-green flex items-center justify-center">
+                  <Target className="size-6 text-brand-green" />
+                </div>
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-green">
+                  <span className="size-2 rounded-full bg-[#034DA2]" />
+                  <span>Mission Statement</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                  A Lender of Choice for the Communities We Serve
+                </h3>
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+                  To stimulate the socio-economic status of our customers for the better, through provision of highly competitive credit and savings facilities and in so doing to become a lender of choice for the communities.
+                </p>
+              </div>
 
-            <div className="absolute -top-16 -right-16 size-44 rounded-full bg-[#009FE0]/10 blur-2xl pointer-events-none" />
+              <div className="pt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500">
+                <span className="font-semibold text-slate-400 uppercase tracking-wider">Customer-First Always</span>
+                <span className="text-[#034DA2] font-bold inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
+                  <span>Ufulu Mission</span>
+                  <ArrowRight className="size-4" />
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -456,7 +466,7 @@ function AboutPageContent() {
       </section>
       )}
 
-      {/* ── 6. REGIONAL REACH & BRANCH PRESENCE (Bespoke non-repetitive) ── */}
+      {/* ── 6. REGIONAL REACH & BRANCH PRESENCE (Integrated layout, not cards) ── */}
       {REGIONAL_HUBS.length > 0 && (
       <section id="regional-footprint" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 scroll-mt-24">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
@@ -472,33 +482,34 @@ function AboutPageContent() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {REGIONAL_HUBS.map((hub) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 border-t border-slate-200/80 pt-10">
+          {REGIONAL_HUBS.map((hub, idx) => (
             <div
               key={hub.city}
-              className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow"
+              className={`flex flex-col justify-between py-6 md:py-0 ${
+                idx === 0 ? "md:pr-8" : idx === 1 ? "md:px-8" : "md:pl-8"
+              }`}
             >
               <div className="space-y-3">
-                <div className="size-11 rounded-2xl bg-[#034DA2] text-[#009FE0] flex items-center justify-center">
-                  <Building2 className="size-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-[#034DA2] uppercase tracking-wide block">
-                    {hub.region}
-                  </span>
-                  <h3 className="text-xl font-bold text-slate-900 mt-0.5">{hub.city} Hub</h3>
-                  <p className="text-xs font-medium text-slate-500 flex items-center gap-1 mt-1">
-                    <MapPin className="size-3.5 text-[#00A3E0]" /> {hub.location}
-                  </p>
-                </div>
+                <span className="text-[11px] font-bold text-[#034DA2] uppercase tracking-wider block">
+                  {hub.region}
+                </span>
+                <h3 className="text-2xl font-extrabold text-slate-900 mt-1">{hub.city} Hub</h3>
+                <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mt-1">
+                  <MapPin className="size-3.5 text-[#00A3E0]" /> {hub.location}
+                </p>
 
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
-                  <span className="font-semibold text-slate-900 block mb-1">Operational Focus:</span>
-                  <p>{hub.focus}</p>
+                <div className="mt-5 space-y-1">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Operational Focus:
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    {hub.focus}
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500">
+              <div className="mt-8 pt-4 border-t border-slate-100 text-xs text-slate-500">
                 {hub.contacts}
               </div>
             </div>
@@ -728,67 +739,67 @@ function AboutPageContent() {
       </section>
 
       {/* ── 9. IMPACT: COMMUNITY INVOLVEMENT & CONTRIBUTION ─────────── */}
-      <section className="bg-slate-950 text-white py-16 sm:py-24 rounded-t-[40px] mt-8">
+      <section className="bg-white text-slate-900 py-16 sm:py-24 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#009FE0]">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2]">
                 <span className="size-2 rounded-full bg-brand-green" />
                 <span>Our Impact</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
                 Transforming Livelihoods Across All 3 Malawian Regions
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Beyond disbursing working capital, Ufulu Finance invests directly into borrower education, solar-powered agricultural infrastructure, and women-led cooperatives.
               </p>
 
               <div className="pt-2">
                 <Link
                   href="/impact"
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#009FE0] hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#034DA2] hover:text-[#02336e] transition-colors group"
                 >
                   <span>Explore our detailed Impact &amp; Portfolio Report</span>
-                  <ArrowRight className="size-4" />
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+              <div className="sm:pl-0 sm:pr-6 pt-6 sm:pt-0">
+                <p className="text-4xl sm:text-5xl font-black tracking-tight text-[#034DA2]">
                   14,000+
                 </p>
-                <h4 className="text-sm font-bold text-white mt-1">
+                <h4 className="text-sm font-bold text-slate-900 mt-2">
                   Entrepreneurs Financed
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                   Active smallholders, market traders, teachers, and healthcare staff.
                 </p>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-[#009FE0]">
+              <div className="sm:px-6 pt-6 sm:pt-0">
+                <p className="text-4xl sm:text-5xl font-black tracking-tight text-[#034DA2]">
                   68%
                 </p>
-                <h4 className="text-sm font-bold text-white mt-1">
+                <h4 className="text-sm font-bold text-slate-900 mt-2">
                   Women-Led Enterprises
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                   Empowering female market vendors and village banking cooperative clusters.
                 </p>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xs">
-                <p className="text-3xl sm:text-4xl font-extrabold text-brand-green-light">
+              <div className="sm:pl-6 sm:pr-0 pt-6 sm:pt-0">
+                <p className="text-4xl sm:text-5xl font-black tracking-tight text-brand-green">
                   98.4%
                 </p>
-                <h4 className="text-sm font-bold text-white mt-1">
+                <h4 className="text-sm font-bold text-slate-900 mt-2">
                   On-Time Repayment
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                   Reflecting responsible credit limits tailored to real borrower cashflows.
                 </p>
               </div>

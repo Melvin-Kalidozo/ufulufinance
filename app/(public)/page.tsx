@@ -36,6 +36,26 @@ export const metadata = {
     "Providing Civil Service Loans, Private Sector Payroll Loans, Village Banking Facilities, and Business Lending across Malawi.",
 };
 
+const getSectorImage = (title: string, customImage?: string): string => {
+  if (customImage && typeof customImage === "string" && customImage.trim() !== "") {
+    return customImage;
+  }
+  const t = title.toLowerCase();
+  if (t.includes("civil") || t.includes("public")) {
+    return "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80";
+  }
+  if (t.includes("private") || t.includes("corporate") || t.includes("employee")) {
+    return "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80";
+  }
+  if (t.includes("village") || t.includes("banking") || t.includes("solidarity") || t.includes("group")) {
+    return "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80";
+  }
+  if (t.includes("business") || t.includes("msme") || t.includes("retail")) {
+    return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+  }
+  return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+};
+
 export default async function HomePage() {
   const SECTOR_ICON: Record<string, LucideIcon> = {
     Landmark,
@@ -68,16 +88,20 @@ export default async function HomePage() {
     description: String(x.description ?? ""),
   }));
 
-  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => ({
-    id: String(x.slug ?? x.title ?? "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-"),
-    title: String(x.title ?? ""),
-    subtitle: String(x.subtitle ?? ""),
-    description: String(x.description ?? ""),
-    icon: iconOf(String(x.iconKey ?? "")),
-    link: String(x.link ?? "#facilities"),
-  }));
+  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => {
+    const title = String(x.title ?? "");
+    return {
+      id: String(x.slug ?? x.title ?? "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-"),
+      title,
+      subtitle: String(x.subtitle ?? ""),
+      description: String(x.description ?? ""),
+      icon: iconOf(String(x.iconKey ?? "")),
+      link: String(x.link ?? "/products"),
+      image: getSectorImage(title, typeof x.image === "string" ? x.image : undefined),
+    };
+  });
 
   /*
   const LOAN_PRODUCTS = (payload?.products ?? []).map((x) => ({
@@ -341,43 +365,104 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {WHO_WE_EMPOWER.map((pillar) => {
-                const Icon = pillar.icon;
+            {/* Top row: 3 sector cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+              {WHO_WE_EMPOWER.slice(0, 3).map((pillar) => {
+                const linkHref = pillar.link === "#facilities" ? "/products" : pillar.link;
+
                 return (
                   <div
                     key={pillar.id}
-                    className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+                    className="relative min-h-[400px] sm:min-h-[440px] rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-5 sm:p-6 group border border-slate-200/60"
                   >
-                    <div className="space-y-4">
-                      <div className="size-11 rounded-xl bg-blue-50 text-[#034DA2] flex items-center justify-center group-hover:bg-[#034DA2] group-hover:text-white transition-colors">
-                        <Icon className="size-5" />
-                      </div>
-                      <div>
-                        <h3 className="text-base font-bold text-slate-900">
-                          {pillar.title}
-                        </h3>
-                        <p className="text-[11px] font-semibold text-brand-green mt-0.5">
-                          {pillar.subtitle}
-                        </p>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
+                    {/* Background image filling the entire card */}
+                    <Image
+                      src={pillar.image}
+                      alt={pillar.title}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+
+                    {/* Gradient overlay for clear text contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/15 group-hover:from-slate-950/98 group-hover:via-slate-950/65 transition-colors duration-300" />
+
+                    {/* Content overlaid directly over the image */}
+                    <div className="relative z-10 flex flex-col justify-end">
+                      <p className="text-[11px] font-bold text-[#7dd3fc] uppercase tracking-wider">
+                        {pillar.subtitle}
+                      </p>
+                      <h3 className="text-lg sm:text-xl font-bold text-white mt-1 leading-snug">
+                        {pillar.title}
+                      </h3>
+                      <p className="text-xs text-slate-200/90 leading-relaxed mt-2.5 line-clamp-3">
                         {pillar.description}
                       </p>
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-slate-100">
-                      <a
-                        href={pillar.link}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#034DA2] hover:text-[#023877] transition-colors"
-                      >
-                        <span>Explore loan facilities</span>
-                        <ArrowRight className="size-3.5" />
-                      </a>
+
+                      <div className="mt-4 pt-3 border-t border-white/15">
+                        <Link
+                          href={linkHref}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-[#7dd3fc] transition-colors"
+                        >
+                          <span>Explore loan facilities</span>
+                          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 );
               })}
             </div>
+
+            {/* Bottom row: 4th card featured wide across */}
+            {WHO_WE_EMPOWER[3] && (() => {
+              const pillar = WHO_WE_EMPOWER[3];
+              const linkHref = pillar.link === "#facilities" ? "/products" : pillar.link;
+
+              return (
+                <div
+                  key={pillar.id}
+                  className="relative min-h-[260px] sm:min-h-[300px] rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-6 sm:p-8 lg:p-10 group border border-slate-200/60 mt-5 sm:mt-6"
+                >
+                  {/* Background image filling the wide card */}
+                  <Image
+                    src={pillar.image}
+                    alt={pillar.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    sizes="100vw"
+                  />
+
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-slate-950/25 group-hover:from-slate-950/98 group-hover:via-slate-950/75 transition-colors duration-300" />
+
+                  {/* Content overlaid directly over the image */}
+                  <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                    <div className="max-w-2xl">
+                      <p className="text-[11px] font-bold text-[#7dd3fc] uppercase tracking-wider">
+                        {pillar.subtitle}
+                      </p>
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1 leading-snug">
+                        {pillar.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed mt-2.5 max-w-xl">
+                        {pillar.description}
+                      </p>
+                    </div>
+
+                    <div className="shrink-0">
+                      <Link
+                        href={linkHref}
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02]"
+                      >
+                        <span>Explore loan facilities</span>
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </section>
       )}
@@ -697,9 +782,9 @@ export default async function HomePage() {
       */}
 
       {/* ─────────────────────────────────────────────────────────────────
-    8. CTA SECTION (Full-Viewport, High-Impact Closer)
+    8. CTA SECTION
 ───────────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative flex items-center justify-center overflow-hidden py-14 sm:py-20">
         {/* Background image + layered gradient */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -710,68 +795,42 @@ export default async function HomePage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#021833]/95 via-[#0a2540]/90 to-[#021833]/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#034DA2]/20 via-transparent to-[#034DA2]/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#021833]/92 via-[#0a2540]/88 to-[#021833]/92" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#034DA2]/15 via-transparent to-[#034DA2]/15" />
         </div>
 
-        {/* Glow accents */}
-        <div className="absolute -top-40 -left-40 size-[500px] rounded-full bg-[#00A3E0]/20 blur-[120px] z-0" />
-        <div className="absolute -bottom-40 -right-40 size-[500px] rounded-full bg-brand-green/10 blur-[120px] z-0" />
+        {/* Subtle glow accents */}
+        <div className="absolute -top-24 -left-24 size-72 rounded-full bg-[#00A3E0]/15 blur-[90px] z-0 pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 size-72 rounded-full bg-brand-green/10 blur-[90px] z-0 pointer-events-none" />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center text-white space-y-8">
-          {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#7dd3fc]">
-            <span className="size-1.5 rounded-full bg-brand-green-light animate-pulse" />
-            Start Your Application Today
-          </div>
-
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-sm">
-            Let&rsquo;s Cultivate Your
-            <br className="hidden sm:block" /> Financial Future, Together.
+        <div className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white space-y-5">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight drop-shadow-sm">
+            Let&rsquo;s Cultivate Your{" "}
+            <span className="text-[#7dd3fc]">Financial Future,</span> Together.
           </h2>
 
-          <p className="text-sm sm:text-lg text-slate-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300/90 max-w-xl mx-auto font-normal leading-relaxed">
             Ready to access civil service credit, explore payroll facilities, or
             expand your business? Speak with our accredited loan advisors today
             and get a decision fast.
           </p>
 
           {/* CTA buttons */}
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-9 py-4 text-sm sm:text-base font-bold shadow-lg shadow-sky-950/30 transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-lg shadow-sky-950/30 transition-all hover:scale-105 cursor-pointer"
             >
               Apply for Financing
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 hover:bg-white/20 text-white px-8 py-4 text-sm sm:text-base font-semibold backdrop-blur-sm transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 text-white px-6 py-3 text-xs sm:text-sm font-semibold backdrop-blur-sm transition-colors"
             >
               <Phone className="size-4" />
               Contact Nearest Branch
             </Link>
-          </div>
-
-          {/* Trust strip */}
-          <div className="pt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 border-t border-white/10 mt-4">
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
-              <ShieldCheck className="size-4 text-brand-green-light" />
-              Registered &amp; Regulated
-            </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
-              <Clock className="size-4 text-brand-green-light" />
-              Fast Turnaround
-            </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
-              <MapPin className="size-4 text-brand-green-light" />
-              Lilongwe &middot; Blantyre &middot; Mzuzu
-            </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-300">
-              <Mail className="size-4 text-brand-green-light" />
-              loans@ufulufinance.com
-            </div>
           </div>
         </div>
       </section>

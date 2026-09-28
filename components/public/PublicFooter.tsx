@@ -296,6 +296,15 @@ export function PublicFooter() {
             <Link href="/terms" className="hover:text-white transition-colors">
               Terms of Service
             </Link>
+            <span>&middot;</span>
+            <a
+              href="https://goldenhour265.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              Developed by Goldenhour
+            </a>
           </div>
         </div>
       </div>

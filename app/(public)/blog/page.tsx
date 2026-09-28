@@ -179,9 +179,9 @@ function BlogInsightsPageContent() {
         </div>
       </section>
 
-      {/* ── 2. INSIGHTS INTRODUCTION & OUR PERSPECTIVE ──────────────── */}
+      {/* ── 2. INSIGHTS INTRODUCTION & OUR PERSPECTIVE (Non-Card Layout) ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
               <span className="size-2 rounded-full bg-brand-green" />
@@ -196,37 +196,35 @@ function BlogInsightsPageContent() {
               We believe fair financial services must always be paired with transparent financial education. Our leadership regularly shares research on liquidity cycles, agricultural value chains, and micro-enterprise risk management in Malawi.
             </p>
 
-            <div className="pt-2">
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-sky-50 border border-sky-100">
-                <Sparkles className="size-5 text-[#00A3E0] shrink-0" />
-                <p className="text-xs font-semibold text-slate-900">
-                  Every insight is curated by accredited Malawian financial advisors and agronomists.
-                </p>
-              </div>
+            <div className="pt-2 flex items-center gap-2.5 text-xs font-medium text-slate-600">
+              <Sparkles className="size-4 text-[#00A3E0] shrink-0" />
+              <span>Curated by accredited Malawian financial advisors and agronomists.</span>
             </div>
           </div>
 
-          {/* Featured Perspective Card */}
-          <div className="lg:col-span-7 bg-gradient-to-br from-[#01214A] to-[#034DA2] text-white rounded-[32px] p-8 sm:p-10 shadow-xl relative overflow-hidden">
-            <span className="px-3 py-1 rounded-full bg-[#00A3E0] text-slate-950 text-[10px] font-extrabold uppercase tracking-wide">
-              Thought Leadership
-            </span>
+          {/* Thought Leadership (Integrated Section, Not a Card) */}
+          <div className="lg:col-span-7 space-y-4 lg:border-l lg:border-slate-200/80 lg:pl-10">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#034DA2]">
+              <span className="size-2 rounded-full bg-brand-green" />
+              <span>Thought Leadership</span>
+            </div>
 
-            <h3 className="text-xl sm:text-2xl font-bold mt-4 leading-snug">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 leading-snug">
               &ldquo;True financial inclusion does not mean giving people debt; it means providing liquidity that multiplies their productivity.&rdquo;
             </h3>
 
-            <p className="text-xs sm:text-sm text-sky-100/85 mt-3 leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
               In our latest industry whitepaper, we dissect why rigid commercial bank requirements push over 70% of Malawians to informal money lenders—and how digital-first microfinance creates a safe bridge to prosperity.
             </p>
 
-            <div className="mt-6 pt-4 border-t border-[#00A3E0]/30 flex items-center justify-between text-xs text-sky-200">
-              <span>By Chifundo Banda, Managing Director</span>
+            <div className="pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+              <span className="font-semibold text-slate-500">By Chifundo Banda, Managing Director</span>
               <Link
                 href="/blog/sme-working-capital-2026"
-                className="font-bold text-[#38bdf8] hover:underline flex items-center gap-1"
+                className="font-bold text-[#034DA2] hover:text-[#02336e] inline-flex items-center gap-1.5 transition-colors group"
               >
-                Read Perspective <ArrowRight className="size-3.5" />
+                <span>Read Perspective</span>
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>

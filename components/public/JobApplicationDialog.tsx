@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import React, { useState, useRef, isValidElement } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
