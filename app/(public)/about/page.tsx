@@ -192,27 +192,27 @@ export default function AboutPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Civil Service Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Private Sector Payroll Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Village Banking Loans</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Business Loans (Expanding)</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Responsible Lending Practices</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Non-Deposit Taking Microfinance Institution</span>
                 </div>
               </div>
@@ -258,7 +258,7 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-[#034DA2]">
-                  <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                  <CheckCircle2 className="size-3.5 text-[#00A651]" />
                   <span>Milestone Verified</span>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function AboutPage() {
           <div className="bg-white text-slate-900 rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-200/90 flex flex-col justify-between">
             <div className="relative z-10 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-bold text-slate-800 tracking-wide uppercase">
-                <Target className="size-3.5 text-[#00A3E0]" />
+                <Target className="size-3.5 text-[#00A651]" />
                 <span>Mission Statement</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
@@ -310,7 +310,7 @@ export default function AboutPage() {
 
             <div className="relative z-10 pt-8 mt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span>Customer-First Always</span>
-              <span className="text-[#00A3E0] font-semibold">Ufulu Mission &rarr;</span>
+              <span className="text-[#00A651] font-semibold">Ufulu Mission &rarr;</span>
             </div>
 
             <div className="absolute -top-16 -right-16 size-44 rounded-full bg-[#009FE0]/10 blur-2xl pointer-events-none" />
@@ -338,7 +338,7 @@ export default function AboutPage() {
             {CORE_VALUES.map((val) => {
               const Icon = val.icon;
               if (val.isFeatured) {
-              return (
+                return (
                   <div
                     key={val.id}
                     className="rounded-3xl p-7 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
@@ -388,7 +388,7 @@ export default function AboutPage() {
                   </div>
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-500">
                     <span>Practiced Daily</span>
-                    <Check className="size-4 text-[#00A3E0]" />
+                    <Check className="size-4 text-[#00A651]" />
                   </div>
                 </div>
               );
@@ -428,7 +428,7 @@ export default function AboutPage() {
                   </span>
                   <h3 className="text-xl font-bold text-slate-900 mt-0.5">{hub.city} Hub</h3>
                   <p className="text-xs font-medium text-slate-500 flex items-center gap-1 mt-1">
-                    <MapPin className="size-3.5 text-[#00A3E0]" /> {hub.location}
+                    <MapPin className="size-3.5 text-[#00A651]" /> {hub.location}
                   </p>
                 </div>
 
@@ -467,11 +467,10 @@ export default function AboutPage() {
             <div className="inline-flex p-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-medium self-start md:self-auto overflow-x-auto max-w-full">
               <button
                 onClick={() => setActiveLeaderTab("all")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "all"
+                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${activeLeaderTab === "all"
                     ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
-                }`}
+                  }`}
               >
                 <span>All Leaders</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "all" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
@@ -480,11 +479,10 @@ export default function AboutPage() {
               </button>
               <button
                 onClick={() => setActiveLeaderTab("board")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "board"
+                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${activeLeaderTab === "board"
                     ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
-                }`}
+                  }`}
               >
                 <span>Board of Directors</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "board" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
@@ -493,11 +491,10 @@ export default function AboutPage() {
               </button>
               <button
                 onClick={() => setActiveLeaderTab("executive")}
-                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
-                  activeLeaderTab === "executive"
+                className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${activeLeaderTab === "executive"
                     ? "bg-[#034DA2] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
-                }`}
+                  }`}
               >
                 <span>Executive Management</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeLeaderTab === "executive" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"}`}>
@@ -536,16 +533,14 @@ export default function AboutPage() {
                     {/* Clean floating badges on top */}
                     <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2">
                       <span
-                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-xs backdrop-blur-md inline-flex items-center gap-1.5 ${
-                          lead.category === "board"
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-xs backdrop-blur-md inline-flex items-center gap-1.5 ${lead.category === "board"
                             ? "bg-white/95 text-[#034DA2] border border-slate-200/60"
                             : "bg-[#034DA2]/95 text-white border border-blue-700/50"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`size-1.5 rounded-full ${
-                            lead.category === "board" ? "bg-amber-500" : "bg-[#009FE0]"
-                          }`}
+                          className={`size-1.5 rounded-full ${lead.category === "board" ? "bg-amber-500" : "bg-[#009FE0]"
+                            }`}
                         />
                         {lead.category === "board" ? "Board Member" : "Executive"}
                       </span>
@@ -580,7 +575,7 @@ export default function AboutPage() {
                 <div className="px-5 pb-5 pt-0">
                   <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
                     <span className="inline-flex items-center gap-1 text-[#034DA2] font-semibold">
-                      <BadgeCheck className="size-3.5 text-[#00A3E0]" />
+                      <BadgeCheck className="size-3.5 text-[#00A651]" />
                       Verified Credentials
                     </span>
                     <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
@@ -599,7 +594,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <HelpCircle className="size-4 text-[#00A3E0]" />
+              <HelpCircle className="size-4 text-[#00A651]" />
               <span>Common Questions</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950">
@@ -627,9 +622,8 @@ export default function AboutPage() {
                       {faq.question}
                     </span>
                     <div
-                      className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                        isOpen ? "bg-[#034DA2] text-white rotate-180" : "bg-slate-100 text-slate-600"
-                      }`}
+                      className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${isOpen ? "bg-[#034DA2] text-white rotate-180" : "bg-slate-100 text-slate-600"
+                        }`}
                     >
                       <ChevronDown className="size-4" />
                     </div>

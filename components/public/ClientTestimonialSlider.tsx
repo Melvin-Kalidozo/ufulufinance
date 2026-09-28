@@ -185,7 +185,7 @@ export function ClientTestimonialSlider() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 w-full lg:w-auto pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100">
             <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
               <div className="size-8 rounded-xl bg-blue-100 text-[#034DA2] flex items-center justify-center shrink-0">
-                <Clock className="size-4 text-[#00A3E0]" />
+                <Clock className="size-4 text-[#00A651]" />
               </div>
               <div>
                 <span className="text-xs font-bold text-slate-900 block">24h Turnaround</span>
@@ -195,7 +195,7 @@ export function ClientTestimonialSlider() {
 
             <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
               <div className="size-8 rounded-xl bg-blue-100 text-[#034DA2] flex items-center justify-center shrink-0">
-                <ShieldCheck className="size-4 text-[#00A3E0]" />
+                <ShieldCheck className="size-4 text-[#00A651]" />
               </div>
               <div>
                 <span className="text-xs font-bold text-slate-900 block">100% Transparent</span>
@@ -205,7 +205,7 @@ export function ClientTestimonialSlider() {
 
             <div className="col-span-2 sm:col-span-1 flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
               <div className="size-8 rounded-xl bg-blue-100 text-[#034DA2] flex items-center justify-center shrink-0">
-                <Banknote className="size-4 text-[#00A3E0]" />
+                <Banknote className="size-4 text-[#00A651]" />
               </div>
               <div>
                 <span className="text-xs font-bold text-slate-900 block">Flexible Terms</span>
@@ -262,7 +262,7 @@ export function ClientTestimonialSlider() {
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            className="text-xs font-bold text-[#034DA2] hover:text-[#00A3E0] transition-colors cursor-pointer ml-auto"
+            className="text-xs font-bold text-[#034DA2] hover:text-[#00A651] transition-colors cursor-pointer ml-auto"
           >
             {showAll ? "Show Less" : `View All (${filteredStories.length}) Stories`}
           </button>
@@ -309,7 +309,7 @@ export function ClientTestimonialSlider() {
             <div className="pt-5 border-t border-slate-100 space-y-4">
               {/* Profile details */}
               <div className="flex items-center gap-3.5">
-                <div className="size-11 rounded-full bg-gradient-to-br from-[#01214A] via-[#034DA2] to-[#00A3E0] text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm shrink-0 border border-sky-400/30">
+                <div className="size-11 rounded-full bg-gradient-to-br from-[#01214A] via-[#034DA2] to-[#00A651] text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm shrink-0 border border-sky-400/30">
                   <span className="select-none">
                     {item.name
                       .split(" ")
@@ -324,8 +324,8 @@ export function ClientTestimonialSlider() {
                     <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors truncate">
                       {item.name}
                     </h4>
-                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#00A3E0]">
-                      <BadgeCheck className="size-3 text-[#00A3E0]" />
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#00A651]">
+                      <BadgeCheck className="size-3 text-[#00A651]" />
                       <span>Verified</span>
                     </span>
                   </div>

@@ -5,7 +5,7 @@ import nodemailer, { type Transporter } from "nodemailer";
 let transporter: Transporter | null = null;
 
 const BRAND_PRIMARY = "#034DA2";
-const BRAND_ACCENT = "#00A3E0";
+const BRAND_ACCENT = "#00A651";
 const BRAND_DARK = "#0a2540";
 
 function getTransporter(): Transporter | null {

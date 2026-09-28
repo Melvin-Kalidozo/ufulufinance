@@ -137,7 +137,7 @@ export default async function HomePage() {
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
               <Link
                 href="/loans"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-7 py-3.5 text-sm font-bold shadow-lg shadow-sky-950/20 transition-all hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A651] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-7 py-3.5 text-sm font-bold shadow-lg shadow-sky-950/20 transition-all hover:scale-105 cursor-pointer"
               >
                 Apply Now
                 <ArrowRight className="size-4" />
@@ -199,28 +199,28 @@ export default async function HomePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-[#00A651] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Transparent Terms</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Zero hidden fees or surprise penalties</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-[#00A651] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">National Reach</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Branches in Lilongwe, Blantyre &amp; Mzuzu</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-[#00A651] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Client Protection Code</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Strict anti-predatory lending policies</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-5 text-[#00A651] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Fast Mobile Payouts</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Airtel Money, TNM Mpamba, or Bank</p>
@@ -339,20 +339,18 @@ export default async function HomePage() {
           return (
             <section
               key={prod.id}
-              className={`py-20 sm:py-28 border-t border-slate-200/80 ${
-                isFlipped ? "bg-[#f8fafc]" : "bg-white"
-              }`}
+              className={`py-20 sm:py-28 border-t border-slate-200/80 ${isFlipped ? "bg-[#f8fafc]" : "bg-white"
+                }`}
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                   {/* Content Column */}
                   <div
-                    className={`space-y-6 lg:col-span-7 ${
-                      isFlipped ? "lg:order-2" : "lg:order-1"
-                    }`}
+                    className={`space-y-6 lg:col-span-7 ${isFlipped ? "lg:order-2" : "lg:order-1"
+                      }`}
                   >
                     {/* Category Kicker */}
-                    <p className="text-xs font-extrabold uppercase tracking-widest text-[#00A3E0]">
+                    <p className="text-xs font-extrabold uppercase tracking-widest text-[#00A651]">
                       {prod.category}
                     </p>
 
@@ -436,16 +434,15 @@ export default async function HomePage() {
                         className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-[#034DA2] transition-colors py-2 group"
                       >
                         <span>View full requirements</span>
-                        <ChevronRight className="size-4 text-[#00A3E0] transition-transform group-hover:translate-x-0.5" />
+                        <ChevronRight className="size-4 text-[#00A651] transition-transform group-hover:translate-x-0.5" />
                       </Link>
                     </div>
                   </div>
 
                   {/* Matching Image Column: Clean Photography with No Badges */}
                   <div
-                    className={`lg:col-span-5 ${
-                      isFlipped ? "lg:order-1" : "lg:order-2"
-                    }`}
+                    className={`lg:col-span-5 ${isFlipped ? "lg:order-1" : "lg:order-2"
+                      }`}
                   >
                     <div className="relative aspect-[4/3] lg:aspect-[5/4] rounded-3xl overflow-hidden shadow-xl border border-slate-200/90 group">
                       <Image
@@ -626,7 +623,7 @@ export default async function HomePage() {
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               href="/loans"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A651] hover:bg-[#0284C7] text-white px-8 py-3.5 text-sm font-bold shadow-lg transition-all hover:scale-105 cursor-pointer"
             >
               Apply for Financing
               <ArrowRight className="size-4" />

@@ -246,10 +246,10 @@ export function ResourceManager({
                           <span
                             className={cn(
                               "inline-flex items-center gap-1.5 text-xs font-semibold",
-                              active ? "text-[#00A3E0]" : "text-slate-400"
+                              active ? "text-[#00A651]" : "text-slate-400"
                             )}
                           >
-                            <span className={cn("size-1.5 rounded-full", active ? "bg-[#00A3E0]" : "bg-slate-300")} />
+                            <span className={cn("size-1.5 rounded-full", active ? "bg-[#00A651]" : "bg-slate-300")} />
                             {active === false ? "Inactive" : "Active"}
                           </span>
                         )}

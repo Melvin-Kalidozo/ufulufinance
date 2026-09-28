@@ -38,7 +38,7 @@ export default function ErrorPage({
       <header className="w-full bg-[#01214A] border-b border-sky-900/40 py-4 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="size-9 rounded-xl bg-[#034DA2] border border-[#00A3E0]/40 flex items-center justify-center font-black text-white text-lg shadow-sm">
+            <div className="size-9 rounded-xl bg-[#034DA2] border border-[#00A651]/40 flex items-center justify-center font-black text-white text-lg shadow-sm">
               U
             </div>
             <div className="flex flex-col">
@@ -55,7 +55,7 @@ export default function ErrorPage({
             href="/contact"
             className="text-xs font-semibold text-sky-200 hover:text-white transition-colors flex items-center gap-1.5"
           >
-            <HelpCircle className="size-3.5 text-[#00A3E0]" />
+            <HelpCircle className="size-3.5 text-[#00A651]" />
             <span>Support Desk</span>
           </Link>
         </div>
@@ -85,7 +85,7 @@ export default function ErrorPage({
 
           {/* Security & Integrity Reassurance */}
           <div className="my-6 p-4 rounded-2xl bg-blue-50/80 border border-blue-200/80 max-w-md mx-auto flex items-center gap-3 text-left">
-            <div className="size-9 rounded-xl bg-[#034DA2] text-[#38bdf8] flex items-center justify-center shrink-0">
+            <div className="size-9 rounded-xl bg-[#034DA2] text-[#00A651] flex items-center justify-center shrink-0">
               <ShieldCheck className="size-5" />
             </div>
             <div>
@@ -110,7 +110,7 @@ export default function ErrorPage({
               onClick={handleRetry}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#034DA2] hover:bg-[#023877] text-white text-xs sm:text-sm font-bold transition-all hover:scale-[1.02] shadow-md shadow-blue-950/20 cursor-pointer"
             >
-              <RotateCcw className="size-4 text-[#38bdf8]" />
+              <RotateCcw className="size-4 text-[#00A651]" />
               <span>Retry Operation</span>
             </button>
 
@@ -124,7 +124,7 @@ export default function ErrorPage({
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] text-white text-xs sm:text-sm font-extrabold transition-all hover:scale-[1.02] shadow-md shadow-sky-500/20"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00A651] hover:bg-[#0284C7] text-white text-xs sm:text-sm font-extrabold transition-all hover:scale-[1.02] shadow-md shadow-sky-500/20"
             >
               <PhoneCall className="size-4" />
               <span>Contact Support</span>

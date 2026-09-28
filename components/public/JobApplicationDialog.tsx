@@ -200,9 +200,19 @@ export function JobApplicationDialog({
   const inputBase =
     "w-full rounded-xl border bg-slate-50 px-4 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none transition-all";
 
+  const fallbackTrigger = (
+    <button
+      type="button"
+      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00A651] text-white text-xs font-bold hover:bg-[#0284C7] transition-colors cursor-pointer"
+    >
+      Apply Now
+    </button>
+  );
+  const safeTrigger = React.isValidElement(activeTrigger) ? activeTrigger : fallbackTrigger;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{activeTrigger}</DialogTrigger>
+      <DialogTrigger asChild>{safeTrigger}</DialogTrigger>
 
       <DialogContent className="sm:max-w-[580px] p-0 overflow-hidden rounded-3xl border border-slate-200 shadow-2xl bg-white max-h-[92vh] flex flex-col">
         {/* ── Dialog Header ── */}

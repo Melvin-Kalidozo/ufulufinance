@@ -81,11 +81,11 @@ export function PublicHeader() {
   // menu below only links into /admin for now.
   const initials = user?.name
     ? user.name
-        .split(" ")
-        .map((n: string) => n[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase()
+      .split(" ")
+      .map((n: string) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase()
     : "";
 
   return (
@@ -138,8 +138,8 @@ export function PublicHeader() {
                         ? "text-[#034DA2]"
                         : "text-slate-600 hover:text-slate-950"
                       : active
-                      ? "text-[#38bdf8]"
-                      : "text-white/90 hover:text-white"
+                        ? "text-[#38bdf8]"
+                        : "text-white/90 hover:text-white"
                   )}
                 >
                   <span>{link.label}</span>
@@ -150,13 +150,13 @@ export function PublicHeader() {
                       "absolute bottom-0 h-0.5 rounded-full transition-all duration-300 ease-out",
                       active
                         ? cn(
-                            "w-4/5",
-                            isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
-                          )
+                          "w-4/5",
+                          isScrolled ? "bg-[#034DA2]" : "bg-[#38bdf8]"
+                        )
                         : cn(
-                            "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
-                            isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
-                          )
+                          "w-0 group-hover:w-3/5 opacity-0 group-hover:opacity-100",
+                          isScrolled ? "bg-[#034DA2]/60" : "bg-[#38bdf8]/80"
+                        )
                     )}
                   />
                 </Link>

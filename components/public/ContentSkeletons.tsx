@@ -23,7 +23,7 @@ export function StaticHero({
       <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-[#01214A]/90 to-slate-950/90" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 text-center text-white sm:px-6 lg:px-8">
         {eyebrow ? (
-          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#38bdf8]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#00A651]">
             {eyebrow}
           </p>
         ) : null}

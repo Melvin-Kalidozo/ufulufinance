@@ -162,11 +162,11 @@ export default function LoansPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#38bdf8] transition-colors">
+            <Link href="/" className="hover:text-[#00A651] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#38bdf8] font-semibold">Loan Products</span>
+            <span className="text-[#00A651] font-semibold">Loan Products</span>
           </div>
         </div>
       </section>
@@ -200,11 +200,10 @@ export default function LoansPage() {
                 <button
                   key={tab.id}
                   onClick={() => setSelectedCategory(tab.id)}
-                  className={`px-4 py-2 rounded-full whitespace-nowrap transition-all cursor-pointer ${
-                    selectedCategory === tab.id
+                  className={`px-4 py-2 rounded-full whitespace-nowrap transition-all cursor-pointer ${selectedCategory === tab.id
                       ? "bg-[#034DA2] text-white shadow-xs font-semibold"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -223,7 +222,7 @@ export default function LoansPage() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="px-3 py-1 rounded-full bg-white/20 text-[#38bdf8] text-[10px] font-extrabold uppercase tracking-wide backdrop-blur-sm border border-white/20">
+                        <span className="px-3 py-1 rounded-full bg-white/20 text-[#00A651] text-[10px] font-extrabold uppercase tracking-wide backdrop-blur-sm border border-white/20">
                           {prod.badge}
                         </span>
                         <span className="text-xs font-bold text-blue-100">
@@ -241,7 +240,7 @@ export default function LoansPage() {
                       <div className="mt-6 p-4 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs space-y-2 text-xs">
                         <div className="flex justify-between font-bold">
                           <span>Limit:</span>
-                          <span className="text-[#38bdf8]">MWK {prod.minAmount.toLocaleString()} – {prod.maxAmount.toLocaleString()}</span>
+                          <span className="text-[#00A651]">MWK {prod.minAmount.toLocaleString()} – {prod.maxAmount.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-blue-100">
                           <span>Tenure:</span>
@@ -257,7 +256,7 @@ export default function LoansPage() {
                     <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
                       <button
                         onClick={() => setActiveModalProduct(prod)}
-                        className="text-xs font-bold text-[#38bdf8] underline hover:text-white transition-colors cursor-pointer"
+                        className="text-xs font-bold text-[#00A651] underline hover:text-white transition-colors cursor-pointer"
                       >
                         View Full Details &amp; KYC
                       </button>
@@ -268,7 +267,7 @@ export default function LoansPage() {
                         triggerButton={
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00A3E0] hover:bg-[#0284C7] text-white text-xs font-bold transition-all cursor-pointer shadow-md"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00A651] hover:bg-[#0284C7] text-white text-xs font-bold transition-all cursor-pointer shadow-md"
                           >
                             Apply Now
                             <ArrowRight className="size-3.5" />
@@ -357,7 +356,7 @@ export default function LoansPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left: Interactive Controls */}
             <div className="lg:col-span-7 space-y-7">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#38bdf8] bg-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#00A651] bg-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/10">
                 <Calculator className="size-4" />
                 <span>Transparent Repayment Calculator</span>
               </div>
@@ -375,7 +374,7 @@ export default function LoansPage() {
               <div className="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-7 space-y-4 backdrop-blur-xs">
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="text-xs sm:text-sm font-semibold text-slate-200">Desired Borrowing Amount:</span>
-                  <span className="text-[#38bdf8] text-2xl sm:text-3xl font-black tracking-tight">
+                  <span className="text-[#00A651] text-2xl sm:text-3xl font-black tracking-tight">
                     MWK {calcAmount.toLocaleString()}
                   </span>
                 </div>
@@ -405,11 +404,10 @@ export default function LoansPage() {
                       key={m}
                       type="button"
                       onClick={() => setCalcMonths(m)}
-                      className={`py-3 text-xs font-bold rounded-2xl border transition-all cursor-pointer ${
-                        calcMonths === m
+                      className={`py-3 text-xs font-bold rounded-2xl border transition-all cursor-pointer ${calcMonths === m
                           ? "bg-[#009FE0] text-white border-[#009FE0] shadow-lg font-black scale-105"
                           : "bg-white/10 text-white border-white/15 hover:bg-white/20"
-                      }`}
+                        }`}
                     >
                       {m} Mo
                     </button>
@@ -463,7 +461,7 @@ export default function LoansPage() {
                 triggerButton={
                   <button
                     type="button"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#00A3E0] hover:bg-[#0284C7] text-white py-4 text-sm font-bold shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#00A651] hover:bg-[#0284C7] text-white py-4 text-sm font-bold shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
                   >
                     <span>Enquire for This Loan Facility</span>
                     <ArrowRight className="size-4" />
@@ -483,7 +481,7 @@ export default function LoansPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
+              <span className="size-2 rounded-full bg-[#00A651]" />
               <span>Simple, Fast &amp; Dignified</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
@@ -527,11 +525,11 @@ export default function LoansPage() {
             ].map(({ step, title, desc, icon: Icon, badge }) => (
               <div
                 key={step}
-                className="relative bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-[#00A3E0] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                className="relative bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-[#00A651] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-3xl font-black text-slate-300 group-hover:text-[#00A3E0] transition-colors">
+                    <span className="text-3xl font-black text-slate-300 group-hover:text-[#00A651] transition-colors">
                       {step}
                     </span>
                     <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-700">
@@ -549,7 +547,7 @@ export default function LoansPage() {
 
                 <div className="pt-6 mt-6 border-t border-slate-200/80 flex items-center gap-1.5 text-xs font-bold text-[#01214A]">
                   <span>Step {step} Verified</span>
-                  <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                  <CheckCircle2 className="size-3.5 text-[#00A651]" />
                 </div>
               </div>
             ))}
@@ -562,7 +560,7 @@ export default function LoansPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="size-2 rounded-full bg-[#00A3E0]" />
+              <span className="size-2 rounded-full bg-[#00A651]" />
               <span>Eligibility &amp; Requirements</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -575,63 +573,63 @@ export default function LoansPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="size-11 rounded-2xl bg-[#00A3E0]/15 text-[#034DA2] flex items-center justify-center">
+              <div className="size-11 rounded-2xl bg-[#00A651]/15 text-[#034DA2] flex items-center justify-center">
                 <BadgeCheck className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">1. Basic Eligibility</h3>
               <ul className="space-y-2 text-xs text-slate-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>Malawian citizen aged 21 to 65 years</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>Active business operating for minimum 6 months</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>Or confirmed civil servant / permanent employee</span>
                 </li>
               </ul>
             </div>
 
             <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="size-11 rounded-2xl bg-[#00A3E0]/15 text-[#034DA2] flex items-center justify-center">
+              <div className="size-11 rounded-2xl bg-[#00A651]/15 text-[#034DA2] flex items-center justify-center">
                 <FileText className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">2. KYC Identification</h3>
               <ul className="space-y-2 text-xs text-slate-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>National ID (Smart Card) or valid Malawian Passport</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>2 recent passport-size photographs</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>Proof of residence (water/electric bill or chief's letter)</span>
                 </li>
               </ul>
             </div>
 
             <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="size-11 rounded-2xl bg-[#00A3E0]/15 text-[#034DA2] flex items-center justify-center">
+              <div className="size-11 rounded-2xl bg-[#00A651]/15 text-[#034DA2] flex items-center justify-center">
                 <Users className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">3. Financial Statements</h3>
               <ul className="space-y-2 text-xs text-slate-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>3 to 6 months bank or mobile money statement</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>Or latest 3 months official payslips (for salary loans)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle2 className="size-4 text-[#00A3E0] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="size-4 text-[#00A651] shrink-0 mt-0.5" />
                   <span>One reliable local guarantor or peer cluster pledge</span>
                 </li>
               </ul>
@@ -686,7 +684,7 @@ export default function LoansPage() {
               <ul className="space-y-1.5 pt-1 text-xs text-slate-600">
                 {activeModalProduct.keyDetails.map((k, i) => (
                   <li key={i} className="flex items-center gap-2">
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                    <CheckCircle2 className="size-3.5 text-[#00A651]" />
                     <span>{k}</span>
                   </li>
                 ))}

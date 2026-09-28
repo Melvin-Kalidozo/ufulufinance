@@ -153,11 +153,11 @@ export default function ServicesPage() {
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
-            <Link href="/" className="hover:text-[#38bdf8] transition-colors">
+            <Link href="/" className="hover:text-[#00A651] transition-colors">
               Home
             </Link>
             <span className="text-slate-400">&rarr;</span>
-            <span className="text-[#38bdf8] font-semibold">Services</span>
+            <span className="text-[#00A651] font-semibold">Services</span>
           </div>
         </div>
       </section>
@@ -480,7 +480,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-[#034DA2]">
                     <span>Eligible for Credit</span>
-                    <CheckCircle2 className="size-3.5 text-[#00A3E0]" />
+                    <CheckCircle2 className="size-3.5 text-[#00A651]" />
                   </div>
                 </div>
               );
@@ -513,7 +513,7 @@ export default function ServicesPage() {
                 className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="size-11 rounded-2xl bg-[#034DA2] text-[#38bdf8] flex items-center justify-center">
+                  <div className="size-11 rounded-2xl bg-[#034DA2] text-[#00A651] flex items-center justify-center">
                     <Icon className="size-5" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900">{adv.title}</h3>
@@ -523,7 +523,7 @@ export default function ServicesPage() {
                 </div>
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-1 text-[11px] font-semibold text-[#034DA2]">
                   <span>Guaranteed Feature</span>
-                  <CheckCircle2 className="size-3 text-[#00A3E0]" />
+                  <CheckCircle2 className="size-3 text-[#00A651]" />
                 </div>
               </div>
             );

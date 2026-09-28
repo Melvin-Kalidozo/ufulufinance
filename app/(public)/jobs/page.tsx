@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -152,19 +152,19 @@ export default function JobsPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-6 text-xs sm:text-sm font-medium text-slate-700">
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Uncompromising Personal Integrity</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Empathy &amp; Respect for Everyday Borrowers</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Curiosity &amp; Drive to Learn Continuously</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="size-4 text-[#00A3E0] shrink-0" />
+                  <Check className="size-4 text-[#00A651] shrink-0" />
                   <span>Prudent Risk Assessment Discipline</span>
                 </div>
               </div>
@@ -197,7 +197,7 @@ export default function JobsPage() {
                 />
                 <div className="absolute inset-0 bg-black/10" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#00A3E0] shadow-lg">
+                  <div className="size-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#00A651] shadow-lg">
                     <HeartHandshake className="size-7" />
                   </div>
                 </div>
@@ -271,7 +271,7 @@ export default function JobsPage() {
 
                       <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
                         <span className="flex items-center gap-1">
-                          <MapPin className="size-3.5 text-[#00A3E0]" /> {role.location}
+                          <MapPin className="size-3.5 text-[#00A651]" /> {role.location}
                         </span>
                         <span>&bull;</span>
                         <span>{role.type}</span>

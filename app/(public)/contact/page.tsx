@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
@@ -232,7 +232,7 @@ export default function ContactPage() {
         "bg-red-50/30 border border-red-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-500/20";
     } else if (isValid) {
       borderClasses =
-        "bg-[#F0F4F8] border border-sky-400/80 focus:bg-white focus:border-[#00A3E0] focus:ring-2 focus:ring-sky-500/20";
+        "bg-[#F0F4F8] border border-sky-400/80 focus:bg-white focus:border-[#00A651] focus:ring-2 focus:ring-sky-500/20";
     }
 
     return {
@@ -441,7 +441,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("name").borderClasses}`}
                           />
                           {getFieldState("name").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("name").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -496,7 +496,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("phone").borderClasses}`}
                           />
                           {getFieldState("phone").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("phone").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -529,7 +529,7 @@ export default function ContactPage() {
                             className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("email").borderClasses}`}
                           />
                           {getFieldState("email").isValid && (
-                            <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                           )}
                           {getFieldState("email").isInvalid && (
                             <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -563,7 +563,7 @@ export default function ContactPage() {
                           className={`w-full rounded-lg px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none ${getFieldState("subject").borderClasses}`}
                         />
                         {getFieldState("subject").isValid && (
-                          <CheckCircle2 className="size-4 text-[#00A3E0] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                          <CheckCircle2 className="size-4 text-[#00A651] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         )}
                         {getFieldState("subject").isInvalid && (
                           <AlertCircle className="size-4 text-red-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -651,17 +651,17 @@ export default function ContactPage() {
                 <div className="mt-4 space-y-1.5 text-xs text-slate-600">
                   {str(office, "phone") ? (
                     <p className="flex items-center gap-1.5">
-                      <Phone className="size-3.5 text-[#00A3E0]" /> {str(office, "phone")}
+                      <Phone className="size-3.5 text-[#00A651]" /> {str(office, "phone")}
                     </p>
                   ) : null}
                   {str(office, "email") ? (
                     <p className="flex items-center gap-1.5">
-                      <Mail className="size-3.5 text-[#00A3E0]" /> {str(office, "email")}
+                      <Mail className="size-3.5 text-[#00A651]" /> {str(office, "email")}
                     </p>
                   ) : null}
                   {str(office, "hours") ? (
                     <p className="flex items-center gap-1.5">
-                      <Clock className="size-3.5 text-[#00A3E0]" /> {str(office, "hours")}
+                      <Clock className="size-3.5 text-[#00A651]" /> {str(office, "hours")}
                     </p>
                   ) : null}
                 </div>
