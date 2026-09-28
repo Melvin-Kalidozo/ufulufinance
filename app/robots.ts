@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ufulufinance.com";
-
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/portal/", "/api/"],
+      disallow: ["/admin/", "/api/", "/account/", "/signin", "/signup"],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }
