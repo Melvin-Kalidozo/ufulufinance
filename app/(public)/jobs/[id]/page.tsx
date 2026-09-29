@@ -5,6 +5,9 @@ import type { JobRole } from "@/lib/jobsData";
 import { getJobBySlug, getOpenJobs } from "@/lib/cms-data";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
 import { ShareJobButton } from "@/components/public/ShareJobButton";
+import { pageMetadata } from "@/lib/metadata";
+import { JsonLd, breadcrumbJsonLd, jobPostingJsonLd } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/site";
 import {
   MapPin,
   Briefcase,
@@ -76,12 +79,22 @@ export async function generateMetadata(
   const raw = await getJobBySlug(id).catch(() => null);
   const job = raw ? mapJob(raw as unknown as Record<string, unknown>) : null;
   if (!job) {
-    return { title: "Job Not Found — Ufulu Finance" };
+    return {
+      title: "Job Not Found",
+      robots: { index: false, follow: false },
+    };
   }
-  return {
+  return pageMetadata({
     title: `${job.title} — Careers at Ufulu Finance`,
-    description: job.description,
-  };
+    description:
+      job.description ||
+      `Apply for the ${job.title} role at Ufulu Finance in ${job.location || "Malawi"}.`,
+    path: `/jobs/${id}`,
+    image: job.image,
+    keywords: [job.title, job.department, job.location, "jobs Malawi"].filter(
+      Boolean
+    ) as string[],
+  });
 }
 
 export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
@@ -103,8 +116,33 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
     .filter((r: JobRole) => r.id !== job.id)
     .slice(0, 3);
 
+  const toIso = (value?: string): string | undefined => {
+    if (!value) return undefined;
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? undefined : d.toISOString();
+  };
+
   return (
     <div className="min-h-screen bg-[#fcfdfd] text-slate-900 antialiased">
+      <JsonLd
+        data={jobPostingJsonLd({
+          title: job.title,
+          description: job.description,
+          url: absoluteUrl(`/jobs/${job.id}`),
+          datePosted: new Date().toISOString(),
+          validThrough: toIso(job.deadline),
+          employmentType: job.type,
+          location: job.location,
+          salaryRange: job.salaryRange,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Careers", path: "/jobs" },
+          { name: job.title, path: `/jobs/${job.id}` },
+        ])}
+      />
       {/* ── 1. FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
       <section className="relative w-full overflow-hidden bg-slate-950 pt-32 sm:pt-40 pb-16 sm:pb-24">
         {/* Background photo & ambient radial lights */}

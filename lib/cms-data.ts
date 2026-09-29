@@ -82,6 +82,18 @@ export async function getJobBySlug(slug: string) {
   );
 }
 
+export async function getArticleBySlug(slug: string) {
+  return cachedPublic(`public:article:${slug}`, [], async () =>
+    prisma.article.findFirst({ where: { slug, status: "PUBLISHED" } })
+  );
+}
+
+export async function getEventBySlug(slug: string) {
+  return cachedPublic(`public:event:${slug}`, [], async () =>
+    prisma.event.findFirst({ where: { slug, status: "PUBLISHED" } })
+  );
+}
+
 export async function getOpenJobs(limit = 20) {
   return cachedPublic("cms:open-jobs", [String(limit)], async () =>
     prisma.job.findMany({

@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { ClientTestimonialSlider } from "@/components/public/ClientTestimonialSlider";
 import { getHomeContent } from "@/lib/cms-data";
 import { HomePreload } from "@/components/public/HomePreload";
+import { pageMetadata } from "@/lib/metadata";
 import {
   ArrowRight,
   ShieldCheck,
@@ -30,11 +31,19 @@ import {
   Banknote,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Ufulu Finance | Transparent Microfinance in Malawi",
   description:
-    "Providing Civil Service Loans, Private Sector Payroll Loans, Village Banking Facilities, and Business Lending across Malawi.",
-};
+    "Ufulu Finance is a Malawi microfinance institution offering civil service loans, private sector payroll loans, village banking facilities, and MSME business lending with transparent terms and fast mobile disbursement.",
+  path: "/",
+  keywords: [
+    "Ufulu Finance Malawi",
+    "civil service loan Malawi",
+    "village banking facility",
+    "business lending Malawi",
+  ],
+  absoluteTitle: true,
+});
 
 const PRODUCT_AI_IMAGES = [
   "/images/audience-civil-servants.jpg",
@@ -44,23 +53,80 @@ const PRODUCT_AI_IMAGES = [
 ];
 
 const getSectorImage = (title: string, customImage?: string, index = 0): string => {
-  if (customImage && typeof customImage === "string" && customImage.trim() !== "" && !customImage.includes("unsplash.com")) {
+  if (
+    customImage &&
+    typeof customImage === "string" &&
+    customImage.trim() !== "" &&
+    !customImage.includes("unsplash.com")
+  ) {
     return customImage;
   }
   const t = title.toLowerCase();
   if (t.includes("civil") || t.includes("public")) {
     return "/images/audience-civil-servants.jpg";
   }
-  if (t.includes("private") || t.includes("corporate") || t.includes("employee")) {
+  if (
+    t.includes("private") ||
+    t.includes("corporate") ||
+    t.includes("employee")
+  ) {
     return "/images/audience-smallholder-farmers.jpg";
   }
-  if (t.includes("village") || t.includes("banking") || t.includes("solidarity") || t.includes("group")) {
+  if (
+    t.includes("village") ||
+    t.includes("banking") ||
+    t.includes("solidarity") ||
+    t.includes("group")
+  ) {
     return "/images/audience-women-entrepreneurs.jpg";
   }
-  if (t.includes("business") || t.includes("msme") || t.includes("retail") || t.includes("market") || t.includes("vendor")) {
+  if (
+    t.includes("business") ||
+    t.includes("msme") ||
+    t.includes("retail") ||
+    t.includes("market") ||
+    t.includes("vendor")
+  ) {
     return "/images/audience-market-vendors.jpg";
   }
   return PRODUCT_AI_IMAGES[index % PRODUCT_AI_IMAGES.length];
+};
+
+const getFacilitySlug = (title: string): string => {
+  const t = title.toLowerCase();
+  if (t.includes("civil") || t.includes("public")) return "civil-service";
+  if (
+    t.includes("private") ||
+    t.includes("corporate") ||
+    t.includes("employee") ||
+    t.includes("payroll")
+  ) {
+    return "private-sector-payroll";
+  }
+  if (
+    t.includes("village") ||
+    t.includes("banking") ||
+    t.includes("solidarity") ||
+    t.includes("group") ||
+    t.includes("community")
+  ) {
+    return "village-banking";
+  }
+  if (
+    t.includes("business") ||
+    t.includes("msme") ||
+    t.includes("retail") ||
+    t.includes("entrepreneur")
+  ) {
+    return "business-loans";
+  }
+  return "";
+};
+
+const resolvePillarHref = (pillar: { link: string; title: string }): string => {
+  if (pillar.link && pillar.link.includes("/products")) return pillar.link;
+  const slug = getFacilitySlug(pillar.title);
+  return slug ? `/products?facility=${slug}` : "/products";
 };
 
 export default async function HomePage() {
@@ -106,7 +172,11 @@ export default async function HomePage() {
       description: String(x.description ?? ""),
       icon: iconOf(String(x.iconKey ?? "")),
       link: String(x.link ?? "/products"),
-      image: getSectorImage(title, typeof x.image === "string" ? x.image : undefined, i),
+      image: getSectorImage(
+        title,
+        typeof x.image === "string" ? x.image : undefined,
+        i,
+      ),
     };
   });
 
@@ -375,7 +445,7 @@ export default async function HomePage() {
             {/* Top row: 3 sector cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
               {WHO_WE_EMPOWER.slice(0, 3).map((pillar) => {
-                const linkHref = pillar.link === "#facilities" ? "/products" : pillar.link;
+                const linkHref = resolvePillarHref(pillar);
 
                 return (
                   <div
@@ -422,54 +492,55 @@ export default async function HomePage() {
             </div>
 
             {/* Bottom row: 4th card featured wide across */}
-            {WHO_WE_EMPOWER[3] && (() => {
-              const pillar = WHO_WE_EMPOWER[3];
-              const linkHref = pillar.link === "#facilities" ? "/products" : pillar.link;
+            {WHO_WE_EMPOWER[3] &&
+              (() => {
+                const pillar = WHO_WE_EMPOWER[3];
+                const linkHref = resolvePillarHref(pillar);
 
-              return (
-                <div
-                  key={pillar.id}
-                  className="relative min-h-[260px] sm:min-h-[300px] rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-6 sm:p-8 lg:p-10 group border border-slate-200/60 mt-5 sm:mt-6"
-                >
-                  {/* Background image filling the wide card */}
-                  <Image
-                    src={pillar.image}
-                    alt={pillar.title}
-                    fill
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                    sizes="100vw"
-                  />
+                return (
+                  <div
+                    key={pillar.id}
+                    className="relative min-h-[260px] sm:min-h-[300px] rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-6 sm:p-8 lg:p-10 group border border-slate-200/60 mt-5 sm:mt-6"
+                  >
+                    {/* Background image filling the wide card */}
+                    <Image
+                      src={pillar.image}
+                      alt={pillar.title}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      sizes="100vw"
+                    />
 
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-slate-950/25 group-hover:from-slate-950/98 group-hover:via-slate-950/75 transition-colors duration-300" />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-slate-950/25 group-hover:from-slate-950/98 group-hover:via-slate-950/75 transition-colors duration-300" />
 
-                  {/* Content overlaid directly over the image */}
-                  <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                    <div className="max-w-2xl">
-                      <p className="text-[11px] font-bold text-[#7dd3fc] uppercase tracking-wider">
-                        {pillar.subtitle}
-                      </p>
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1 leading-snug">
-                        {pillar.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed mt-2.5 max-w-xl">
-                        {pillar.description}
-                      </p>
-                    </div>
+                    {/* Content overlaid directly over the image */}
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                      <div className="max-w-2xl">
+                        <p className="text-[11px] font-bold text-[#7dd3fc] uppercase tracking-wider">
+                          {pillar.subtitle}
+                        </p>
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1 leading-snug">
+                          {pillar.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed mt-2.5 max-w-xl">
+                          {pillar.description}
+                        </p>
+                      </div>
 
-                    <div className="shrink-0">
-                      <Link
-                        href={linkHref}
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02]"
-                      >
-                        <span>Explore loan facilities</span>
-                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                      </Link>
+                      <div className="shrink-0">
+                        <Link
+                          href={linkHref}
+                          className="inline-flex items-center gap-2 rounded-xl bg-[#00A3E0] hover:bg-[#0284C7] active:bg-[#0369a1] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02]"
+                        >
+                          <span>Explore loan facilities</span>
+                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })()}
+                );
+              })()}
           </div>
         </section>
       )}
