@@ -47,7 +47,7 @@ export const metadata = pageMetadata({
 
 const PRODUCT_AI_IMAGES = [
   "/images/audience-civil-servants.jpg",
-  "/images/audience-smallholder-farmers.jpg",
+  "/images/audience-private-sector.jpg",
   "/images/audience-women-entrepreneurs.jpg",
   "/images/audience-market-vendors.jpg",
 ];
@@ -70,7 +70,7 @@ const getSectorImage = (title: string, customImage?: string, index = 0): string 
     t.includes("corporate") ||
     t.includes("employee")
   ) {
-    return "/images/audience-smallholder-farmers.jpg";
+    return "/images/audience-private-sector.jpg";
   }
   if (
     t.includes("village") ||
