@@ -36,24 +36,31 @@ export const metadata = {
     "Providing Civil Service Loans, Private Sector Payroll Loans, Village Banking Facilities, and Business Lending across Malawi.",
 };
 
-const getSectorImage = (title: string, customImage?: string): string => {
-  if (customImage && typeof customImage === "string" && customImage.trim() !== "") {
+const PRODUCT_AI_IMAGES = [
+  "/images/audience-civil-servants.jpg",
+  "/images/audience-smallholder-farmers.jpg",
+  "/images/audience-women-entrepreneurs.jpg",
+  "/images/audience-market-vendors.jpg",
+];
+
+const getSectorImage = (title: string, customImage?: string, index = 0): string => {
+  if (customImage && typeof customImage === "string" && customImage.trim() !== "" && !customImage.includes("unsplash.com")) {
     return customImage;
   }
   const t = title.toLowerCase();
   if (t.includes("civil") || t.includes("public")) {
-    return "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-civil-servants.jpg";
   }
   if (t.includes("private") || t.includes("corporate") || t.includes("employee")) {
-    return "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-smallholder-farmers.jpg";
   }
   if (t.includes("village") || t.includes("banking") || t.includes("solidarity") || t.includes("group")) {
-    return "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-women-entrepreneurs.jpg";
   }
-  if (t.includes("business") || t.includes("msme") || t.includes("retail")) {
-    return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+  if (t.includes("business") || t.includes("msme") || t.includes("retail") || t.includes("market") || t.includes("vendor")) {
+    return "/images/audience-market-vendors.jpg";
   }
-  return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+  return PRODUCT_AI_IMAGES[index % PRODUCT_AI_IMAGES.length];
 };
 
 export default async function HomePage() {
@@ -88,7 +95,7 @@ export default async function HomePage() {
     description: String(x.description ?? ""),
   }));
 
-  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => {
+  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x, i) => {
     const title = String(x.title ?? "");
     return {
       id: String(x.slug ?? x.title ?? "")
@@ -99,7 +106,7 @@ export default async function HomePage() {
       description: String(x.description ?? ""),
       icon: iconOf(String(x.iconKey ?? "")),
       link: String(x.link ?? "/products"),
-      image: getSectorImage(title, typeof x.image === "string" ? x.image : undefined),
+      image: getSectorImage(title, typeof x.image === "string" ? x.image : undefined, i),
     };
   });
 
