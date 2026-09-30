@@ -23,6 +23,17 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  try {
+    const events = await getEventsList(1000);
+    return events.map((event) => ({ id: event.slug }));
+  } catch {
+    return [];
+  }
+}
+
 function toEvent(r: Record<string, unknown>): EventItem {
   const isUpcoming = r.date ? new Date(String(r.date)) >= new Date() : true;
   return {

@@ -29,6 +29,17 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  try {
+    const jobs = await getOpenJobs();
+    return jobs.map((job) => ({ id: job.slug }));
+  } catch {
+    return [];
+  }
+}
+
 function formatDate(val: string | undefined): string {
   if (!val) return "Rolling Basis";
   const d = new Date(val);

@@ -28,6 +28,17 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  try {
+    const articles = await getArticlesList();
+    return articles.map((article) => ({ slug: article.slug }));
+  } catch {
+    return [];
+  }
+}
+
 function toArticle(r: Record<string, unknown>): Article {
   const content =
     r.content && typeof r.content === "object"
