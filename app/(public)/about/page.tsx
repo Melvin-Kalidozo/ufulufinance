@@ -1,68 +1,30 @@
-"use client";
-
-import { Suspense, useState, useEffect } from "react";
+import { Suspense } from "react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import {
-  StaticHero,
-  Shimmer,
-  TwoColumnSkeleton,
-  SectionHeadingSkeleton,
-  TextCardGridSkeleton,
-  CardGridSkeleton,
-  ListRowSkeleton,
-} from "@/components/public/ContentSkeletons";
-import { usePublicData } from "@/lib/content-store";
 import Image from "next/image";
-import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
+import { getAboutContent } from "@/lib/cms-data";
+import { LeadershipGrid, type Leader } from "@/components/public/LeadershipGrid";
+import { AboutFaqAccordion } from "@/components/public/AboutFaqAccordion";
+import { SectionDeepLink } from "@/components/public/SectionDeepLink";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  ArrowUpRight,
-  ShieldCheck,
-  Award,
-  Users,
-  HeartHandshake,
   ArrowRight,
-  Landmark,
-  Eye,
-  Target,
+  ShieldCheck,
   Sparkles,
-  CheckCircle2,
-  Calendar,
-  Compass,
-  Briefcase,
-  TrendingUp,
-  Scale,
-  MapPin,
-  Mail,
-  Building2,
-  ChevronDown,
-  HelpCircle,
-  Check,
   BadgeCheck,
+  Target,
+  Scale,
+  HeartHandshake,
+  CheckCircle2,
+  Compass,
+  Check,
+  MapPin,
+  HelpCircle,
 } from "lucide-react";
 
-type Leader = {
-  name: string;
-  role: string;
-  bio: string;
-  image: string;
-};
+type LeaderView = Leader;
 
-function AboutPageContent() {
-  const searchParams = useSearchParams();
-  const section = searchParams.get("section");
-  const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
-  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
-  const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/about");
-  const content = body?.data ?? null;
+export default async function AboutPage() {
+  const content = await getAboutContent();
 
   const aboutRow = (r: unknown) => (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
   const aval = (r: unknown, k: string, d = "") => {
@@ -82,7 +44,7 @@ function AboutPageContent() {
   };
   const vId = (r: unknown) => aval(r, "title").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-  const CORE_VALUES = (content?.values ?? []).map((r) => ({
+  const CORE_VALUES = (content.values ?? []).map((r) => ({
     id: vId(r),
     title: aval(r, "title"),
     description: aval(r, "description"),
@@ -91,13 +53,13 @@ function AboutPageContent() {
     isFeatured: abool(r, "isFeatured"),
   }));
 
-  const TIMELINE = (content?.timeline ?? []).map((r) => ({
+  const TIMELINE = (content.timeline ?? []).map((r) => ({
     year: aval(r, "year"),
     title: aval(r, "title"),
     description: aval(r, "description"),
   }));
 
-  const REGIONAL_HUBS = (content?.hubs ?? []).map((r) => ({
+  const REGIONAL_HUBS = (content.hubs ?? []).map((r) => ({
     region: aval(r, "region"),
     city: aval(r, "city"),
     location: aval(r, "location"),
@@ -105,97 +67,29 @@ function AboutPageContent() {
     contacts: aarr(r, "contacts").join(" | "),
   }));
 
-  const LEADERS: Leader[] = (content?.leaders ?? []).map((r) => ({
+  const LEADERS: LeaderView[] = (content.leaders ?? []).map((r) => ({
     name: aval(r, "name"),
     role: aval(r, "title"),
     bio: aval(r, "bio"),
     image: aval(r, "image"),
   }));
 
-  const ABOUT_FAQS = (content?.aboutFaqs ?? []).map((r, i) => ({
+  const ABOUT_FAQS = (content.aboutFaqs ?? []).map((r, i) => ({
     id: String(aboutRow(r).id ?? `faq-${i}`),
     question: aval(r, "question"),
     answer: aval(r, "answer"),
   }));
 
-  const PRODUCTS = (content?.products ?? [])
+  const PRODUCTS = (content.products ?? [])
     .map((r) => aval(r, "title"))
     .filter(Boolean);
 
-  // Deep-link support: /about?section=<id> scrolls to that section (re-runs on
-  // same-page query changes, like the products page).
-  useEffect(() => {
-    if (!content || !section) return;
-    const el = document.getElementById(section);
-    if (el) {
-      requestAnimationFrame(() => {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-  }, [content, section]);
-
-  if (!content) {
-    return (
-      <div className="min-h-screen bg-[#fcfdfd]">
-        <StaticHero
-          title="About Ufulu Finance"
-          subtitle="Company Overview · History · Mission & Vision · Governance · Impact"
-        />
-        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
-          {/* Company overview */}
-          <TwoColumnSkeleton />
-
-          {/* History */}
-          <div>
-            <SectionHeadingSkeleton />
-            <TextCardGridSkeleton count={4} className="lg:grid-cols-4" />
-          </div>
-
-          {/* Mission & Vision */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            <Shimmer className="h-72 rounded-[32px]" />
-            <Shimmer className="h-72 rounded-[32px]" />
-          </div>
-
-          {/* Core values */}
-          <div>
-            <SectionHeadingSkeleton />
-            <TextCardGridSkeleton count={6} />
-          </div>
-
-          {/* Regional */}
-          <div>
-            <SectionHeadingSkeleton />
-            <TextCardGridSkeleton count={3} />
-          </div>
-
-          {/* Leadership */}
-          <div>
-            <SectionHeadingSkeleton />
-            <CardGridSkeleton count={3} />
-          </div>
-
-          {/* FAQ */}
-          <div className="mx-auto max-w-4xl">
-            <SectionHeadingSkeleton />
-            <ListRowSkeleton count={5} />
-          </div>
-
-          {/* Impact */}
-          <div className="rounded-[40px] bg-slate-950 p-8 sm:p-12">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Shimmer key={i} className="h-24 rounded-2xl" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
+      <Suspense fallback={null}>
+        <SectionDeepLink />
+      </Suspense>
+
       {/* ── 1. FULL-WIDTH HERO BANNER (Edge-to-Edge) ────────────────── */}
       <section className="relative w-full overflow-hidden bg-slate-950 pt-36 sm:pt-44 pb-20 sm:pb-28">
         <div className="absolute inset-0 z-0">
@@ -534,126 +428,7 @@ function AboutPageContent() {
             </p>
           </div>
 
-          {LEADERS.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-              <p className="text-sm font-semibold text-slate-700">Leadership profiles coming soon</p>
-              <p className="mt-1 text-xs text-slate-500">Our team details will be published shortly.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {LEADERS.map((lead) => (
-                <button
-                  type="button"
-                  key={lead.name}
-                  onClick={() => setSelectedLeader(lead)}
-                  className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col overflow-hidden text-left cursor-pointer"
-                >
-                  {/* Portrait */}
-                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100">
-                    {lead.image ? (
-                      <>
-                        <Image
-                          src={lead.image}
-                          alt=""
-                          fill
-                          aria-hidden
-                          className="object-cover blur-xl scale-125 opacity-40 pointer-events-none"
-                        />
-                        <Image
-                          src={lead.image}
-                          alt={lead.name}
-                          fill
-                          className="relative z-10 object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                      </>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#034DA2]/10 to-[#009FE0]/10 text-4xl font-extrabold text-[#034DA2]">
-                        {lead.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .join("")
-                          .toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card Body */}
-                  <div className="p-5 flex flex-1 flex-col">
-                    <h3 className="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors leading-snug tracking-tight">
-                      {lead.name}
-                    </h3>
-                    <p className="text-xs font-bold text-[#034DA2] mt-0.5 leading-snug">
-                      {lead.role}
-                    </p>
-
-                    {lead.bio && (
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed line-clamp-3">
-                        {lead.bio}
-                      </p>
-                    )}
-
-                    <span className="mt-auto pt-4 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#034DA2]">
-                      Read full profile
-                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-
-          <Dialog
-            open={selectedLeader !== null}
-            onOpenChange={(o) => {
-              if (!o) setSelectedLeader(null);
-            }}
-          >
-            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-              {selectedLeader && (
-                <>
-                  <DialogHeader>
-                    <div className="flex items-center gap-4 text-left">
-                      <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-slate-100">
-                        {selectedLeader.image ? (
-                          <Image
-                            src={selectedLeader.image}
-                            alt={selectedLeader.name}
-                            fill
-                            className="object-cover"
-                            sizes="64px"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-lg font-extrabold text-[#034DA2]">
-                            {selectedLeader.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .filter(Boolean)
-                              .slice(0, 2)
-                              .join("")
-                              .toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <DialogTitle className="text-lg font-extrabold tracking-tight text-slate-900">
-                          {selectedLeader.name}
-                        </DialogTitle>
-                        <DialogDescription className="mt-0.5 text-xs font-bold text-[#034DA2]">
-                          {selectedLeader.role}
-                        </DialogDescription>
-                      </div>
-                    </div>
-                  </DialogHeader>
-                  <p className="whitespace-pre-line text-sm leading-relaxed text-slate-600">
-                    {selectedLeader.bio || "Profile details coming soon."}
-                  </p>
-                </>
-              )}
-            </DialogContent>
-          </Dialog>
+          <LeadershipGrid leaders={LEADERS} />
         </div>
       </section>
 
@@ -673,42 +448,7 @@ function AboutPageContent() {
             </p>
           </div>
 
-          {ABOUT_FAQS.length > 0 && (
-          <div className="space-y-3.5">
-            {ABOUT_FAQS.map((faq) => {
-              const isOpen = openFaqId === faq.id;
-              return (
-                <div
-                  key={faq.id}
-                  className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden transition-all"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaqId(isOpen ? null : faq.id)}
-                    className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/70 transition-colors"
-                  >
-                    <span className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                      {faq.question}
-                    </span>
-                    <div
-                      className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                        isOpen ? "bg-[#034DA2] text-white rotate-180" : "bg-slate-100 text-slate-600"
-                      }`}
-                    >
-                      <ChevronDown className="size-4" />
-                    </div>
-                  </button>
-
-                  {isOpen && (
-                    <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
-                      <p>{faq.answer}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          )}
+          {ABOUT_FAQS.length > 0 && <AboutFaqAccordion faqs={ABOUT_FAQS} />}
 
           <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
             <div>
@@ -808,13 +548,5 @@ function AboutPageContent() {
         </div>
       </section>
     </div>
-  );
-}
-
-export default function AboutPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#fcfdfd]" />}>
-      <AboutPageContent />
-    </Suspense>
   );
 }

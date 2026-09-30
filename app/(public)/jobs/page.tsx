@@ -1,16 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
-import {
-  StaticHero,
-  Shimmer,
-  TwoColumnSkeleton,
-  SectionHeadingSkeleton,
-  ListRowSkeleton,
-  TextCardGridSkeleton,
-} from "@/components/public/ContentSkeletons";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -21,13 +11,10 @@ import {
 } from "lucide-react";
 
 import type { JobRole } from "@/lib/jobsData";
-import { usePublicData } from "@/lib/content-store";
+import { getJobsList } from "@/lib/cms-data";
 
-export default function JobsPage() {
-  const { body } = usePublicData<{ data: unknown[] }>(
-    "/api/public/jobs",
-  );
-  const live = body;
+export default async function JobsPage() {
+  const jobs = await getJobsList();
 
   const jRow = (r: unknown) =>
     (r && typeof r === "object" ? r : {}) as Record<string, unknown>;
@@ -40,8 +27,8 @@ export default function JobsPage() {
     return Array.isArray(v) ? v.map((x) => String(x)) : [];
   };
 
-  const OPEN_ROLES: JobRole[] = live?.data?.length
-    ? (live.data.map((r) => ({
+  const OPEN_ROLES: JobRole[] = jobs.length
+    ? (jobs.map((r) => ({
         id: jval(r, "slug"),
         title: jval(r, "title"),
         department: jval(r, "department"),
@@ -60,36 +47,6 @@ export default function JobsPage() {
         status: jval(r, "status"),
       })) as JobRole[])
     : [];
-
-  if (!live) {
-    return (
-      <div className="min-h-screen bg-[#fcfdfd]">
-        <StaticHero
-          title="Careers at Ufulu"
-          subtitle="Why Work With Us · Open Positions · Growth Opportunities · Apply Online"
-        />
-        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
-          <TwoColumnSkeleton />
-
-          {/* Why work with us */}
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-6">
-              <Shimmer className="aspect-[4/3] w-full rounded-3xl" />
-            </div>
-            <div className="lg:col-span-6">
-              <ListRowSkeleton count={4} />
-            </div>
-          </div>
-
-          {/* Available positions */}
-          <div>
-            <SectionHeadingSkeleton />
-            <TextCardGridSkeleton count={6} />
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">

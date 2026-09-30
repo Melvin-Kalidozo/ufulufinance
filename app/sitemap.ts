@@ -5,19 +5,17 @@ import { SITE_URL, absoluteUrl } from "@/lib/site";
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}`, lastModified: now, changeFrequency: "daily", priority: 1.0 },
-    { url: `${SITE_URL}/products`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/impact`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/jobs`, lastModified: now, changeFrequency: "daily", priority: 0.85 },
-    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "daily", priority: 0.85 },
-    { url: `${SITE_URL}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${SITE_URL}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${SITE_URL}`, changeFrequency: "daily", priority: 1.0 },
+    { url: `${SITE_URL}/products`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/impact`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/jobs`, changeFrequency: "daily", priority: 0.85 },
+    { url: `${SITE_URL}/blog`, changeFrequency: "daily", priority: 0.85 },
+    { url: `${SITE_URL}/faq`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/contact`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${SITE_URL}/terms`, changeFrequency: "yearly", priority: 0.4 },
   ];
 
   let jobRoutes: MetadataRoute.Sitemap = [];

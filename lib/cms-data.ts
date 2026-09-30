@@ -76,6 +76,123 @@ export async function getHomeContent(): Promise<HomeContent> {
   });
 }
 
+export async function getImpactContent() {
+  return cachedPublic("public:impact", [], async () => {
+    const [projects, initiatives, stories] = await Promise.all([
+      prisma.project.findMany({
+        orderBy: { sortOrder: "asc" },
+        where: { status: "PUBLISHED" },
+      }),
+      prisma.communityInitiative.findMany({
+        orderBy: { sortOrder: "asc" },
+        where: { status: "PUBLISHED" },
+      }),
+      prisma.successStory.findMany({
+        orderBy: { sortOrder: "asc" },
+        where: { status: "PUBLISHED" },
+      }),
+    ]);
+    return { projects, initiatives, stories };
+  });
+}
+
+export async function getProductsList() {
+  return cachedPublic("public:products-list", [], async () =>
+    prisma.product.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { sortOrder: "asc" },
+    })
+  );
+}
+
+export async function getProductsData() {
+  return cachedPublic("public:products-data", [], async () => {
+    const [products, audiences, advantages] = await Promise.all([
+      prisma.product.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.productAudience.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.productAdvantage.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+    ]);
+    return { products, audiences, advantages };
+  });
+}
+
+export async function getFaqs() {
+  return cachedPublic("public:faqs-all", [], async () =>
+    prisma.faq.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { sortOrder: "asc" },
+    })
+  );
+}
+
+export async function getAboutContent() {
+  return cachedPublic("public:about", [], async () => {
+    const [settings, values, timeline, hubs, leaders, aboutFaqs, products] =
+      await Promise.all([
+        prisma.websiteSetting.findFirst(),
+        prisma.aboutValue.findMany({
+          orderBy: { sortOrder: "asc" },
+          where: { status: "PUBLISHED" },
+        }),
+        prisma.aboutTimeline.findMany({ orderBy: { sortOrder: "asc" } }),
+        prisma.regionalHub.findMany({
+          orderBy: { sortOrder: "asc" },
+          where: { status: "PUBLISHED" },
+        }),
+        prisma.governanceMember.findMany({
+          orderBy: { sortOrder: "asc" },
+          where: { status: "PUBLISHED" },
+        }),
+        prisma.faq.findMany({
+          where: { status: "PUBLISHED", category: "About Ufulu" },
+          orderBy: { sortOrder: "asc" },
+        }),
+        prisma.product.findMany({
+          where: { status: "PUBLISHED" },
+          orderBy: { sortOrder: "asc" },
+        }),
+      ]);
+    return { settings, values, timeline, hubs, leaders, aboutFaqs, products };
+  });
+}
+
+export async function getJobsList() {
+  return cachedPublic("public:jobs-all", [], async () =>
+    prisma.job.findMany({
+      where: { status: { in: ["OPEN", "CLOSED"] } },
+      orderBy: { createdAt: "asc" },
+    })
+  );
+}
+
+export async function getArticlesList() {
+  return cachedPublic("public:articles-all", [], async () =>
+    prisma.article.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { date: "desc" },
+    })
+  );
+}
+
+export async function getEventsList(limit = 20) {
+  return cachedPublic("public:events-list", [String(limit)], async () =>
+    prisma.event.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { date: "desc" },
+      take: limit,
+    })
+  );
+}
+
 export async function getJobBySlug(slug: string) {
   return cachedPublic(`public:job:${slug}`, [], async () =>
     prisma.job.findFirst({ where: { slug, status: { in: ["OPEN", "CLOSED"] } } })

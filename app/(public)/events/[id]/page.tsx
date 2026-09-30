@@ -1,12 +1,8 @@
-"use client";
-
-import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { EventItem } from "@/lib/blogData";
-import { usePublicData } from "@/lib/content-store";
-import { StaticHero, DetailSkeleton } from "@/components/public/ContentSkeletons";
+import { getEventBySlug, getEventsList } from "@/lib/cms-data";
 import {
   Calendar,
   Clock,
@@ -50,32 +46,20 @@ function toEvent(r: Record<string, unknown>): EventItem {
   };
 }
 
-export default function EventDetailPage({ params }: PageProps) {
-  const { id } = use(params);
-  const { body: detail, loading } = usePublicData<{ data?: Record<string, unknown> }>(
-    `/api/public/events/${encodeURIComponent(id)}`
-  );
-  const { body: list } = usePublicData<{ data: unknown[] }>("/api/public/events?limit=20");
+export default async function EventDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  const [detail, list] = await Promise.all([
+    getEventBySlug(id),
+    getEventsList(20),
+  ]);
 
-  const event: EventItem | undefined = detail?.data ? toEvent(detail.data) : undefined;
-  const others = (list?.data ?? [])
-    .filter((r) => String((r as Record<string, unknown>).slug ?? "") !== id)
+  const event: EventItem | undefined = detail
+    ? toEvent(detail as unknown as Record<string, unknown>)
+    : undefined;
+  const others = list
+    .filter((r) => String((r as unknown as Record<string, unknown>).slug ?? "") !== id)
     .slice(0, 2)
-    .map((r) => toEvent(r as Record<string, unknown>));
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f8f9fa]">
-        <StaticHero
-          title="Community Clinics & Events"
-          subtitle="Upcoming and past Ufulu Finance workshops, forums and gatherings."
-        />
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-          <DetailSkeleton />
-        </div>
-      </div>
-    );
-  }
+    .map((r) => toEvent(r as unknown as Record<string, unknown>));
 
   if (!event) return notFound();
 
