@@ -1,20 +1,16 @@
-"use client";
-
-import { use, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Article } from "@/lib/blogData";
-import { usePublicData } from "@/lib/content-store";
+import { getArticlesList, getArticleBySlug } from "@/lib/cms-data";
 import { resolveEmbed } from "@/lib/embed";
-import { StaticHero, DetailSkeleton } from "@/components/public/ContentSkeletons";
+import { ArticleActions } from "@/components/public/ArticleActions";
 import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
 import {
   Calendar,
   Clock,
   ArrowLeft,
   ArrowRight,
-  Share2,
   Check,
   Quote,
   Sparkles,
@@ -22,7 +18,6 @@ import {
   ChevronRight,
   ShieldCheck,
   CheckCircle2,
-  ThumbsUp,
   Mail,
   Phone,
   MapPin,
@@ -73,50 +68,24 @@ function toArticle(r: Record<string, unknown>): Article {
   };
 }
 
-export default function DedicatedArticlePage({ params }: PageProps) {
-  const resolvedParams = use(params);
-  const slug = resolvedParams.slug;
-  const { body: detail, loading } = usePublicData<{ data?: Record<string, unknown> }>(
-    `/api/public/articles/${encodeURIComponent(slug)}`
-  );
-  const { body: list } = usePublicData<{ data: unknown[] }>("/api/public/articles?limit=20");
+export default async function DedicatedArticlePage({ params }: PageProps) {
+  const { slug } = await params;
+  const [detail, list] = await Promise.all([
+    getArticleBySlug(slug),
+    getArticlesList(),
+  ]);
 
-  const [copied, setCopied] = useState(false);
-  const [liked, setLiked] = useState(false);
-
-  const article: Article | undefined = detail?.data
-    ? toArticle(detail.data)
+  const article: Article | undefined = detail
+    ? toArticle(detail as unknown as Record<string, unknown>)
     : undefined;
-  const relatedArticles = (list?.data ?? [])
-    .filter((r) => String((r as Record<string, unknown>).slug ?? "") !== slug)
+  const relatedArticles = list
+    .filter((r) => String((r as unknown as Record<string, unknown>).slug ?? "") !== slug)
     .slice(0, 3)
-    .map((r) => toArticle(r as Record<string, unknown>));
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#fcfdfd]">
-        <StaticHero
-          title="Insights & News"
-          subtitle="Our Perspective · Practical Business Coaching · Announcements"
-        />
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-          <DetailSkeleton />
-        </div>
-      </div>
-    );
-  }
+    .map((r) => toArticle(r as unknown as Record<string, unknown>));
 
   if (!article) return notFound();
 
   const embed = resolveEmbed(article.embedUrl);
-
-  const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-slate-900">
@@ -198,29 +167,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
 
             {/* Action buttons */}
             <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => setLiked(!liked)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-bold transition-all cursor-pointer ${
-                  liked
-                    ? "bg-[#00A3E0] text-slate-950 border-[#00A3E0]"
-                    : "bg-white/8 border-white/15 text-white hover:bg-white/15"
-                }`}
-              >
-                <ThumbsUp className="size-3.5" />
-                {liked ? "Helpful (1)" : "Helpful"}
-              </button>
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-white text-[11px] font-bold transition-all cursor-pointer hover:bg-white/15"
-              >
-                {copied ? (
-                  <><Check className="size-3.5 text-[#38bdf8]" /><span className="text-[#38bdf8]">Copied!</span></>
-                ) : (
-                  <><Share2 className="size-3.5" /><span>Share</span></>
-                )}
-              </button>
+              <ArticleActions />
               <Link
                 href="/blog"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-white text-[11px] font-bold transition-all hover:bg-white/15"
@@ -326,7 +273,7 @@ export default function DedicatedArticlePage({ params }: PageProps) {
                 <Quote className="absolute -top-3 -left-2 size-20 text-white/5 pointer-events-none" />
                 <Quote className="absolute -bottom-3 -right-2 size-20 text-white/5 pointer-events-none rotate-180" />
                 <p className="relative text-lg sm:text-xl font-medium italic leading-relaxed text-sky-100 mb-4">
-                  "{article.quote.text}"
+                  &ldquo;{article.quote.text}&rdquo;
                 </p>
                 <cite className="text-xs font-black uppercase tracking-wider text-[#38bdf8] not-italic">
                   — {article.quote.author}

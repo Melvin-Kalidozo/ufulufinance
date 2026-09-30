@@ -5,7 +5,7 @@
  * canonical links and Open Graph images always point at the deployed origin.
  */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ufulufinance.com"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.ufulufinance.com"
 ).replace(/\/+$/, "");
 
 export const SITE_NAME = "Ufulu Finance";

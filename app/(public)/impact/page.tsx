@@ -1,17 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
-import { LoanEnquiryDialog } from "@/components/public/LoanEnquiryDialog";
-import {
-  StaticHero,
-  Shimmer,
-  TwoColumnSkeleton,
-  SectionHeadingSkeleton,
-  CardGridSkeleton,
-} from "@/components/public/ContentSkeletons";
-import { usePublicData } from "@/lib/content-store";
+import { getImpactContent } from "@/lib/cms-data";
 import {
   ArrowUpRight,
   ShieldCheck,
@@ -30,9 +20,8 @@ import {
   SunMedium,
 } from "lucide-react";
 
-export default function ImpactPortfolioPage() {
-  const { body } = usePublicData<{ data: Record<string, unknown[]> }>("/api/public/impact");
-  const content = body?.data ?? null;
+export default async function ImpactPortfolioPage() {
+  const content = await getImpactContent();
 
   const iconOf = (title: string): LucideIcon => {
     const t = title.toLowerCase();
@@ -53,7 +42,7 @@ export default function ImpactPortfolioPage() {
   };
   const slugId = (r: unknown) => str(r, "title").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-  const PROJECTS = (content?.projects ?? []).map((r) => ({
+  const PROJECTS = (content.projects ?? []).map((r) => ({
     id: slugId(r),
     title: str(r, "title"),
     category: str(r, "category"),
@@ -64,13 +53,13 @@ export default function ImpactPortfolioPage() {
     icon: iconOf(str(r, "title")),
   }));
 
-  const COMMUNITY_INITIATIVES = (content?.initiatives ?? []).map((r) => ({
+  const COMMUNITY_INITIATIVES = (content.initiatives ?? []).map((r) => ({
     title: str(r, "title"),
     desc: str(r, "description"),
     icon: iconOf(str(r, "title")),
   }));
 
-  const SUCCESS_STORIES = (content?.stories ?? []).map((r) => ({
+  const SUCCESS_STORIES = (content.stories ?? []).map((r) => ({
     name: str(r, "name"),
     image: str(r, "image"),
     enterprise: str(r, "enterprise"),
@@ -80,46 +69,7 @@ export default function ImpactPortfolioPage() {
   }));
 
   if (!content) {
-    return (
-      <div className="min-h-screen bg-[#fcfdfd]">
-        <StaticHero
-          title="Impact & Portfolio"
-          subtitle="Projects, community initiatives and client success stories transforming livelihoods across Malawi."
-        />
-        <div className="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
-          <TwoColumnSkeleton />
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Shimmer key={i} className="h-24 rounded-2xl" />
-            ))}
-          </div>
-
-          {/* Projects */}
-          <div>
-            <SectionHeadingSkeleton />
-            <CardGridSkeleton count={3} />
-          </div>
-
-          {/* Initiatives */}
-          <div className="rounded-[32px] bg-white border border-slate-200 p-8 sm:p-14">
-            <Shimmer className="mb-10 h-6 w-48" />
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <Shimmer key={i} className="h-40 rounded-3xl" />
-              ))}
-            </div>
-          </div>
-
-          {/* Success stories */}
-          <div>
-            <SectionHeadingSkeleton />
-            <CardGridSkeleton count={3} />
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
