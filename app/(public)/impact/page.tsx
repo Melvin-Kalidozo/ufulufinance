@@ -214,16 +214,19 @@ export default async function ImpactPortfolioPage() {
 
       {/* ── 4. COMMUNITY INITIATIVES ─────────────────────────────────── */}
       {COMMUNITY_INITIATIVES.length > 0 && (
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="bg-[#034DA2] text-white rounded-[32px] p-8 sm:p-14 shadow-xl">
-          <div className="max-w-2xl mb-12 space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#009FE0]">
-              <Sparkles className="size-4" />
+      <section className="py-16 sm:py-24 bg-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2.5">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+              <span className="size-2 rounded-full bg-brand-green" />
               <span>Community Initiatives</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Investing Back Into The Communities We Call Home
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Beyond lending — grassroots programmes that create lasting change across Malawi.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -232,15 +235,21 @@ export default async function ImpactPortfolioPage() {
               return (
                 <div
                   key={init.title}
-                  className="bg-white/10 border border-white/15 rounded-3xl p-6 backdrop-blur-xs space-y-3"
+                  className="bg-[#f8fafc] border border-slate-200/80 rounded-3xl p-7 hover:shadow-md hover:border-slate-300 transition-all flex flex-col gap-4"
                 >
-                  <div className="size-12 rounded-2xl bg-[#009FE0] text-white flex items-center justify-center">
+                  <div className="size-12 rounded-2xl bg-[#034DA2]/10 text-[#034DA2] flex items-center justify-center shrink-0">
                     <Icon className="size-6" />
                   </div>
-                  <h3 className="text-base font-bold text-white">{init.title}</h3>
-                  <p className="text-xs text-blue-100/85 leading-relaxed">
-                    {init.desc}
-                  </p>
+                  <div className="space-y-2">
+                    <h3 className="text-base font-bold text-slate-900 leading-snug">{init.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {init.desc}
+                    </p>
+                  </div>
+                  <div className="pt-3 border-t border-slate-200/70 flex items-center gap-1.5 text-[11px] font-semibold text-brand-green uppercase tracking-wide">
+                    <CheckCircle2 className="size-3.5 text-brand-green" />
+                    <span>Active Programme</span>
+                  </div>
                 </div>
               );
             })}
@@ -270,39 +279,42 @@ export default async function ImpactPortfolioPage() {
             {SUCCESS_STORIES.map((story) => (
               <div
                 key={story.name}
-                className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between"
+                className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
               >
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="relative size-14 rounded-full overflow-hidden shrink-0">
-                      <Image
-                        src={story.image}
-                        alt={story.name}
-                        fill
-                        className="object-cover"
-                        sizes="56px"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900">{story.name}</h4>
-                      <span className="text-xs text-[#034DA2] font-semibold block">
-                        {story.enterprise}
-                      </span>
-                      <span className="text-[11px] text-slate-400 block">{story.location}</span>
-                    </div>
-                  </div>
+                  <Quote className="size-8 text-sky-100" />
 
-                  <Quote className="size-6 text-[#009FE0]" />
-
-                  <p className="text-xs text-slate-600 leading-relaxed italic">
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
                     &ldquo;{story.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100">
-                  <span className="text-[11px] font-bold text-[#034DA2]">
-                    {story.stats}
-                  </span>
+                <div className="pt-5 border-t border-slate-100 space-y-3 mt-6">
+                  <div className="flex items-center gap-3.5">
+                    <div className="size-11 rounded-full bg-gradient-to-br from-[#01214A] via-[#034DA2] to-[#00A651] text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm shrink-0 border border-sky-400/30">
+                      <span className="select-none">
+                        {story.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#034DA2] transition-colors truncate">
+                        {story.name}
+                      </h4>
+                      <span className="text-xs text-[#034DA2] font-semibold block truncate">
+                        {story.enterprise}
+                      </span>
+                      <span className="text-[11px] text-slate-400 block truncate">{story.location}</span>
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t border-slate-100">
+                    <span className="text-[11px] font-bold text-[#034DA2]">
+                      {story.stats}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
