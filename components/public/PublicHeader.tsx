@@ -42,6 +42,7 @@ const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/products", menu: "products" },
   { label: "About us", href: "/about", menu: "about" },
+  { label: "Impact", href: "/impact" },
   { label: "Blog", href: "/blog", menu: "blog" },
   { label: "Job listings", href: "/jobs" },
   { label: "Contact us", href: "/contact" },

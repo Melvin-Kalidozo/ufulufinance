@@ -45,24 +45,32 @@ export const metadata = pageMetadata({
   absoluteTitle: true,
 });
 
-const getSectorImage = (title: string, customImage?: string): string => {
+const PRODUCT_AI_IMAGES = [
+  "/images/audience-civil-servants.jpg",
+  "/images/audience-private-sector.jpg",
+  "/images/audience-women-entrepreneurs.jpg",
+  "/images/audience-market-vendors.jpg",
+];
+
+const getSectorImage = (title: string, customImage?: string, index = 0): string => {
   if (
     customImage &&
     typeof customImage === "string" &&
-    customImage.trim() !== ""
+    customImage.trim() !== "" &&
+    !customImage.includes("unsplash.com")
   ) {
     return customImage;
   }
   const t = title.toLowerCase();
   if (t.includes("civil") || t.includes("public")) {
-    return "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-civil-servants.jpg";
   }
   if (
     t.includes("private") ||
     t.includes("corporate") ||
     t.includes("employee")
   ) {
-    return "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-private-sector.jpg";
   }
   if (
     t.includes("village") ||
@@ -70,12 +78,18 @@ const getSectorImage = (title: string, customImage?: string): string => {
     t.includes("solidarity") ||
     t.includes("group")
   ) {
-    return "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80";
+    return "/images/audience-women-entrepreneurs.jpg";
   }
-  if (t.includes("business") || t.includes("msme") || t.includes("retail")) {
-    return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+  if (
+    t.includes("business") ||
+    t.includes("msme") ||
+    t.includes("retail") ||
+    t.includes("market") ||
+    t.includes("vendor")
+  ) {
+    return "/images/audience-market-vendors.jpg";
   }
-  return "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80";
+  return PRODUCT_AI_IMAGES[index % PRODUCT_AI_IMAGES.length];
 };
 
 const getFacilitySlug = (title: string): string => {
@@ -147,7 +161,7 @@ export default async function HomePage() {
     description: String(x.description ?? ""),
   }));
 
-  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x) => {
+  const WHO_WE_EMPOWER = (payload?.sectors ?? []).map((x, i) => {
     const title = String(x.title ?? "");
     return {
       id: String(x.slug ?? x.title ?? "")
@@ -161,6 +175,7 @@ export default async function HomePage() {
       image: getSectorImage(
         title,
         typeof x.image === "string" ? x.image : undefined,
+        i,
       ),
     };
   });
