@@ -102,7 +102,6 @@ export default async function BlogInsightsPage() {
             </p>
 
             <div className="pt-2 flex items-center gap-2.5 text-xs font-medium text-slate-600">
-              <Sparkles className="size-4 text-[#00A3E0] shrink-0" />
               <span>Curated by accredited Malawian financial advisors and agronomists.</span>
             </div>
           </div>
@@ -122,15 +121,8 @@ export default async function BlogInsightsPage() {
               In our latest industry whitepaper, we dissect why rigid commercial bank requirements push over 70% of Malawians to informal money lenders—and how digital-first microfinance creates a safe bridge to prosperity.
             </p>
 
-            <div className="pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
-              <span className="font-semibold text-slate-500">By Chifundo Banda, Managing Director</span>
-              <Link
-                href="/blog/sme-working-capital-2026"
-                className="font-bold text-[#034DA2] hover:text-[#02336e] inline-flex items-center gap-1.5 transition-colors group"
-              >
-                <span>Read Perspective</span>
-                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+            <div className="pt-5 border-t border-slate-100 flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+              <span className="font-semibold text-slate-500">By Mwandida C Pangani, CEO</span>
             </div>
           </div>
         </div>
