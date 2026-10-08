@@ -53,7 +53,7 @@ const DEFAULT_OFFICES: ContactRow[] = [
     label: "Lilongwe Head Office",
     address: "City Centre, Area 3, Lilongwe, Malawi",
     phone: "+265 99 123 4567",
-    email: "info@ufulufinance.com",
+    email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
   },
   {
@@ -61,7 +61,7 @@ const DEFAULT_OFFICES: ContactRow[] = [
     label: "Blantyre Commercial Branch",
     address: "Victoria Avenue, CBD, Blantyre, Malawi",
     phone: "+265 88 123 4567",
-    email: "",
+    email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
   },
   {
@@ -69,7 +69,31 @@ const DEFAULT_OFFICES: ContactRow[] = [
     label: "Mzuzu Regional Office",
     address: "Katoto Commercial Area, Mzuzu, Malawi",
     phone: "+265 99 876 5432",
-    email: "info@ufulufinance.com",
+    email: "loans@ufulufinance.com",
+    hours: "8:00 AM – 5:00 PM",
+  },
+  {
+    city: "Kasungu",
+    label: "Kasungu Region Branch",
+    address: "Kasungu City Offices, Kasungu, Malawi",
+    phone: "+265 998 02 91 46",
+    email: "loans@ufulufinance.com",
+    hours: "8:00 AM – 5:00 PM",
+  },
+  {
+    city: "Zomba",
+    label: "Zomba Region Branch",
+    address: "Zomba Post Office, Zomba, Malawi",
+    phone: "+265 999 67 94 44",
+    email: "loans@ufulufinance.com",
+    hours: "8:00 AM – 5:00 PM",
+  },
+  {
+    city: "Karonga",
+    label: "Karonga Region Branch",
+    address: "Karonga Post Office, Karonga, Malawi",
+    phone: "+265 994 37 54 44",
+    email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
   },
 ];
@@ -78,6 +102,9 @@ const OFFICE_COORDINATES: Record<string, { lat: number; lng: number }> = {
   lilongwe: { lat: -13.962612, lng: 33.774119 },
   blantyre: { lat: -15.786111, lng: 35.005833 },
   mzuzu: { lat: -11.458925, lng: 34.015142 },
+  kasungu: { lat: -13.009200, lng: 33.467700 },
+  zomba: { lat: -15.384800, lng: 35.318800 },
+  karonga: { lat: -9.936000, lng: 33.933300 },
 };
 
 function getOfficeCoordinates(office: ContactRow | null): { lat: number; lng: number } {
@@ -91,6 +118,15 @@ function getOfficeCoordinates(office: ContactRow | null): { lat: number; lng: nu
   }
   if (city.includes("mzuzu") || label.includes("mzuzu") || address.includes("mzuzu")) {
     return OFFICE_COORDINATES.mzuzu;
+  }
+  if (city.includes("kasungu") || label.includes("kasungu") || address.includes("kasungu")) {
+    return OFFICE_COORDINATES.kasungu;
+  }
+  if (city.includes("zomba") || label.includes("zomba") || address.includes("zomba")) {
+    return OFFICE_COORDINATES.zomba;
+  }
+  if (city.includes("karonga") || label.includes("karonga") || address.includes("karonga")) {
+    return OFFICE_COORDINATES.karonga;
   }
   return OFFICE_COORDINATES.lilongwe;
 }
@@ -118,8 +154,30 @@ export default function ContactPage() {
         o && typeof o === "object" ? (o as ContactRow) : {},
       )
     : [];
-  const offices: ContactRow[] =
-    rawOffices.length > 0 ? rawOffices : DEFAULT_OFFICES;
+  // Merge: use DB offices but patch any stale/missing fields from our defaults,
+  // then append any city not already in the DB (e.g. Kasungu, Zomba, Karonga).
+  const offices: ContactRow[] = (() => {
+    if (rawOffices.length === 0) return DEFAULT_OFFICES;
+    // Build a lookup of defaults by city key for patching
+    const defaultByCity = new Map(
+      DEFAULT_OFFICES.map((d) => [String(d.city ?? "").toLowerCase().trim(), d]),
+    );
+    // Patch each DB office: fill blank email or replace stale info@ with loans@
+    const patched = rawOffices.map((o) => {
+      const key = String(o.city ?? "").toLowerCase().trim();
+      const def = defaultByCity.get(key);
+      if (!def) return o;
+      const dbEmail = String(o.email ?? "").trim();
+      const needsEmail = !dbEmail || dbEmail === "info@ufulufinance.com";
+      return needsEmail ? { ...o, email: def.email } : o;
+    });
+    // Append cities not yet in DB
+    const dbCities = new Set(patched.map((o) => String(o.city ?? "").toLowerCase().trim()));
+    const missing = DEFAULT_OFFICES.filter(
+      (d) => !dbCities.has(String(d.city ?? "").toLowerCase().trim()),
+    );
+    return [...patched, ...missing];
+  })();
   const socials: ContactRow[] = Array.isArray(settings?.socialLinks)
     ? (settings?.socialLinks as unknown[]).map((o) =>
         o && typeof o === "object" ? (o as ContactRow) : {},
@@ -365,7 +423,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200/90 max-w-lg mx-auto font-normal leading-relaxed">
             Our accredited loan advisors are ready to assist you in Lilongwe,
-            Blantyre, and Mzuzu.
+            Blantyre, Mzuzu, Kasungu, Zomba, and Karonga.
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-xs font-medium text-white shadow-xs">
@@ -392,8 +450,9 @@ export default function ContactPage() {
                   </h2>
                   <p className="mt-3 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs">
                     Our accredited loan officers and client relationship
-                    managers are available across Lilongwe, Blantyre, and Mzuzu
-                    to provide rapid, judgment-free financial advisory.
+                    managers are available across Lilongwe, Blantyre, Mzuzu,
+                    Kasungu, Zomba, and Karonga to provide rapid, judgment-free
+                    financial advisory.
                   </p>
 
                   <div className="mt-8 space-y-6">

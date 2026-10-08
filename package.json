@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.0",
@@ -45,5 +46,8 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   }
 }
