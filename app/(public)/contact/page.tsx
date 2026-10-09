@@ -51,10 +51,12 @@ const DEFAULT_OFFICES: ContactRow[] = [
   {
     city: "Lilongwe",
     label: "Lilongwe Head Office",
-    address: "City Centre, Area 3, Lilongwe, Malawi",
+    address: "Mandala Road, Area 3, Lilongwe, Malawi",
     phone: "+265 99 123 4567",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -13.98774,
+    lng: 33.76651,
   },
   {
     city: "Blantyre",
@@ -63,6 +65,8 @@ const DEFAULT_OFFICES: ContactRow[] = [
     phone: "+265 88 123 4567",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -15.78853,
+    lng: 35.00483,
   },
   {
     city: "Mzuzu",
@@ -71,6 +75,8 @@ const DEFAULT_OFFICES: ContactRow[] = [
     phone: "+265 99 876 5432",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -11.45916,
+    lng: 34.00955,
   },
   {
     city: "Kasungu",
@@ -79,6 +85,8 @@ const DEFAULT_OFFICES: ContactRow[] = [
     phone: "+265 998 02 91 46",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -13.03199,
+    lng: 33.48286,
   },
   {
     city: "Zomba",
@@ -87,6 +95,8 @@ const DEFAULT_OFFICES: ContactRow[] = [
     phone: "+265 999 67 94 44",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -15.3858,
+    lng: 35.319,
   },
   {
     city: "Karonga",
@@ -95,20 +105,40 @@ const DEFAULT_OFFICES: ContactRow[] = [
     phone: "+265 994 37 54 44",
     email: "loans@ufulufinance.com",
     hours: "8:00 AM – 5:00 PM",
+    lat: -9.9386,
+    lng: 33.9269,
   },
 ];
 
 const OFFICE_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  lilongwe: { lat: -13.962612, lng: 33.774119 },
-  blantyre: { lat: -15.786111, lng: 35.005833 },
-  mzuzu: { lat: -11.458925, lng: 34.015142 },
-  kasungu: { lat: -13.009200, lng: 33.467700 },
-  zomba: { lat: -15.384800, lng: 35.318800 },
-  karonga: { lat: -9.936000, lng: 33.933300 },
+  lilongwe: { lat: -13.98774, lng: 33.76651 },
+  blantyre: { lat: -15.78853, lng: 35.00483 },
+  mzuzu: { lat: -11.45916, lng: 34.00955 },
+  kasungu: { lat: -13.03199, lng: 33.48286 },
+  zomba: { lat: -15.3858, lng: 35.319 },
+  karonga: { lat: -9.9386, lng: 33.9269 },
 };
 
 function getOfficeCoordinates(office: ContactRow | null): { lat: number; lng: number } {
-  if (!office) return { lat: -13.962612, lng: 33.774119 };
+  if (!office) return OFFICE_COORDINATES.lilongwe;
+
+  // 1. Check if office contains direct lat / lng values (number or numeric string)
+  if (
+    office.lat !== undefined &&
+    office.lat !== null &&
+    office.lat !== "" &&
+    office.lng !== undefined &&
+    office.lng !== null &&
+    office.lng !== ""
+  ) {
+    const parsedLat = typeof office.lat === "number" ? office.lat : parseFloat(String(office.lat));
+    const parsedLng = typeof office.lng === "number" ? office.lng : parseFloat(String(office.lng));
+    if (!Number.isNaN(parsedLat) && !Number.isNaN(parsedLng)) {
+      return { lat: parsedLat, lng: parsedLng };
+    }
+  }
+
+  // 2. City / Address fallback resolution
   const city = String(office.city ?? "").toLowerCase();
   const label = String(office.label ?? "").toLowerCase();
   const address = String(office.address ?? "").toLowerCase();
@@ -162,14 +192,23 @@ export default function ContactPage() {
     const defaultByCity = new Map(
       DEFAULT_OFFICES.map((d) => [String(d.city ?? "").toLowerCase().trim(), d]),
     );
-    // Patch each DB office: fill blank email or replace stale info@ with loans@
+    // Patch each DB office: fill blank email or replace stale info@ with loans@, and ensure lat/lng are populated
     const patched = rawOffices.map((o) => {
       const key = String(o.city ?? "").toLowerCase().trim();
       const def = defaultByCity.get(key);
       if (!def) return o;
       const dbEmail = String(o.email ?? "").trim();
       const needsEmail = !dbEmail || dbEmail === "info@ufulufinance.com";
-      return needsEmail ? { ...o, email: def.email } : o;
+      const email = needsEmail ? def.email : o.email;
+      const lat =
+        o.lat !== undefined && o.lat !== null && o.lat !== ""
+          ? o.lat
+          : def.lat;
+      const lng =
+        o.lng !== undefined && o.lng !== null && o.lng !== ""
+          ? o.lng
+          : def.lng;
+      return { ...o, email, lat, lng };
     });
     // Append cities not yet in DB
     const dbCities = new Set(patched.map((o) => String(o.city ?? "").toLowerCase().trim()));

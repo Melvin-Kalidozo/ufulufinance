@@ -2,16 +2,14 @@
  * Seed: Website Settings — Offices
  *
  * Updates (upserts) the singleton WebsiteSetting row with the full, current
- * list of Ufulu Finance branches.  Run with:
+ * list of Ufulu Finance branches including verified GPS coordinates (lat, lng).
+ * Run with:
  *
  *   npx prisma db seed
  *
  * or directly:
  *
  *   node prisma/seed.mjs
- *
- * NOTE: Coordinates (lat/lng) are resolved client-side from OFFICE_COORDINATES
- * in app/(public)/contact/page.tsx and are NOT stored in the database.
  */
 
 import "dotenv/config";
@@ -33,10 +31,12 @@ const offices = [
   {
     city: "Lilongwe",
     label: "Lilongwe Head Office",
-    address: "City Centre, Area 3, Lilongwe, Malawi",
+    address: "Mandala Road, Area 3, Lilongwe, Malawi",
     phone: "+265 99 123 4567",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -13.98774,
+    lng: 33.76651,
   },
   {
     city: "Blantyre",
@@ -44,7 +44,9 @@ const offices = [
     address: "Victoria Avenue, CBD, Blantyre, Malawi",
     phone: "+265 88 123 4567",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -15.78853,
+    lng: 35.00483,
   },
   {
     city: "Mzuzu",
@@ -52,7 +54,9 @@ const offices = [
     address: "Katoto Commercial Area, Mzuzu, Malawi",
     phone: "+265 99 876 5432",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -11.45916,
+    lng: 34.00955,
   },
   {
     city: "Kasungu",
@@ -60,7 +64,9 @@ const offices = [
     address: "Kasungu City Offices, Kasungu, Malawi",
     phone: "+265 998 02 91 46",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -13.03199,
+    lng: 33.48286,
   },
   {
     city: "Zomba",
@@ -68,7 +74,9 @@ const offices = [
     address: "Zomba Post Office, Zomba, Malawi",
     phone: "+265 999 67 94 44",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -15.3858,
+    lng: 35.319,
   },
   {
     city: "Karonga",
@@ -76,7 +84,9 @@ const offices = [
     address: "Karonga Post Office, Karonga, Malawi",
     phone: "+265 994 37 54 44",
     email: "loans@ufulufinance.com",
-    hours: "8:00 AM \u2013 5:00 PM",
+    hours: "8:00 AM – 5:00 PM",
+    lat: -9.9386,
+    lng: 33.9269,
   },
 ];
 
@@ -91,14 +101,14 @@ async function main() {
       phone: "+265 99 123 4567",
       addressLine1: "City Centre, Area 3, Lilongwe, Malawi",
       addressLine2: "Lilongwe",
-      officeHours: "Mon \u2013 Fri, 8:00 AM \u2013 5:00 PM",
+      officeHours: "Mon – Fri, 8:00 AM – 5:00 PM",
       mapEmbedUrl: "",
       offices,
     },
   });
 
   console.log("Updated WebsiteSetting id=" + result.id + " with " + offices.length + " offices:");
-  offices.forEach((o) => console.log("  * " + o.label + " -- " + o.phone + " -- " + o.email));
+  offices.forEach((o) => console.log("  * " + o.label + " -- " + o.phone + " -- " + o.email + " (lat: " + o.lat + ", lng: " + o.lng + ")"));
 }
 
 main()

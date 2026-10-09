@@ -60,6 +60,8 @@ type OfficeRow = {
   phone: string;
   email: string;
   hours: string;
+  lat?: string;
+  lng?: string;
 };
 type SocialRow = { platform: string; name: string; url: string };
 
@@ -70,6 +72,8 @@ const EMPTY_OFFICE: OfficeRow = {
   phone: "",
   email: "",
   hours: "",
+  lat: "",
+  lng: "",
 };
 const EMPTY_SOCIAL: SocialRow = { platform: "facebook", name: "", url: "" };
 
@@ -160,6 +164,8 @@ export function SettingsManager() {
             phone: strOf(o, "phone"),
             email: strOf(o, "email"),
             hours: strOf(o, "hours"),
+            lat: strOf(o, "lat"),
+            lng: strOf(o, "lng"),
           })),
         );
         const rawSocials = Array.isArray(row.socialLinks)
@@ -495,6 +501,8 @@ export function SettingsManager() {
                           ["phone", "Phone"],
                           ["email", "Email"],
                           ["hours", "Hours"],
+                          ["lat", "Latitude"],
+                          ["lng", "Longitude"],
                         ] as const
                       ).map(([key, label]) => (
                         <div key={key}>
@@ -502,7 +510,7 @@ export function SettingsManager() {
                             {label}
                           </Label>
                           <Input
-                            value={office[key]}
+                            value={office[key] ?? ""}
                             onChange={(e) =>
                               updateOffice(i, key, e.target.value)
                             }
