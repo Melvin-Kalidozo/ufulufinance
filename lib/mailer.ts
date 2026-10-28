@@ -57,7 +57,18 @@ export function brandShell(body: string): string {
     </div>`;
 }
 
-export async function sendMail(to: string, subject: string, html: string) {
+export type MailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType?: string;
+};
+
+export async function sendMail(
+  to: string,
+  subject: string,
+  html: string,
+  options: { attachments?: MailAttachment[] } = {}
+) {
   const t = getTransporter();
   if (!t) {
     console.log(
@@ -72,6 +83,7 @@ export async function sendMail(to: string, subject: string, html: string) {
     to,
     subject,
     html,
+    ...(options.attachments?.length ? { attachments: options.attachments } : {}),
   });
   return { devFallback: false };
 }

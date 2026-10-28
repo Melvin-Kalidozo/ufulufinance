@@ -7,6 +7,8 @@ import { isValidEmail, isValidPhone } from "@/lib/validators";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { brandShell, escapeHtml, sendMail } from "@/lib/mailer";
 import { getNotificationRecipient } from "@/lib/notify";
+import { SITE_URL } from "@/lib/site";
+import { signApplicationCvToken } from "@/lib/job-cv-token";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +46,7 @@ export async function POST(
     if (!cv || !(cv instanceof File)) throw new Error("missing");
     cvBuffer = await readDocument(cv);
   } catch (e) {
-    return fail(e instanceof Error ? e.message : "Please attach your CV (PDF, DOC or DOCX, max 5 MB).");
+    return fail(e instanceof Error ? e.message : "Please attach your CV (PDF, max 5 MB).");
   }
 
   let upload;
@@ -69,23 +71,48 @@ export async function POST(
     },
   });
 
+  const safeName =
+    application.name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || `applicant-${application.id}`;
+  const dashboardUrl = `${SITE_URL}/admin/enquiries?tab=applications`;
+
+  let cvViewUrl = upload.secureUrl;
+  try {
+    const cvToken = signApplicationCvToken(application.id);
+    cvViewUrl = `${SITE_URL}/api/public/job-applications/${application.id}/cv.pdf?token=${encodeURIComponent(cvToken)}`;
+  } catch (e) {
+    console.error("[cv-link]", e);
+  }
+
   const html = brandShell(`
     <p style="margin:0 0 16px;color:#0f172a;font-size:16px;font-weight:700;">New job application — ${escapeHtml(job.title)}</p>
     <table role="presentation" style="width:100%;border-collapse:collapse;">
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;width:180px;">Name</td><td style="padding:8px 12px;color:#0f172a;font-weight:600;">${escapeHtml(application.name)}</td></tr>
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">Email</td><td style="padding:8px 12px;color:#0f172a;font-weight:600;">${escapeHtml(application.email)}</td></tr>
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">Phone</td><td style="padding:8px 12px;color:#0f172a;font-weight:600;">${escapeHtml(application.phone ?? "—")}</td></tr>
-      <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">CV</td><td style="padding:8px 12px;"><a href="${escapeHtml(upload.secureUrl)}" style="color:#034DA2;">Download CV</a></td></tr>
+      <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">CV</td><td style="padding:8px 12px;"><a href="${escapeHtml(cvViewUrl)}" style="color:#034DA2;font-weight:600;">View CV (PDF)</a></td></tr>
     </table>
-    <p style="margin:16px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
+    <p style="margin:16px 0 0;color:#475569;font-size:12px;">The applicant's CV is attached to this email as a PDF.</p>
+    <p style="margin:12px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
+    <div style="margin:24px 0 0;">
+      <a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background-color:#034DA2;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:12px 22px;border-radius:8px;">View in Dashboard</a>
+    </div>
+    <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Open the Job Applications tab and search for ${escapeHtml(application.name)} or ${escapeHtml(application.email)}.</p>
   `);
   const adminTo = await getNotificationRecipient("job");
   after(() =>
-    sendMail(
-      adminTo,
-      `New job application — ${job.title}`,
-      html
-    ).catch((e) => console.error("[mail]", e))
+    sendMail(adminTo, `New job application — ${job.title}`, html, {
+      attachments: [
+        {
+          filename: `${safeName}-cv.pdf`,
+          content: cvBuffer,
+          contentType: "application/pdf",
+        },
+      ],
+    }).catch((e) => console.error("[mail]", e))
   );
 
   const confirmHtml = brandShell(`

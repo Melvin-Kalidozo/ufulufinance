@@ -11,8 +11,11 @@ const TABS = [
   { value: "applications", label: "Job Applications" },
 ];
 
-export function EnquiriesTabs() {
-  const [active, setActive] = useState("loan");
+export function EnquiriesTabs({ initialTab }: { initialTab?: string }) {
+  const [active, setActive] = useState(() => {
+    const match = TABS.find((tab) => tab.value === initialTab);
+    return match?.value ?? "loan";
+  });
   return (
     <div className="space-y-4">
       <Tabs value={active} onValueChange={setActive}>

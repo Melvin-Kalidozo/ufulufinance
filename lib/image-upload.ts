@@ -10,11 +10,7 @@ export const IMAGE_QUALITY = 80;
 
 export const ALLOWED_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp"];
 
-export const ALLOWED_DOC_MIMES = [
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-];
+export const ALLOWED_DOC_MIMES = ["application/pdf"];
 export const MAX_DOC_MB = 5;
 
 export type OptimizedImage = { buffer: Buffer; mime: "image/webp"; ext: string };
@@ -59,14 +55,20 @@ export async function optimizeImage(file: File): Promise<OptimizedImage> {
   return { buffer, mime: "image/webp", ext: "webp" };
 }
 
-/** Validates a CV/document upload (PDF, DOC, DOCX) and returns its raw buffer. */
+/** Validates a PDF CV upload and returns its raw buffer. */
 export async function readDocument(file: File): Promise<Buffer> {
   const mime = mimeOf(file);
-  if (!ALLOWED_DOC_MIMES.includes(mime) && !file.name.toLowerCase().endsWith(".pdf")) {
-    throw new UploadError("CV must be a PDF, DOC or DOCX file.");
+  const isPdf = ALLOWED_DOC_MIMES.includes(mime) || file.name.toLowerCase().endsWith(".pdf");
+  if (!isPdf) {
+    throw new UploadError("CV must be a PDF file.");
   }
   assertFileSize(file, MAX_DOC_MB, "CV");
-  return Buffer.from(await file.arrayBuffer());
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  if (!buffer.subarray(0, 1024).toString("latin1").includes("%PDF-")) {
+    throw new UploadError("CV must be a valid PDF file.");
+  }
+  return buffer;
 }
 
 export type UploadFolder =
