@@ -8,19 +8,49 @@ function signingSecret(): string {
   return secret;
 }
 
-export function signApplicationCvToken(applicationId: number): string {
+export type JobDocumentKind = "cv" | "cover-letter";
+
+export function signApplicationDocumentToken(
+  applicationId: number,
+  kind: JobDocumentKind
+): string {
   return createHmac("sha256", signingSecret())
-    .update(`job-application-cv:${applicationId}`)
+    .update(`job-application-${kind}:${applicationId}`)
     .digest("base64url");
+}
+
+export function verifyApplicationDocumentToken(
+  applicationId: number,
+  kind: JobDocumentKind,
+  token: string
+): boolean {
+  if (!token) return false;
+  const expected = Buffer.from(
+    signApplicationDocumentToken(applicationId, kind)
+  );
+  const provided = Buffer.from(token);
+  if (expected.length !== provided.length) return false;
+  return timingSafeEqual(expected, provided);
+}
+
+export function signApplicationCvToken(applicationId: number): string {
+  return signApplicationDocumentToken(applicationId, "cv");
 }
 
 export function verifyApplicationCvToken(
   applicationId: number,
   token: string
 ): boolean {
-  if (!token) return false;
-  const expected = Buffer.from(signApplicationCvToken(applicationId));
-  const provided = Buffer.from(token);
-  if (expected.length !== provided.length) return false;
-  return timingSafeEqual(expected, provided);
+  return verifyApplicationDocumentToken(applicationId, "cv", token);
+}
+
+export function signApplicationCoverLetterToken(applicationId: number): string {
+  return signApplicationDocumentToken(applicationId, "cover-letter");
+}
+
+export function verifyApplicationCoverLetterToken(
+  applicationId: number,
+  token: string
+): boolean {
+  return verifyApplicationDocumentToken(applicationId, "cover-letter", token);
 }

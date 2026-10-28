@@ -291,7 +291,9 @@ model JobApplication {
   name        String
   email       String
   phone       String?
-  coverNote   String?
+  coverNote   String? // legacy typed cover note (kept for existing applications)
+  coverLetterUrl String?
+  coverLetterPublicId String?
   cvUrl       String
   cvPublicId  String?
   status      JobApplicationStatus @default(PENDING)

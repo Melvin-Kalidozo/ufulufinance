@@ -56,13 +56,17 @@ export function JobApplicationDialog({
     phone: "",
     location: job.location.includes("Lilongwe") ? "Lilongwe" : job.location.includes("Blantyre") ? "Blantyre" : "National",
     experienceYears: "3-5",
-    coverLetter: "",
   });
 
   const [cvFile, setCvFile] = useState<{ name: string; size: string } | null>(null);
   const [cvRaw, setCvRaw] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [coverLetterFile, setCoverLetterFile] = useState<{ name: string; size: string } | null>(null);
+  const [coverLetterRaw, setCoverLetterRaw] = useState<File | null>(null);
+  const [coverLetterError, setCoverLetterError] = useState("");
+  const coverLetterInputRef = useRef<HTMLInputElement | null>(null);
 
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -77,32 +81,40 @@ export function JobApplicationDialog({
     setTouched((prev) => ({ ...prev, [field]: true }));
   }
 
+  function validatePdfFile(file: File, label: string): string {
+    if (file.size > 5 * 1024 * 1024) {
+      return "File exceeds 5MB. Please upload a PDF under 5MB.";
+    }
+    if (
+      file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+      return `Only PDF documents (.pdf) are accepted for ${label} uploads.`;
+    }
+    return "";
+  }
+
+  function formatFileSize(file: File): string {
+    return file.size > 1024 * 1024
+      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+      : `${Math.round(file.size / 1024)} KB`;
+  }
+
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     setCvError("");
     if (!file) return;
 
-    // Validate size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setCvError("File exceeds 5MB. Please upload a PDF under 5MB.");
-      return;
-    }
-
-    // Validate type (strictly PDF)
-    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      setCvError("Only PDF documents (.pdf) are accepted for CV uploads.");
+    const error = validatePdfFile(file, "CV");
+    if (error) {
+      setCvError(error);
       return;
     }
 
     setCvRaw(file);
-    const sizeFormatted =
-      file.size > 1024 * 1024
-        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
-        : `${Math.round(file.size / 1024)} KB`;
-
     setCvFile({
       name: file.name,
-      size: sizeFormatted,
+      size: formatFileSize(file),
     });
   }
 
@@ -112,6 +124,33 @@ export function JobApplicationDialog({
     setCvError("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  }
+
+  function handleCoverLetterChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    setCoverLetterError("");
+    if (!file) return;
+
+    const error = validatePdfFile(file, "cover letter");
+    if (error) {
+      setCoverLetterError(error);
+      return;
+    }
+
+    setCoverLetterRaw(file);
+    setCoverLetterFile({
+      name: file.name,
+      size: formatFileSize(file),
+    });
+  }
+
+  function handleRemoveCoverLetter() {
+    setCoverLetterFile(null);
+    setCoverLetterRaw(null);
+    setCoverLetterError("");
+    if (coverLetterInputRef.current) {
+      coverLetterInputRef.current.value = "";
     }
   }
 
@@ -133,12 +172,7 @@ export function JobApplicationDialog({
       ? "Please enter a valid phone number"
       : "",
     cv: !cvFile ? "CV / Resume (PDF) is required" : "",
-    coverLetter:
-      !form.coverLetter.trim()
-        ? "Please provide a short cover note"
-        : form.coverLetter.trim().length < 20
-        ? `Please enter at least 20 characters (${20 - form.coverLetter.trim().length} more needed)`
-        : "",
+    coverLetter: !coverLetterFile ? "Cover Letter (PDF) is required" : "",
   };
 
   const isFormValid =
@@ -149,7 +183,7 @@ export function JobApplicationDialog({
     setTouched({ name: true, email: true, phone: true, cv: true, coverLetter: true });
 
     if (!isFormValid) {
-      toast.error("Please fill in all required fields and attach your CV.");
+      toast.error("Please fill in all required fields and attach your CV and cover letter.");
       return;
     }
 
@@ -159,8 +193,8 @@ export function JobApplicationDialog({
       fd.append("name", form.name);
       fd.append("email", form.email);
       fd.append("phone", form.phone);
-      fd.append("coverNote", form.coverLetter);
       if (cvRaw) fd.append("cv", cvRaw);
+      if (coverLetterRaw) fd.append("coverLetter", coverLetterRaw);
 
       const res = await fetch(`/api/public/jobs/${encodeURIComponent(job.id)}/apply`, {
         method: "POST",
@@ -188,11 +222,15 @@ export function JobApplicationDialog({
       phone: "",
       location: "Lilongwe",
       experienceYears: "3-5",
-      coverLetter: "",
     });
     setCvFile(null);
     setCvRaw(null);
     setCvError("");
+    setCoverLetterFile(null);
+    setCoverLetterRaw(null);
+    setCoverLetterError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (coverLetterInputRef.current) coverLetterInputRef.current.value = "";
     setTouched({});
     setOpen(false);
   }
@@ -370,103 +408,32 @@ export function JobApplicationDialog({
               </div>
 
               {/* ── CV / Resume Upload (PDF Max 5MB) ── */}
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-slate-700">
-                    Curriculum Vitae (CV) <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[10px] text-slate-400">PDF only, max 5MB</span>
-                </div>
+              <PdfUploadField
+                id="cv-upload-input"
+                label="Curriculum Vitae (CV)"
+                prompt="Click or drag to attach your CV (PDF)"
+                hint="Max file size: 5MB • Comprehensive work history"
+                file={cvFile}
+                error={cvError || errors.cv}
+                showError={Boolean(cvError) || touched.cv}
+                inputRef={fileInputRef}
+                onSelect={handleFileChange}
+                onRemove={handleRemoveFile}
+              />
 
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                  className="hidden"
-                  id="cv-upload-input"
-                />
-
-                {!cvFile ? (
-                  <label
-                    htmlFor="cv-upload-input"
-                    className={`flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed rounded-2xl bg-slate-50 hover:bg-sky-50/30 transition-colors cursor-pointer text-center group ${
-                      touched.cv && errors.cv ? "border-red-400" : "border-slate-200 hover:border-[#034DA2]"
-                    }`}
-                  >
-                    <div className="size-8 rounded-full bg-slate-100 group-hover:bg-blue-100 flex items-center justify-center text-slate-500 group-hover:text-[#034DA2] transition-colors">
-                      <UploadCloud className="size-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-slate-700">
-                        Click or drag to attach your CV (PDF)
-                      </p>
-                      <p className="text-[10px] text-slate-400 mt-0.5">
-                        Max file size: 5MB &bull; Comprehensive work history
-                      </p>
-                    </div>
-                  </label>
-                ) : (
-                  <div className="flex items-center justify-between p-3 rounded-2xl bg-sky-50/80 border border-sky-200">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="size-10 rounded-lg bg-[#034DA2] text-white flex items-center justify-center shrink-0">
-                        <FileText className="size-5 text-[#009FE0]" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs font-bold text-slate-900 truncate">
-                          {cvFile.name}
-                        </p>
-                        <p className="text-[10px] text-sky-800 font-medium">
-                          {cvFile.size} &bull; Validated PDF ready to submit
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleRemoveFile}
-                      className="size-7 rounded-full bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center shrink-0 border border-slate-200 shadow-xs transition-colors cursor-pointer"
-                      title="Remove file"
-                    >
-                      <X className="size-3.5" />
-                    </button>
-                  </div>
-                )}
-
-                {(cvError || (touched.cv && errors.cv)) && (
-                  <p className="text-[11px] text-red-500 flex items-center gap-1 font-medium pt-0.5">
-                    <AlertCircle className="size-3" /> {cvError || errors.cv}
-                  </p>
-                )}
-              </div>
-
-              {/* Cover Letter / Motivation Note */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="job-cover" className="block text-xs font-bold text-slate-700">
-                    Cover Letter &amp; Alignment <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[10px] text-slate-400">Min 20 characters</span>
-                </div>
-                <textarea
-                  id="job-cover"
-                  name="coverLetter"
-                  rows={3}
-                  value={form.coverLetter}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("coverLetter")}
-                  placeholder="Explain why your experience matches this role and how you will advance Ufulu's ethical credit mission..."
-                  className={`${inputBase} ${
-                    touched.coverLetter && errors.coverLetter
-                      ? "border-red-400 bg-red-50/20 focus:border-red-500"
-                      : "border-slate-200 focus:border-[#034DA2]"
-                  } resize-none`}
-                />
-                {touched.coverLetter && errors.coverLetter && (
-                  <p className="text-[11px] text-red-500 flex items-center gap-1 font-medium">
-                    <AlertCircle className="size-3" /> {errors.coverLetter}
-                  </p>
-                )}
-              </div>
+              {/* ── Cover Letter Upload (PDF Max 5MB) ── */}
+              <PdfUploadField
+                id="cover-letter-upload-input"
+                label="Cover Letter"
+                prompt="Click or drag to attach your cover letter (PDF)"
+                hint="Max file size: 5MB • Explain your alignment with the role"
+                file={coverLetterFile}
+                error={coverLetterError || errors.coverLetter}
+                showError={Boolean(coverLetterError) || touched.coverLetter}
+                inputRef={coverLetterInputRef}
+                onSelect={handleCoverLetterChange}
+                onRemove={handleRemoveCoverLetter}
+              />
 
               {/* Submit Action */}
               <div className="pt-2">
@@ -502,5 +469,98 @@ export function JobApplicationDialog({
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function PdfUploadField({
+  id,
+  label,
+  prompt,
+  hint,
+  file,
+  error,
+  showError,
+  inputRef,
+  onSelect,
+  onRemove,
+}: {
+  id: string;
+  label: string;
+  prompt: string;
+  hint: string;
+  file: { name: string; size: string } | null;
+  error: string;
+  showError: boolean;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  onSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="space-y-1.5 pt-1">
+      <div className="flex items-center justify-between">
+        <label className="block text-xs font-bold text-slate-700">
+          {label} <span className="text-red-500">*</span>
+        </label>
+        <span className="text-[10px] text-slate-400">PDF only, max 5MB</span>
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="application/pdf"
+        onChange={onSelect}
+        className="hidden"
+        id={id}
+      />
+
+      {!file ? (
+        <label
+          htmlFor={id}
+          className={`flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed rounded-2xl bg-slate-50 hover:bg-sky-50/30 transition-colors cursor-pointer text-center group ${
+            showError && error
+              ? "border-red-400"
+              : "border-slate-200 hover:border-[#034DA2]"
+          }`}
+        >
+          <div className="size-8 rounded-full bg-slate-100 group-hover:bg-blue-100 flex items-center justify-center text-slate-500 group-hover:text-[#034DA2] transition-colors">
+            <UploadCloud className="size-4" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-slate-700">{prompt}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">{hint}</p>
+          </div>
+        </label>
+      ) : (
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-sky-50/80 border border-sky-200">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="size-10 rounded-lg bg-[#034DA2] text-white flex items-center justify-center shrink-0">
+              <FileText className="size-5 text-[#009FE0]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-slate-900 truncate">
+                {file.name}
+              </p>
+              <p className="text-[10px] text-sky-800 font-medium">
+                {file.size} • Validated PDF ready to submit
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onRemove}
+            className="size-7 rounded-full bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center shrink-0 border border-slate-200 shadow-xs transition-colors cursor-pointer"
+            title="Remove file"
+          >
+            <X className="size-3.5" />
+          </button>
+        </div>
+      )}
+
+      {showError && error && (
+        <p className="text-[11px] text-red-500 flex items-center gap-1 font-medium pt-0.5">
+          <AlertCircle className="size-3" /> {error}
+        </p>
+      )}
+    </div>
   );
 }

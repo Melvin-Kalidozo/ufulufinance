@@ -211,14 +211,26 @@ export function JobApplicationsManager() {
                   )}
                 </dl>
               </div>
-              <a
-                href={`/api/admin/job-applications/${selected.id}/cv`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#034DA2] px-4 py-2.5 text-xs font-bold text-white shadow hover:bg-[#023877]"
-              >
-                <ExternalLink className="size-4" /> Open CV
-              </a>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={`/api/admin/job-applications/${selected.id}/cv`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#034DA2] px-4 py-2.5 text-xs font-bold text-white shadow hover:bg-[#023877]"
+                >
+                  <ExternalLink className="size-4" /> Open CV
+                </a>
+                {selected.coverLetterUrl && (
+                  <a
+                    href={`/api/admin/job-applications/${selected.id}/cover-letter`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#01214A] px-4 py-2.5 text-xs font-bold text-white shadow hover:bg-[#023168]"
+                  >
+                    <ExternalLink className="size-4" /> Open Cover Letter
+                  </a>
+                )}
+              </div>
               <div className="flex items-center gap-2 border-t border-slate-100 pt-4">
                 <Select value={selected.status} onValueChange={(v) => updateStatus(selected, v)} disabled={busy}>
                   <SelectTrigger className="h-9 w-full rounded-xl border-slate-200 bg-white sm:w-44"><SelectValue /></SelectTrigger>

@@ -2,13 +2,19 @@ import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/api-helpers";
 import { readDocument } from "@/lib/image-upload";
-import { uploadBufferToCloudinary } from "@/lib/cloudinary";
+import {
+  deleteCloudinaryAsset,
+  uploadBufferToCloudinary,
+} from "@/lib/cloudinary";
 import { isValidEmail, isValidPhone } from "@/lib/validators";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { brandShell, escapeHtml, sendMail } from "@/lib/mailer";
 import { getNotificationRecipient } from "@/lib/notify";
 import { SITE_URL } from "@/lib/site";
-import { signApplicationCvToken } from "@/lib/job-cv-token";
+import {
+  signApplicationCoverLetterToken,
+  signApplicationCvToken,
+} from "@/lib/job-cv-token";
 
 export const dynamic = "force-dynamic";
 
@@ -34,8 +40,8 @@ export async function POST(
   const name = String(form.get("name") ?? "").trim();
   const email = String(form.get("email") ?? "").toLowerCase().trim();
   const phone = String(form.get("phone") ?? "").trim();
-  const coverNote = String(form.get("coverNote") ?? "").trim();
   const cv = form.get("cv");
+  const coverLetter = form.get("coverLetter");
 
   if (name.length < 2) return fail("Full name is required.");
   if (!isValidEmail(email)) return fail("A valid email address is required.");
@@ -44,9 +50,21 @@ export async function POST(
   let cvBuffer: Buffer;
   try {
     if (!cv || !(cv instanceof File)) throw new Error("missing");
-    cvBuffer = await readDocument(cv);
+    cvBuffer = await readDocument(cv, "CV");
   } catch (e) {
     return fail(e instanceof Error ? e.message : "Please attach your CV (PDF, max 5 MB).");
+  }
+
+  let coverLetterBuffer: Buffer;
+  try {
+    if (!coverLetter || !(coverLetter instanceof File)) throw new Error("missing");
+    coverLetterBuffer = await readDocument(coverLetter, "Cover letter");
+  } catch (e) {
+    return fail(
+      e instanceof Error
+        ? e.message
+        : "Please attach your cover letter (PDF, max 5 MB)."
+    );
   }
 
   let upload;
@@ -59,17 +77,42 @@ export async function POST(
     return fail("We could not upload your CV. Please try again.");
   }
 
-  const application = await prisma.jobApplication.create({
-    data: {
-      jobId: job.id,
-      name,
-      email,
-      phone: phone || null,
-      coverNote: coverNote || null,
-      cvUrl: upload.secureUrl,
-      cvPublicId: upload.publicId,
-    },
-  });
+  let coverLetterUpload;
+  try {
+    coverLetterUpload = await uploadBufferToCloudinary(
+      coverLetterBuffer,
+      "cover-letters",
+      {
+        resourceType: "raw",
+        publicId: `cover-letter-${Date.now()}`,
+      }
+    );
+  } catch {
+    void deleteCloudinaryAsset(upload.publicId, "raw").catch(() => {});
+    return fail("We could not upload your cover letter. Please try again.");
+  }
+
+  let application;
+  try {
+    application = await prisma.jobApplication.create({
+      data: {
+        jobId: job.id,
+        name,
+        email,
+        phone: phone || null,
+        coverNote: null,
+        coverLetterUrl: coverLetterUpload.secureUrl,
+        coverLetterPublicId: coverLetterUpload.publicId,
+        cvUrl: upload.secureUrl,
+        cvPublicId: upload.publicId,
+      },
+    });
+  } catch (e) {
+    console.error("[job-application]", e);
+    void deleteCloudinaryAsset(upload.publicId, "raw").catch(() => {});
+    void deleteCloudinaryAsset(coverLetterUpload.publicId, "raw").catch(() => {});
+    return fail("We could not save your application. Please try again.", 500);
+  }
 
   const safeName =
     application.name
@@ -87,6 +130,14 @@ export async function POST(
     console.error("[cv-link]", e);
   }
 
+  let coverLetterViewUrl = coverLetterUpload.secureUrl;
+  try {
+    const coverLetterToken = signApplicationCoverLetterToken(application.id);
+    coverLetterViewUrl = `${SITE_URL}/api/public/job-applications/${application.id}/cover-letter.pdf?token=${encodeURIComponent(coverLetterToken)}`;
+  } catch (e) {
+    console.error("[cover-letter-link]", e);
+  }
+
   const html = brandShell(`
     <p style="margin:0 0 16px;color:#0f172a;font-size:16px;font-weight:700;">New job application — ${escapeHtml(job.title)}</p>
     <table role="presentation" style="width:100%;border-collapse:collapse;">
@@ -94,9 +145,9 @@ export async function POST(
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">Email</td><td style="padding:8px 12px;color:#0f172a;font-weight:600;">${escapeHtml(application.email)}</td></tr>
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">Phone</td><td style="padding:8px 12px;color:#0f172a;font-weight:600;">${escapeHtml(application.phone ?? "—")}</td></tr>
       <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">CV</td><td style="padding:8px 12px;"><a href="${escapeHtml(cvViewUrl)}" style="color:#034DA2;font-weight:600;">View CV (PDF)</a></td></tr>
+      <tr><td style="padding:8px 0;color:#64748b;font-size:12px;">Cover Letter</td><td style="padding:8px 12px;"><a href="${escapeHtml(coverLetterViewUrl)}" style="color:#034DA2;font-weight:600;">View Cover Letter (PDF)</a></td></tr>
     </table>
-    <p style="margin:16px 0 0;color:#475569;font-size:12px;">The applicant's CV is attached to this email as a PDF.</p>
-    <p style="margin:12px 0 0;color:#475569;">${escapeHtml(application.coverNote || "")}</p>
+    <p style="margin:16px 0 0;color:#475569;font-size:12px;">The applicant's CV and cover letter are attached to this email as PDFs.</p>
     <div style="margin:24px 0 0;">
       <a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background-color:#034DA2;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:12px 22px;border-radius:8px;">View in Dashboard</a>
     </div>
@@ -109,6 +160,11 @@ export async function POST(
         {
           filename: `${safeName}-cv.pdf`,
           content: cvBuffer,
+          contentType: "application/pdf",
+        },
+        {
+          filename: `${safeName}-cover-letter.pdf`,
+          content: coverLetterBuffer,
           contentType: "application/pdf",
         },
       ],

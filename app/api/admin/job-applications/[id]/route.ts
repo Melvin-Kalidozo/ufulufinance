@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/api-auth";
+import { deleteCloudinaryAsset } from "@/lib/cloudinary";
 import { JobApplicationStatus } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,21 @@ export async function DELETE(
   const { id } = await params;
   const numeric = Number(id);
   if (!Number.isInteger(numeric)) return NextResponse.json({ message: "Invalid id" }, { status: 400 });
+
+  const application = await prisma.jobApplication.findUnique({
+    where: { id: numeric },
+    select: { cvPublicId: true, coverLetterPublicId: true },
+  });
+  if (!application) return NextResponse.json({ message: "Application not found" }, { status: 404 });
+
   await prisma.jobApplication.delete({ where: { id: numeric } });
+
+  if (application.cvPublicId) {
+    void deleteCloudinaryAsset(application.cvPublicId, "raw").catch(() => {});
+  }
+  if (application.coverLetterPublicId) {
+    void deleteCloudinaryAsset(application.coverLetterPublicId, "raw").catch(() => {});
+  }
+
   return NextResponse.json({ ok: true });
 }

@@ -55,18 +55,18 @@ export async function optimizeImage(file: File): Promise<OptimizedImage> {
   return { buffer, mime: "image/webp", ext: "webp" };
 }
 
-/** Validates a PDF CV upload and returns its raw buffer. */
-export async function readDocument(file: File): Promise<Buffer> {
+/** Validates a PDF document upload and returns its raw buffer. */
+export async function readDocument(file: File, label = "CV"): Promise<Buffer> {
   const mime = mimeOf(file);
   const isPdf = ALLOWED_DOC_MIMES.includes(mime) || file.name.toLowerCase().endsWith(".pdf");
   if (!isPdf) {
-    throw new UploadError("CV must be a PDF file.");
+    throw new UploadError(`${label} must be a PDF file.`);
   }
-  assertFileSize(file, MAX_DOC_MB, "CV");
+  assertFileSize(file, MAX_DOC_MB, label);
 
   const buffer = Buffer.from(await file.arrayBuffer());
   if (!buffer.subarray(0, 1024).toString("latin1").includes("%PDF-")) {
-    throw new UploadError("CV must be a valid PDF file.");
+    throw new UploadError(`${label} must be a valid PDF file.`);
   }
   return buffer;
 }
@@ -81,4 +81,5 @@ export type UploadFolder =
   | "testimonials"
   | "settings"
   | "media"
-  | "cvs";
+  | "cvs"
+  | "cover-letters";
