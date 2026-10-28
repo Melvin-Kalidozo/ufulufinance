@@ -259,7 +259,7 @@ export function JobApplicationDialog({
                   Application Received!
                 </h3>
                 <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Thank you, <strong className="text-slate-900">{form.name}</strong>. Your application for <strong className="text-slate-900">{job.title}</strong> has been logged. Our Talent Acquisition team will review your CV and contact shortlisted candidates via <span className="font-semibold text-slate-900">{form.email}</span> within 5 business days.
+                  Thank you, <strong className="text-slate-900">{form.name}</strong>. Your application for <strong className="text-slate-900">{job.title}</strong> has been received.
                 </p>
               </div>
 

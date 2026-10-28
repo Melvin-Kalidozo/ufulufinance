@@ -27,7 +27,6 @@ import {
   ShieldCheck,
   Coins,
   ArrowUpRight,
-  HeartHandshake,
   Lock,
   Target,
   Users,
@@ -338,13 +337,6 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 </div>
               )}
 
-              <div className="mt-2 p-5 rounded-2xl bg-[#fafbfc] border border-slate-200/70 flex items-start gap-3.5">
-                <HeartHandshake className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  <strong className="text-slate-900 font-semibold">Our Grassroots Mission: </strong>
-                  At Ufulu Finance, every team member contributes directly to closing the SME credit deficit across Malawi with transparent and compassionate microcredit services.
-                </p>
-              </div>
             </section>
 
             {/* 2.2 Key Responsibilities */}
@@ -497,10 +489,10 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   <div>
                     <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
                       <span className="h-3 w-1 rounded-full bg-brand-green" />
-                      Financial Package
+                      Terms of Employment
                     </span>
                     <h2 className="text-xl font-bold text-slate-950">
-                      Remuneration &amp; Bonuses
+                      Remuneration
                     </h2>
                   </div>
                 </div>
@@ -508,13 +500,13 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 <div className="p-6 rounded-2xl bg-sky-50/70 border border-sky-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                   <div>
                     <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#01214A] block">
-                      Base Salary &amp; Incentives
+                      Salary
                     </span>
                     <p className="text-base sm:text-lg font-bold text-slate-900 mt-0.5">
                       {job.salaryRange}
                     </p>
                     <p className="text-xs text-slate-600 mt-1">
-                      Includes monthly collection performance rewards and transparent milestone payouts.
+                      You will sign an employment contract with Ufulu Finance Limited.
                     </p>
                   </div>
                   <div className="size-10 rounded-full bg-[#01214A] text-[#00A3E0] flex items-center justify-center shrink-0">
@@ -538,7 +530,7 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   Ready to Apply?
                 </h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Submit your credentials online. Our Talent Acquisition team evaluates all submissions.
+                  Submit your application online using the form below.
                 </p>
               </div>
 
@@ -578,27 +570,6 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 )}
               </div>
 
-              {/* Application Checklist */}
-              <div className="space-y-2">
-                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wide">
-                  Application Checklist
-                </h4>
-                <ul className="space-y-2 text-xs text-slate-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
-                    <span>Updated Curriculum Vitae / Resume (PDF format, max 5MB)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
-                    <span>Brief Statement of Motivation / Cover Note</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="size-3.5 text-brand-green shrink-0 mt-0.5" />
-                    <span>Valid Malawian Phone & WhatsApp number</span>
-                  </li>
-                </ul>
-              </div>
-
               {/* Main Dialog Trigger Button */}
               <div>
                 {closed ? (
@@ -632,18 +603,15 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 )}
               </div>
 
-              {/* Ethical Standards Guarantee */}
-              <div className="space-y-2 pt-3 border-t border-slate-100 text-center">
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  <strong className="text-slate-800 font-semibold">Zero Fee Guarantee:</strong> Ufulu Finance does not charge any application or interview fees.
-                </p>
-                <div className="text-xs text-slate-500 pt-1">
-                  <span>Questions regarding this vacancy?</span>
+              {/* Contact */}
+              <div className="pt-3 border-t border-slate-100 text-center">
+                <div className="text-xs text-slate-500">
+                  <span>Applications and enquiries:</span>
                   <a
-                    href="mailto:ufulufinance@gmail.com"
+                    href="mailto:vacancies@ufulufinance.com"
                     className="block text-[#01214A] font-semibold hover:underline mt-0.5"
                   >
-                    ufulufinance@gmail.com
+                    vacancies@ufulufinance.com
                   </a>
                 </div>
               </div>
