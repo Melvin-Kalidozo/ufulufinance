@@ -38,9 +38,45 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { Plus, Pencil, Trash2, Search, Loader2, ImagePlus, X, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Search,
+  Loader2,
+  ImagePlus,
+  X,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 
 type Row = Record<string, any>;
+
+type EditableGroup = { heading: string; items: string[] };
+
+function parseGroups(value: unknown): EditableGroup[] {
+  if (!Array.isArray(value)) return [];
+  if (value.length && value.every((entry) => typeof entry === "string")) {
+    return [
+      {
+        heading: "",
+        items: value.map((item) => String(item).trim()).filter(Boolean),
+      },
+    ];
+  }
+  return value.map((entry) => {
+    if (typeof entry === "string") return { heading: "", items: [entry] };
+    const row = (entry ?? {}) as Record<string, unknown>;
+    return {
+      heading: typeof row.heading === "string" ? row.heading : "",
+      items: Array.isArray(row.items)
+        ? row.items.map((item) => (typeof item === "string" ? item : "")).filter(Boolean)
+        : [],
+    };
+  });
+}
 
 function titleValue(row: Row, def: ResourceDef): string {
   if (def.model === "governanceMember" && row.name) return String(row.name);
@@ -433,6 +469,12 @@ function ResourceDialog({
             ? (val as Record<string, unknown>)[f.jsonWrapper]
             : val;
         next[f.name] = JSON.stringify(obj ?? null, null, 2);
+      } else if (f.type === "json-groups") {
+        const groups =
+          f.jsonWrapper && val && typeof val === "object"
+            ? (val as Record<string, unknown>)[f.jsonWrapper]
+            : val;
+        next[f.name] = JSON.stringify(parseGroups(groups));
       }
       else if (f.type === "datetime") {
         if (val instanceof Date || typeof val === "string") next[f.name] = toLocalInput(val);
@@ -527,10 +569,18 @@ function ResourceDialog({
         }
         const value = form[name];
         if (value === undefined || value === null) continue;
-        if (f.type === "json-array" || f.type === "json-object") {
+        if (f.type === "json-array" || f.type === "json-object" || f.type === "json-groups") {
           if (f.type === "json-array") {
             const lines = value.split("\n").map((l) => l.trim()).filter(Boolean);
             fd.append(name, JSON.stringify(lines));
+          } else if (f.type === "json-groups") {
+            const groups = parseGroups(parseJsonField(value))
+              .map((group) => ({
+                heading: group.heading.trim(),
+                items: group.items.map((item) => item.trim()).filter(Boolean),
+              }))
+              .filter((group) => group.heading || group.items.length);
+            fd.append(name, JSON.stringify(groups));
           } else {
             const text = value.trim();
             fd.append(name, text ? JSON.stringify(parseJsonField(text)) : "");
@@ -562,7 +612,12 @@ function ResourceDialog({
       <FieldControl
         key={field.name}
         field={field}
-        fullWidth={field.type === "textarea" || field.type === "image" || field.type === "json-object"}
+        fullWidth={
+          field.type === "textarea" ||
+          field.type === "image" ||
+          field.type === "json-object" ||
+          field.type === "json-groups"
+        }
         value={form[field.name] ?? ""}
         error={fieldErrors[field.name]}
         onChange={(v) => setField(field.name, v)}
@@ -792,6 +847,8 @@ function FieldControl({
           placeholder='{"location":"Lilongwe"}'
           className="w-full min-h-24 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 font-mono text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100"
         />
+      ) : field.type === "json-groups" ? (
+        <GroupsEditor value={value} onChange={onChange} />
       ) : field.type === "image" ? (
         <ImagePicker
           field={field}
@@ -805,6 +862,126 @@ function FieldControl({
 
       {field.help && !error && <p className="text-[11px] text-slate-400">{field.help}</p>}
       {error && <p className="text-xs text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+function GroupsEditor({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [groups, setGroups] = useState<EditableGroup[]>(() =>
+    parseGroups(parseJsonField(value))
+  );
+  const lastEmitted = useRef(value);
+
+  useEffect(() => {
+    if (value === lastEmitted.current) return;
+    lastEmitted.current = value;
+    setGroups(parseGroups(parseJsonField(value)));
+  }, [value]);
+
+  function commit(next: EditableGroup[]) {
+    setGroups(next);
+    const serialized = JSON.stringify(next);
+    lastEmitted.current = serialized;
+    onChange(serialized);
+  }
+
+  function updateGroup(index: number, patch: Partial<EditableGroup>) {
+    commit(groups.map((group, i) => (i === index ? { ...group, ...patch } : group)));
+  }
+
+  function moveGroup(index: number, direction: -1 | 1) {
+    const target = index + direction;
+    if (target < 0 || target >= groups.length) return;
+    const next = [...groups];
+    [next[index], next[target]] = [next[target], next[index]];
+    commit(next);
+  }
+
+  return (
+    <div className="space-y-3">
+      {groups.length === 0 && (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center">
+          <p className="text-xs text-slate-500">
+            No responsibility groups yet. Add a group for each subheading.
+          </p>
+        </div>
+      )}
+
+      {groups.map((group, index) => (
+        <div
+          key={index}
+          className="space-y-2.5 rounded-xl border border-slate-200 bg-slate-50/60 p-3"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Group {index + 1}
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => moveGroup(index, -1)}
+                disabled={index === 0}
+                className="flex size-7 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white hover:text-[#034DA2] disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label="Move group up"
+              >
+                <ArrowUp className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => moveGroup(index, 1)}
+                disabled={index === groups.length - 1}
+                className="flex size-7 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white hover:text-[#034DA2] disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label="Move group down"
+              >
+                <ArrowDown className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => commit(groups.filter((_, i) => i !== index))}
+                className="flex size-7 items-center justify-center rounded-lg text-red-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                aria-label="Remove group"
+              >
+                <X className="size-3.5" />
+              </button>
+            </div>
+          </div>
+
+          <Input
+            value={group.heading}
+            onChange={(e) => updateGroup(index, { heading: e.target.value })}
+            placeholder="Subheading (e.g. Administration)"
+            className="h-9 rounded-lg border-slate-200 bg-white text-sm"
+          />
+          <textarea
+            rows={Math.max(group.items.length || 3, 3)}
+            value={group.items.join("\n")}
+            onChange={(e) =>
+              updateGroup(index, {
+                items: e.target.value.split("\n"),
+              })
+            }
+            placeholder="One responsibility per line"
+            className="min-h-20 w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 outline-none transition-colors focus:border-[#034DA2] focus:ring-2 focus:ring-blue-100"
+          />
+        </div>
+      ))}
+
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => commit([...groups, { heading: "", items: [""] }])}
+        className="rounded-lg"
+      >
+        <Plus className="size-3.5" />
+        Add responsibility group
+      </Button>
     </div>
   );
 }

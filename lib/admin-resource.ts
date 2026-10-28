@@ -14,6 +14,7 @@ export type FieldType =
   | "image"
   | "json-array"
   | "json-object"
+  | "json-groups"
   | "datetime";
 
 export type FieldDef = {
@@ -161,8 +162,9 @@ async function parseForm(def: ResourceDef, req: Request): Promise<{ parsed?: Par
         break;
       }
       case "json-array":
-      case "json-object": {
-        const parsed = parseStructured(value, field.type === "json-array");
+      case "json-object":
+      case "json-groups": {
+        const parsed = parseStructured(value, field.type !== "json-object");
         if (parsed === null) return { error: `${field.label} is not valid JSON.` };
         values[name] = field.jsonWrapper ? { [field.jsonWrapper]: parsed } : parsed;
         break;

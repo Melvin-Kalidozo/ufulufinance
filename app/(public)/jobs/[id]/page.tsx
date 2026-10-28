@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { JobRole } from "@/lib/jobsData";
+import {
+  normalizeResponsibilityGroups,
+  type JobRole,
+} from "@/lib/jobsData";
 import { getJobBySlug, getOpenJobs } from "@/lib/cms-data";
 import { JobApplicationDialog } from "@/components/public/JobApplicationDialog";
 import { ShareJobButton } from "@/components/public/ShareJobButton";
@@ -26,6 +29,8 @@ import {
   ArrowUpRight,
   HeartHandshake,
   Lock,
+  Target,
+  Users,
 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -74,7 +79,10 @@ function mapJob(r: Record<string, unknown>): JobRole {
     deadline: v("deadline") || undefined,
     description: v("description"),
     overview: v("overview"),
-    responsibilities: arr("responsibilities"),
+    reportsTo: v("reportsTo") || undefined,
+    responsibilityGroups: normalizeResponsibilityGroups(r.responsibilities),
+    skills: arr("skills"),
+    kpis: arr("kpis"),
     requirements: arr("requirements"),
     benefits: arr("benefits"),
     image: v("image"),
@@ -305,6 +313,20 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 {job.overview}
               </p>
 
+              {job.reportsTo && (
+                <div className="flex items-start gap-3.5 rounded-2xl border border-sky-100 bg-sky-50/60 p-4">
+                  <Users className="mt-0.5 size-4 shrink-0 text-[#00A3E0]" />
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      Reports To
+                    </span>
+                    <span className="text-sm font-semibold text-slate-900">
+                      {job.reportsTo}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div className="mt-2 p-5 rounded-2xl bg-[#fafbfc] border border-slate-200/70 flex items-start gap-3.5">
                 <HeartHandshake className="size-5 text-[#00A3E0] shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -331,22 +353,68 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 </div>
               </div>
 
-              <ul className="space-y-3.5 pt-1">
-                {job.responsibilities.map((resp, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#fafbfc] hover:bg-sky-50/50 border border-slate-100 transition-colors text-xs sm:text-sm text-slate-700 leading-relaxed"
-                  >
-                    <div className="size-5 rounded-full bg-[#01214A] text-[#38bdf8] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                      <Check className="size-3" />
-                    </div>
-                    <span>{resp}</span>
-                  </li>
+              <div className="space-y-8 pt-1">
+                {(job.responsibilityGroups ?? []).map((group, groupIdx) => (
+                  <div key={groupIdx} className="space-y-3">
+                    {group.heading && (
+                      <h3 className="flex items-center gap-2.5 text-sm font-extrabold uppercase tracking-wide text-[#01214A]">
+                        <span className="h-4 w-1 rounded-full bg-[#00A3E0]" />
+                        {group.heading}
+                      </h3>
+                    )}
+                    <ul className="space-y-3">
+                      {group.items.map((resp, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#fafbfc] hover:bg-sky-50/50 border border-slate-100 transition-colors text-xs sm:text-sm text-slate-700 leading-relaxed"
+                        >
+                          <div className="size-5 rounded-full bg-[#01214A] text-[#38bdf8] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                            <Check className="size-3" />
+                          </div>
+                          <span>{resp}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </section>
 
-            {/* 2.3 Candidate Requirements & Qualifications */}
+            {/* 2.3 Key Performance Indicators */}
+            {job.kpis && job.kpis.length > 0 && (
+              <section className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-xs space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="size-11 rounded-2xl bg-sky-50 text-[#01214A] flex items-center justify-center shrink-0">
+                    <Target className="size-5" />
+                  </div>
+                  <div>
+                    <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                      <span className="h-3 w-1 rounded-full bg-brand-green" />
+                      Performance Measures
+                    </span>
+                    <h2 className="text-xl font-bold text-slate-950">
+                      Key Performance Indicators
+                    </h2>
+                  </div>
+                </div>
+
+                <ul className="space-y-3.5 pt-1">
+                  {job.kpis.map((kpi, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#fafbfc] hover:bg-sky-50/50 border border-slate-100 transition-colors text-xs sm:text-sm text-slate-700 leading-relaxed"
+                    >
+                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sky-100 text-[10px] font-extrabold text-[#01214A]">
+                        {idx + 1}
+                      </span>
+                      <span>{kpi}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* 2.4 Candidate Requirements & Qualifications */}
             <section className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-xs space-y-6">
               <div className="flex items-center gap-4">
                 <div className="size-11 rounded-2xl bg-sky-50 text-[#01214A] flex items-center justify-center shrink-0">
@@ -358,7 +426,7 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                     Ideal Candidate Profile
                   </span>
                   <h2 className="text-xl font-bold text-slate-950">
-                    Qualifications &amp; Requirements
+                    Qualifications &amp; Experience
                   </h2>
                 </div>
               </div>
@@ -376,7 +444,39 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
               </ul>
             </section>
 
-            {/* 2.4 Compensation & Package */}
+            {/* 2.5 Skills & Competencies */}
+            {job.skills && job.skills.length > 0 && (
+              <section className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-xs space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="size-11 rounded-2xl bg-sky-50 text-[#01214A] flex items-center justify-center shrink-0">
+                    <Sparkles className="size-5" />
+                  </div>
+                  <div>
+                    <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#00A3E0]">
+                      <span className="h-3 w-1 rounded-full bg-brand-green" />
+                      What You Bring
+                    </span>
+                    <h2 className="text-xl font-bold text-slate-950">
+                      Skills &amp; Competencies
+                    </h2>
+                  </div>
+                </div>
+
+                <ul className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-2">
+                  {job.skills.map((skill, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-[#fafbfc] p-4 text-xs leading-relaxed text-slate-700 transition-colors hover:bg-sky-50/50 sm:text-sm"
+                    >
+                      <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#00A3E0]" />
+                      <span>{skill}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* 2.6 Compensation & Package */}
             {job.salaryRange && (
               <section className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-xs space-y-6">
                 <div className="flex items-center gap-4">
@@ -449,6 +549,14 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                   <span className="text-slate-500">Type:</span>
                   <span className="font-semibold text-slate-900">{job.type}</span>
                 </div>
+                {job.reportsTo && (
+                  <div className="flex justify-between items-start gap-2 text-slate-600">
+                    <span className="shrink-0 text-slate-500">Reports to:</span>
+                    <span className="text-right font-semibold text-slate-900">
+                      {job.reportsTo}
+                    </span>
+                  </div>
+                )}
                 {job.deadline && (
                   <div className="flex justify-between items-center text-slate-600 border-t border-slate-200/70 pt-2">
                     <span className="text-slate-500">Deadline:</span>

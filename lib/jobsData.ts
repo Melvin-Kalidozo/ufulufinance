@@ -1,3 +1,8 @@
+export interface ResponsibilityGroup {
+  heading: string;
+  items: string[];
+}
+
 export interface JobRole {
   id: string;
   title: string;
@@ -9,12 +14,56 @@ export interface JobRole {
   deadline?: string;
   description: string;
   overview: string;
-  responsibilities: string[];
+  reportsTo?: string;
+  responsibilities?: string[];
+  responsibilityGroups?: ResponsibilityGroup[];
+  skills?: string[];
+  kpis?: string[];
   requirements: string[];
   benefits?: string[];
   image: string;
   isFeatured?: boolean;
   status?: string;
+}
+
+/**
+ * Normalizes the `Job.responsibilities` JSON column into grouped sections.
+ * Supports the new `{ heading, items }[]` shape and legacy flat `string[]`.
+ */
+export function normalizeResponsibilityGroups(
+  value: unknown
+): ResponsibilityGroup[] {
+  if (!Array.isArray(value)) return [];
+
+  const groups: ResponsibilityGroup[] = [];
+  for (const entry of value) {
+    if (typeof entry === "string") {
+      const text = entry.trim();
+      if (text) groups.push({ heading: "", items: [text] });
+      continue;
+    }
+    if (!entry || typeof entry !== "object") continue;
+
+    const row = entry as Record<string, unknown>;
+    const heading = typeof row.heading === "string" ? row.heading.trim() : "";
+    const rawItems = Array.isArray(row.items) ? row.items : [];
+    const items = rawItems
+      .map((item) => (typeof item === "string" ? item.trim() : ""))
+      .filter(Boolean);
+
+    if (heading || items.length) groups.push({ heading, items });
+  }
+
+  if (groups.length && groups.every((group) => !group.heading)) {
+    return [
+      {
+        heading: "Key Responsibilities",
+        items: groups.flatMap((group) => group.items),
+      },
+    ];
+  }
+
+  return groups;
 }
 
 export const OPEN_ROLES: JobRole[] = [

@@ -10,7 +10,10 @@ import {
   Lock,
 } from "lucide-react";
 
-import type { JobRole } from "@/lib/jobsData";
+import {
+  normalizeResponsibilityGroups,
+  type JobRole,
+} from "@/lib/jobsData";
 import { getJobsList } from "@/lib/cms-data";
 
 export default async function JobsPage() {
@@ -39,7 +42,12 @@ export default async function JobsPage() {
         deadline: jval(r, "deadline") || undefined,
         description: jval(r, "description"),
         overview: jval(r, "overview"),
-        responsibilities: jarr(r, "responsibilities"),
+        reportsTo: jval(r, "reportsTo") || undefined,
+        responsibilityGroups: normalizeResponsibilityGroups(
+          jRow(r).responsibilities
+        ),
+        skills: jarr(r, "skills"),
+        kpis: jarr(r, "kpis"),
         requirements: jarr(r, "requirements"),
         benefits: jarr(r, "benefits"),
         image: jval(r, "image"),

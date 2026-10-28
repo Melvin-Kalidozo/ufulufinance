@@ -271,7 +271,10 @@ model Job {
   image           String?
   overview        String?
   description     String?
-  responsibilities Json? // string[]
+  reportsTo       String?
+  responsibilities Json? // { heading: string, items: string[] }[] (legacy: string[])
+  skills          Json? // string[]
+  kpis            Json? // string[]
   requirements    Json? // string[]
   benefits        Json? // string[]
   isFeatured      Boolean        @default(false)
