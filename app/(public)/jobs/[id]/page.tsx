@@ -49,11 +49,22 @@ function formatDate(val: string | undefined): string {
   if (!val) return "Rolling Basis";
   const d = new Date(val);
   if (isNaN(d.getTime())) return val;
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+
+  const day = d.getUTCDate();
+  const suffix =
+    day % 100 >= 11 && day % 100 <= 13
+      ? "th"
+      : (["th", "st", "nd", "rd"][day % 10] ?? "th");
+  const weekday = d.toLocaleDateString("en-GB", {
+    weekday: "long",
+    timeZone: "UTC",
   });
+  const month = d.toLocaleDateString("en-GB", {
+    month: "long",
+    timeZone: "UTC",
+  });
+
+  return `${weekday}, ${String(day).padStart(2, "0")}${suffix} ${month}, ${d.getUTCFullYear()}`;
 }
 
 function jRow(r: Record<string, unknown>): Record<string, unknown> {
@@ -560,7 +571,9 @@ export default async function DedicatedJobPage(props: PageProps<"/jobs/[id]">) {
                 {job.deadline && (
                   <div className="flex justify-between items-center text-slate-600 border-t border-slate-200/70 pt-2">
                     <span className="text-slate-500">Deadline:</span>
-                    <span className="font-bold text-[#01214A]">{job.deadline}</span>
+                    <span className="font-bold text-[#01214A]">
+                      {formatDate(job.deadline)}
+                    </span>
                   </div>
                 )}
               </div>
