@@ -12,6 +12,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const { page, limit, skip, q } = listParams(url);
   const status = url.searchParams.get("status");
+  const jobIdParam = url.searchParams.get("jobId");
 
   const where: Prisma.JobApplicationWhereInput = {};
   if (q) {
@@ -22,6 +23,16 @@ export async function GET(req: Request) {
     ];
   }
   if (status) where.status = status as JobApplicationStatus;
+  if (jobIdParam) {
+    const jobId = Number(jobIdParam);
+    if (!Number.isInteger(jobId)) {
+      return NextResponse.json(
+        { message: "Invalid job filter." },
+        { status: 400 }
+      );
+    }
+    where.jobId = jobId;
+  }
 
   const [rows, total] = await Promise.all([
     prisma.jobApplication.findMany({

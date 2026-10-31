@@ -120,7 +120,7 @@ export async function POST(
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "") || `applicant-${application.id}`;
-  const dashboardUrl = `${SITE_URL}/admin/enquiries?tab=applications`;
+  const dashboardUrl = `${SITE_URL}/admin/enquiries?tab=applications&jobId=${job.id}`;
 
   let cvViewUrl = upload.secureUrl;
   try {

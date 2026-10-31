@@ -11,7 +11,13 @@ const TABS = [
   { value: "applications", label: "Job Applications" },
 ];
 
-export function EnquiriesTabs({ initialTab }: { initialTab?: string }) {
+export function EnquiriesTabs({
+  initialTab,
+  initialJobId,
+}: {
+  initialTab?: string;
+  initialJobId?: string;
+}) {
   const [active, setActive] = useState(() => {
     const match = TABS.find((tab) => tab.value === initialTab);
     return match?.value ?? "loan";
@@ -35,7 +41,9 @@ export function EnquiriesTabs({ initialTab }: { initialTab?: string }) {
       </Tabs>
       {active === "loan" && <EnquiriesManager kind="loan" />}
       {active === "company" && <EnquiriesManager kind="company" />}
-      {active === "applications" && <JobApplicationsManager />}
+      {active === "applications" && (
+        <JobApplicationsManager initialJobId={initialJobId} />
+      )}
     </div>
   );
 }

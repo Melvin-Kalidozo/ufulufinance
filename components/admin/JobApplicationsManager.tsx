@@ -36,6 +36,8 @@ import { Search, Eye, Trash2, ExternalLink, Loader2 } from "lucide-react";
 
 type App = Record<string, any>;
 
+type JobOption = { id: number; title: string; status: string };
+
 const STATUSES = ["PENDING", "SHORTLISTED", "REJECTED", "HIRED"];
 
 const STATUS_STYLE: Record<string, string> = {
@@ -45,17 +47,39 @@ const STATUS_STYLE: Record<string, string> = {
   HIRED: "border-brand-green/20 bg-brand-green-soft text-brand-green",
 };
 
-export function JobApplicationsManager() {
+export function JobApplicationsManager({
+  initialJobId,
+}: {
+  initialJobId?: string;
+}) {
+  const initialJob =
+    initialJobId && /^\d+$/.test(initialJobId) ? initialJobId : "";
+
   const [rows, setRows] = useState<App[]>([]);
+  const [jobs, setJobs] = useState<JobOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
+  const [jobId, setJobId] = useState(initialJob);
   const [selected, setSelected] = useState<App | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<App | null>(null);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (initialJob) params.set("includeJobId", initialJob);
+    const query = params.toString();
+    fetch(`/api/admin/job-applications/jobs${query ? `?${query}` : ""}`)
+      .then(async (res) => {
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.message || "Failed to load vacancies");
+        setJobs(Array.isArray(json.data) ? json.data : []);
+      })
+      .catch(() => toast.error("Failed to load vacancies"));
+  }, [initialJob]);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -63,6 +87,7 @@ export function JobApplicationsManager() {
       const params = new URLSearchParams({ page: String(page), limit: "10" });
       if (q.trim()) params.set("q", q.trim());
       if (status) params.set("status", status);
+      if (jobId) params.set("jobId", jobId);
       const res = await fetch(`/api/admin/job-applications?${params.toString()}`);
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
@@ -74,7 +99,7 @@ export function JobApplicationsManager() {
     } finally {
       setLoading(false);
     }
-  }, [page, q, status]);
+  }, [page, q, status, jobId]);
 
   useEffect(() => {
     fetchData();
@@ -123,17 +148,36 @@ export function JobApplicationsManager() {
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
           <Input value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} placeholder="Search applicants…" className="h-10 rounded-xl border-slate-200 bg-white pl-9" />
         </div>
-        <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1); }}>
-          <SelectTrigger className="h-10 w-full rounded-xl border-slate-200 bg-white sm:w-44">
-            <SelectValue placeholder="All statuses" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All statuses</SelectItem>
-            {STATUSES.map((s) => (
-              <SelectItem key={s} value={s}>{s.charAt(0) + s.slice(1).toLowerCase()}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
+          <Select value={jobId} onValueChange={(v) => { setJobId(v); setPage(1); }}>
+            <SelectTrigger className="h-10 w-full rounded-xl border-slate-200 bg-white sm:w-56">
+              <SelectValue placeholder="All vacancies" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All vacancies</SelectItem>
+              {jobs.map((job) => (
+                <SelectItem key={job.id} value={String(job.id)}>
+                  {job.title}
+                  {job.status !== "OPEN"
+                    ? ` (${job.status === "CLOSED" ? "Closed" : "Unpublished"})`
+                    : ""}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1); }}>
+            <SelectTrigger className="h-10 w-full rounded-xl border-slate-200 bg-white sm:w-44">
+              <SelectValue placeholder="All statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All statuses</SelectItem>
+              {STATUSES.map((s) => (
+                <SelectItem key={s} value={s}>{s.charAt(0) + s.slice(1).toLowerCase()}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {loading ? (
@@ -142,7 +186,9 @@ export function JobApplicationsManager() {
         </div>
       ) : rows.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 px-6 py-16 text-center">
-          <p className="text-sm font-semibold text-slate-700">No applications yet</p>
+          <p className="text-sm font-semibold text-slate-700">
+            {jobId ? "No applications for this vacancy yet" : "No applications yet"}
+          </p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
