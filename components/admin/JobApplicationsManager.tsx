@@ -32,7 +32,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { Search, Eye, Trash2, ExternalLink, Loader2 } from "lucide-react";
+import {
+  Search,
+  Eye,
+  Trash2,
+  ExternalLink,
+  Loader2,
+  Users,
+} from "lucide-react";
 
 type App = Record<string, any>;
 
@@ -67,6 +74,8 @@ export function JobApplicationsManager({
   const [selected, setSelected] = useState<App | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<App | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const hasFilters = Boolean(q.trim() || status || jobId);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -177,6 +186,23 @@ export function JobApplicationsManager({
               ))}
             </SelectContent>
           </Select>
+
+          <div
+            aria-live="polite"
+            className="flex h-10 items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 shadow-sm"
+          >
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#034DA2]">
+              <Users className="size-4" />
+            </div>
+            <div className="leading-tight">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                {hasFilters ? "Filtered Applications" : "Total Applications"}
+              </p>
+              <p className="text-sm font-extrabold text-slate-900">
+                {loading ? "…" : total.toLocaleString()}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
