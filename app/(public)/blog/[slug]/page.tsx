@@ -207,14 +207,23 @@ export default async function DedicatedArticlePage({ params }: PageProps) {
         </div>
       ) : article.image ? (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
-          <div className="relative h-[180px] sm:h-[300px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-900">
+          <div className="relative h-[260px] sm:h-[380px] lg:h-[500px] rounded-2xl overflow-hidden shadow-xl border border-white/40 bg-slate-950">
+            <Image
+              src={article.image}
+              alt=""
+              aria-hidden="true"
+              fill
+              className="object-cover object-center scale-110 blur-2xl opacity-45"
+              sizes="(max-width: 1280px) 100vw, 1216px"
+            />
+            <div className="absolute inset-0 bg-slate-950/30" />
             <Image
               src={article.image}
               alt={article.title}
               fill
               priority
-              className="object-cover"
-              sizes="(max-width: 1280px) 100vw, 1024px"
+              className="object-contain object-center"
+              sizes="(max-width: 1280px) 100vw, 1216px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
           </div>
