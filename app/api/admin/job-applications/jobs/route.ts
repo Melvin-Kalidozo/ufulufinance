@@ -18,9 +18,12 @@ export async function GET(req: Request) {
 
   const where: Prisma.JobWhereInput = validIncludeJobId
     ? {
-        OR: [{ status: "OPEN" }, { id: validIncludeJobId }],
+        OR: [
+          { status: { in: ["OPEN", "UNPUBLISHED"] } },
+          { id: validIncludeJobId },
+        ],
       }
-    : { status: "OPEN" };
+    : { status: { in: ["OPEN", "UNPUBLISHED"] } };
 
   const jobs = await prisma.job.findMany({
     where,

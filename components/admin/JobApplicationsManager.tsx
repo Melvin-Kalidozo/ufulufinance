@@ -236,7 +236,27 @@ export function JobApplicationsManager({
                       <p className="text-sm font-semibold text-slate-900">{a.name}</p>
                       <p className="text-xs text-slate-500">{a.email}</p>
                     </TableCell>
-                    <TableCell className="hidden px-4 py-3 text-sm text-slate-500 md:table-cell">{a.job?.title}</TableCell>
+                    <TableCell className="hidden px-4 py-3 text-sm text-slate-500 md:table-cell">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span>{a.job?.title}</span>
+                        {a.job?.status === "UNPUBLISHED" && (
+                          <Badge
+                            variant="outline"
+                            className="rounded-md border-amber-200 bg-amber-50 text-[9px] font-bold uppercase tracking-wide text-amber-600"
+                          >
+                            Unpublished
+                          </Badge>
+                        )}
+                        {a.job?.status === "CLOSED" && (
+                          <Badge
+                            variant="outline"
+                            className="rounded-md border-slate-200 bg-slate-100 text-[9px] font-bold uppercase tracking-wide text-slate-500"
+                          >
+                            Closed
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="hidden px-4 py-3 text-sm text-slate-500 sm:table-cell">{new Date(a.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell className="px-4 py-3">
                       <Badge variant="outline" className={cn("rounded-lg text-[10px] font-bold uppercase tracking-wide", STATUS_STYLE[a.status] ?? "")}>{a.status}</Badge>

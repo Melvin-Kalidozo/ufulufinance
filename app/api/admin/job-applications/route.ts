@@ -40,7 +40,7 @@ export async function GET(req: Request) {
       orderBy: { createdAt: "desc" },
       skip,
       take: limit,
-      include: { job: { select: { id: true, title: true } } },
+      include: { job: { select: { id: true, title: true, status: true } } },
     }),
     prisma.jobApplication.count({ where }),
   ]);
