@@ -63,6 +63,13 @@ export type MailAttachment = {
   contentType?: string;
 };
 
+function getFromAddress(): string {
+  const configured = process.env.MAIL_FROM?.trim();
+  if (configured && configured.includes("@")) return configured;
+  const user = process.env.SMTP_USER || "info@ufulufinance.com";
+  return `"Ufulu Finance" <${user}>`;
+}
+
 export async function sendMail(
   to: string,
   subject: string,
@@ -76,16 +83,14 @@ export async function sendMail(
     );
     return { devFallback: true };
   }
-  await t.sendMail({
-    from:
-      process.env.MAIL_FROM ||
-      `"Ufulu Finance" <${process.env.SMTP_USER || "info@ufulufinance.com"}>`,
+  const info = await t.sendMail({
+    from: getFromAddress(),
     to,
     subject,
     html,
     ...(options.attachments?.length ? { attachments: options.attachments } : {}),
   });
-  return { devFallback: false };
+  return { devFallback: false, info };
 }
 
 export function generateVerificationCode() {
