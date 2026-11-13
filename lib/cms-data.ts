@@ -166,12 +166,21 @@ export async function getAboutContent() {
 }
 
 export async function getJobsList() {
-  return cachedPublic("public:jobs-all", [], async () =>
-    prisma.job.findMany({
-      where: { status: { in: ["OPEN", "CLOSED"] } },
-      orderBy: { createdAt: "asc" },
-    })
-  );
+  return cachedPublic("public:jobs-all", [], async () => {
+    // Open roles first (featured pinned, then oldest-first); closed roles after,
+    // newest-first. Two queries because each group needs its own sort direction.
+    const [open, closed] = await Promise.all([
+      prisma.job.findMany({
+        where: { status: "OPEN" },
+        orderBy: [{ isFeatured: "desc" }, { createdAt: "asc" }],
+      }),
+      prisma.job.findMany({
+        where: { status: "CLOSED" },
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+    return [...open, ...closed];
+  });
 }
 
 export async function getArticlesList() {

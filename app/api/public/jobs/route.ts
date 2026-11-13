@@ -22,7 +22,12 @@ export async function GET(req: Request) {
       if (q) where.OR = [{ title: { contains: q, mode: "insensitive" } }];
 
       const [jobs, total] = await Promise.all([
-        prisma.job.findMany({ where, orderBy: { createdAt: "asc" }, skip, take: limit }),
+        prisma.job.findMany({
+          where,
+          orderBy: [{ status: "asc" }, { isFeatured: "desc" }, { createdAt: "asc" }],
+          skip,
+          take: limit,
+        }),
         prisma.job.count({ where }),
       ]);
       return { jobs, total };

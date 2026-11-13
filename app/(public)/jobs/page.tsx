@@ -16,6 +16,145 @@ import {
 } from "@/lib/jobsData";
 import { getJobsList } from "@/lib/cms-data";
 
+function JobCard({ role }: { role: JobRole }) {
+  const closed = role.status === "CLOSED";
+  const featured = role.isFeatured && !closed;
+
+  if (featured) {
+    return (
+      <div className="rounded-3xl p-6 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
+        <div>
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
+                {role.department}
+              </span>
+            </div>
+            <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
+              <ArrowUpRight className="size-4" />
+            </div>
+          </div>
+
+          <h3 className="text-lg font-extrabold leading-snug mt-3">
+            <Link href={`/jobs/${role.id}`} className="hover:underline">
+              {role.title}
+            </Link>
+          </h3>
+          <p className="text-xs text-blue-100 font-medium mt-2 leading-relaxed">
+            {role.description}
+          </p>
+
+          <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
+            <span className="flex items-center gap-1">
+              <MapPin className="size-3.5 text-[#00A3E0]" /> {role.location}
+            </span>
+            <span>&bull;</span>
+            <span>{role.type}</span>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
+          <Link
+            href={`/jobs/${role.id}`}
+            className="text-xs font-bold text-white underline hover:text-sky-200"
+          >
+            View Job Details
+          </Link>
+          <JobApplicationDialog
+            job={role}
+            triggerButton={
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
+              >
+                Apply Now
+                <ArrowRight className="size-3.5" />
+              </button>
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between hover:-translate-y-1">
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
+              {role.department}
+            </span>
+            {closed && (
+              <span className="px-3 py-1 rounded-full bg-slate-200 text-slate-500 text-[10px] font-bold uppercase tracking-wide">
+                Closed
+              </span>
+            )}
+          </div>
+          <Link
+            href={`/jobs/${role.id}`}
+            className="size-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors"
+          >
+            <ArrowUpRight className="size-4" />
+          </Link>
+        </div>
+
+        <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
+          <Link
+            href={`/jobs/${role.id}`}
+            className="hover:text-[#034DA2] hover:underline transition-colors"
+          >
+            {role.title}
+          </Link>
+        </h3>
+        <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+          {role.description}
+        </p>
+
+        <div className="mt-4 flex items-center gap-3 text-xs text-slate-500 font-medium">
+          <span className="flex items-center gap-1">
+            <MapPin className="size-3.5 text-slate-400" /> {role.location}
+          </span>
+          <span>&bull;</span>
+          <span>{role.type}</span>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <Link
+          href={`/jobs/${role.id}`}
+          className="text-xs font-bold text-[#034DA2] hover:underline"
+        >
+          View Job Details
+        </Link>
+        {closed ? (
+          <button
+            type="button"
+            disabled
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed"
+          >
+            <Lock className="size-3.5" />
+            Applications Closed
+          </button>
+        ) : (
+          <JobApplicationDialog
+            job={role}
+            triggerButton={
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Apply Now
+                <ArrowRight className="size-3.5" />
+              </button>
+            }
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default async function JobsPage() {
   const jobs = await getJobsList();
 
@@ -55,6 +194,9 @@ export default async function JobsPage() {
         status: jval(r, "status"),
       })) as JobRole[])
     : [];
+
+  const openRoles = OPEN_ROLES.filter((role) => role.status !== "CLOSED");
+  const closedRoles = OPEN_ROLES.filter((role) => role.status === "CLOSED");
 
   return (
     <div className="bg-[#fcfdfd] text-slate-900 antialiased min-h-screen">
@@ -164,7 +306,7 @@ export default async function JobsPage() {
             </p>
           </div>
 
-          {OPEN_ROLES.length === 0 ? (
+          {openRoles.length === 0 ? (
             <div className="max-w-xl mx-auto text-center rounded-3xl bg-white border border-slate-200/90 shadow-sm p-10 space-y-3">
               <div className="size-12 rounded-2xl bg-blue-50 text-[#034DA2] flex items-center justify-center mx-auto">
                 <Briefcase className="size-6" />
@@ -186,173 +328,37 @@ export default async function JobsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {OPEN_ROLES.map((role) => {
-                const closed = role.status === "CLOSED";
-                if (role.isFeatured) {
-                  return (
-                    <div
-                      key={role.id}
-                      className="rounded-3xl p-6 bg-[#034DA2] text-white shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1"
-                    >
-                      <div>
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wide">
-                              {role.department}
-                            </span>
-                            {closed && (
-                              <span className="px-3 py-1 rounded-full bg-white/25 text-white text-[10px] font-extrabold uppercase tracking-wide">
-                                Closed
-                              </span>
-                            )}
-                          </div>
-                          <div className="size-8 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
-                            <ArrowUpRight className="size-4" />
-                          </div>
-                        </div>
-
-                        <h3 className="text-lg font-extrabold leading-snug mt-3">
-                          <Link
-                            href={`/jobs/${role.id}`}
-                            className="hover:underline"
-                          >
-                            {role.title}
-                          </Link>
-                        </h3>
-                        <p className="text-xs text-blue-100 font-medium mt-2 leading-relaxed">
-                          {role.description}
-                        </p>
-
-                        <div className="mt-4 flex items-center gap-3 text-xs text-blue-200 font-medium">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="size-3.5 text-[#00A3E0]" />{" "}
-                            {role.location}
-                          </span>
-                          <span>&bull;</span>
-                          <span>{role.type}</span>
-                        </div>
-                      </div>
-
-                      <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between">
-                        <Link
-                          href={`/jobs/${role.id}`}
-                          className="text-xs font-bold text-white underline hover:text-sky-200"
-                        >
-                          View Job Details
-                        </Link>
-                        {closed ? (
-                          <button
-                            type="button"
-                            disabled
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/20 text-white/60 text-xs font-bold cursor-not-allowed"
-                          >
-                            <Lock className="size-3.5" />
-                            Applications Closed
-                          </button>
-                        ) : (
-                          <JobApplicationDialog
-                            job={role}
-                            triggerButton={
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#034DA2] text-xs font-bold hover:bg-blue-50 transition-colors cursor-pointer"
-                              >
-                                Apply Now
-                                <ArrowRight className="size-3.5" />
-                              </button>
-                            }
-                          />
-                        )}
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={role.id}
-                    className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between hover:-translate-y-1"
-                  >
-                    <div>
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wide">
-                            {role.department}
-                          </span>
-                          {closed && (
-                            <span className="px-3 py-1 rounded-full bg-slate-200 text-slate-500 text-[10px] font-bold uppercase tracking-wide">
-                              Closed
-                            </span>
-                          )}
-                        </div>
-                        <Link
-                          href={`/jobs/${role.id}`}
-                          className="size-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors"
-                        >
-                          <ArrowUpRight className="size-4" />
-                        </Link>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-slate-900 leading-snug mt-3">
-                        <Link
-                          href={`/jobs/${role.id}`}
-                          className="hover:text-[#034DA2] hover:underline transition-colors"
-                        >
-                          {role.title}
-                        </Link>
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                        {role.description}
-                      </p>
-
-                      <div className="mt-4 flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="size-3.5 text-slate-400" />{" "}
-                          {role.location}
-                        </span>
-                        <span>&bull;</span>
-                        <span>{role.type}</span>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <Link
-                        href={`/jobs/${role.id}`}
-                        className="text-xs font-bold text-[#034DA2] hover:underline"
-                      >
-                        View Job Details
-                      </Link>
-                      {closed ? (
-                        <button
-                          type="button"
-                          disabled
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed"
-                        >
-                          <Lock className="size-3.5" />
-                          Applications Closed
-                        </button>
-                      ) : (
-                        <JobApplicationDialog
-                          job={role}
-                          triggerButton={
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#034DA2] hover:bg-[#023877] text-white text-xs font-semibold transition-colors cursor-pointer"
-                            >
-                              Apply Now
-                              <ArrowRight className="size-3.5" />
-                            </button>
-                          }
-                        />
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+              {openRoles.map((role) => (
+                <JobCard key={role.id} role={role} />
+              ))}
             </div>
           )}
         </div>
       </section>
+
+      {closedRoles.length > 0 && (
+        <section className="py-16 sm:py-20 bg-white border-t border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-12 space-y-2.5">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <span className="size-2 rounded-full bg-slate-400" />
+                <span>Previous Listings</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                Past Closed Roles
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500">
+                These positions are no longer accepting applications.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {closedRoles.map((role) => (
+                <JobCard key={role.id} role={role} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
